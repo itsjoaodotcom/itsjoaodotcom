@@ -1,0 +1,319 @@
+/*
+ * tokens.css — Design System Tokens
+ *
+ * Layer 1: Primitive colours  (--grey-*, --blue-*, …)
+ * Layer 2: Semantic light-mode tokens
+ * Layer 3: Semantic dark-mode overrides
+ * Layer 4: Non-colour shared tokens
+ */
+
+/* ─── Layer 1: Primitives ─────────────────────────────────── */
+:root {
+
+  /* Greyscale */
+  --grey-00: #ffffff;
+  --grey-01: #fafafc;
+  --grey-02: #e2e3e6;
+  --grey-03: #cccdd0;
+  --grey-04: #b5b6b9;
+  --grey-05: #9f9fa2;
+  --grey-06: #87888a;
+  --grey-07: #616163;
+  --grey-08: #3b3c3d;
+  --grey-09: #262728;
+  --grey-10: #1d1e1f;
+  --grey-11: #1a1a1c;
+  --grey-12: #010103;
+  --grey-13: #000000;
+
+  /* Blue */
+  --blue-01: #e6ebff;
+  --blue-02: #ccd9ff;
+  --blue-03: #b3c7ff;
+  --blue-04: #4c71fe;
+  --blue-05: #4061d8;
+  --blue-06: #344fb2;
+  --blue-07: #283e8c;
+  --blue-08: #1c2e66;
+  --blue-09: #101e40;
+
+  /* Green */
+  --green-01: #e6f7ef;
+  --green-02: #ccefde;
+  --green-03: #b3e7cd;
+  --green-04: #50c28a;
+  --green-05: #47ad7a;
+  --green-06: #3d976a;
+  --green-07: #34815a;
+  --green-08: #2a6b4a;
+  --green-09: #20553a;
+
+  /* Red */
+  --red-01: #ffe6e6;
+  --red-02: #ffcccc;
+  --red-03: #ffb3b3;
+  --red-04: #eb5758;
+  --red-05: #d14c4d;
+  --red-06: #b74142;
+  --red-07: #9d3637;
+  --red-08: #822b2c;
+  --red-09: #682021;
+
+  /* Orange */
+  --orange-01: #fff2e6;
+  --orange-02: #ffe5cc;
+  --orange-03: #ffd8b3;
+  --orange-04: #e99243;
+  --orange-05: #d17f3a;
+  --orange-06: #b96c31;
+  --orange-07: #a15928;
+  --orange-08: #89461f;
+  --orange-09: #703316;
+
+  /* Purple */
+  --purple-01: #e6e8fa;
+  --purple-02: #ccd0f5;
+  --purple-03: #b3b9f0;
+  --purple-04: #4c59d3;
+  --purple-05: #424db8;
+  --purple-06: #37409d;
+  --purple-07: #2c3382;
+  --purple-08: #222766;
+  --purple-09: #171b4a;
+
+  /* Cyan */
+  --cyan-01: #e0f8fb;
+  --cyan-02: #c1f1f7;
+  --cyan-03: #a3ebf3;
+  --cyan-04: #26b9d1;
+  --cyan-05: #21a1b8;
+  --cyan-06: #1c899f;
+  --cyan-07: #167186;
+  --cyan-08: #11596d;
+  --cyan-09: #0b4154;
+
+  /* Brown */
+  --brown-01: #f9f0ee;
+  --brown-02: #f3e1dd;
+  --brown-03: #edd2cb;
+  --brown-04: #c79b94;
+  --brown-05: #b08a84;
+  --brown-06: #997873;
+  --brown-07: #826663;
+  --brown-08: #6b5452;
+  --brown-09: #544241;
+
+  /* Yellow */
+  --yellow-01: #fffbe6;
+  --yellow-02: #fff7cc;
+  --yellow-03: #fff3b3;
+  --yellow-04: #f5c200;
+  --yellow-05: #d8a900;
+  --yellow-06: #ba9100;
+  --yellow-07: #9c7800;
+  --yellow-08: #7e6000;
+  --yellow-09: #604800;
+}
+
+/* ─── Layer 2: Semantic — Light mode ─────────────────────── */
+:root {
+
+  /* Surface */
+  --surface-primary:           var(--grey-00);
+  --surface-primaryhover:      rgba(0, 0, 0, 0.02);
+  --surface-secondary:         var(--grey-01);
+  --surface-accent:            var(--blue-05);
+  --surface-popover:           var(--grey-00);
+  --surface-popoverhover:      var(--grey-01);
+  --surface-overlay:           rgba(0, 0, 0, 0.25);
+  --surface-tint:              rgba(0, 0, 0, 0.04);
+  --surface-tintstrong:        rgba(0, 0, 0, 0.10);
+  --surface-tinthover:         rgba(0, 0, 0, 0.16);
+  --surface-internalnote:      rgba(212, 131, 0, 0.02);
+  --surface-tooltip:           var(--grey-12);
+  --surface-infosubtle:        var(--blue-01);
+  --surface-successsubtle:     var(--green-02);
+  --surface-warningsubtle:     var(--orange-02);
+  --surface-criticalsubtle:    var(--red-02);
+  --surface-callhover:         rgba(179, 199, 255, 0.50);
+
+  /* Button */
+  --button-accent:             var(--blue-05);
+  --button-accenthover:        var(--blue-06);
+  --button-critical:           var(--red-05);
+  --button-criticalhover:      var(--red-06);
+  --button-secondary:          var(--grey-00);
+  --button-secondaryhover:     var(--grey-01);
+  --button-ghost:              rgba(0, 0, 0, 0);
+  --button-ghosthover:         rgba(0, 0, 0, 0.04);
+
+  /* Stroke */
+  --stroke-primary:            rgba(0, 0, 0, 0.04);
+  --stroke-secondarystrong:    rgba(0, 0, 0, 0.08);
+  --stroke-dashed:             rgba(0, 0, 0, 0.10);
+  --stroke-accent:             var(--blue-05);
+  --stroke-accentsoft:         var(--blue-03);
+  --stroke-onaccent:           rgba(255, 255, 255, 0.06);
+  --stroke-critical:           var(--red-05);
+  --stroke-internalnote:       rgba(233, 146, 67, 0.08);
+  --stroke-ontooltip:          rgba(255, 255, 255, 0.10);
+
+  /* Content */
+  --content-primary:           var(--grey-12);
+  --content-secondary:         var(--grey-09);
+  --content-tertiary:          var(--grey-06);
+  --content-tertiary-transparent: rgba(0, 0, 0, 0.50);
+  --content-quartenary:        rgba(0, 0, 0, 0.40);
+  --content-accent:            var(--blue-05);
+  --content-onaccent:          var(--grey-00);
+  --content-onaccentsecondary: rgba(255, 255, 255, 0.50);
+  --content-oninverse:         var(--grey-00);
+  --content-success:           var(--green-05);
+  --content-warning:           var(--orange-05);
+  --content-critical:          var(--red-05);
+  --content-internalnote:      var(--orange-08);
+  --content-ontooltip:         var(--grey-01);
+  --content-ontooltipsecondary: rgba(250, 250, 252, 0.50);
+
+  /* Charts */
+  --charts-positive:           var(--blue-05);
+  --charts-positivesubtle:     rgba(64, 97, 216, 0.10);
+  --charts-positiveghost:      rgba(64, 97, 216, 0.00);
+  --charts-neutralsubtle:      var(--grey-02);
+  --charts-neutralghost:       rgba(226, 227, 230, 0.00);
+  --charts-negative:           var(--red-05);
+  --charts-negativesubtle:     rgba(235, 87, 88, 0.10);
+  --charts-negativeghost:      rgba(235, 87, 88, 0.00);
+
+  /* Elevations */
+  --elevation-e1:              rgba(0, 0, 0, 0.04);
+  --elevation-e2:              rgba(0, 0, 0, 0.10);
+}
+
+/* ─── Layer 3: Semantic — Dark mode ──────────────────────── */
+/*
+ * Toggled via the html.dark class (see js/theme.js).
+ * JS initialises the class from window.matchMedia on first load.
+ */
+html.dark {
+
+    /* Surface */
+    --surface-primary:           var(--grey-10);
+    --surface-primaryhover:      rgba(255, 255, 255, 0.03);
+    --surface-secondary:         var(--grey-11);
+    --surface-accent:            var(--blue-06);
+    --surface-popover:           var(--grey-09);
+    --surface-popoverhover:      rgba(255, 255, 255, 0.16);
+    --surface-tint:              rgba(255, 255, 255, 0.05);
+    --surface-tintstrong:        rgba(255, 255, 255, 0.12);
+    --surface-tinthover:         rgba(255, 255, 255, 0.16);
+    --surface-internalnote:      rgba(212, 131, 0, 0.08);
+    --surface-tooltip:           var(--grey-09);
+    --surface-infosubtle:        var(--blue-08);
+    --surface-successsubtle:     var(--green-08);
+    --surface-warningsubtle:     var(--orange-08);
+    --surface-criticalsubtle:    var(--red-08);
+    --surface-callhover:         var(--blue-03);
+
+    /* Button */
+    --button-accent:             var(--blue-06);
+    --button-accenthover:        var(--blue-07);
+    --button-critical:           var(--red-06);
+    --button-criticalhover:      var(--red-07);
+    --button-secondary:          var(--grey-09);
+    --button-secondaryhover:     var(--grey-08);
+    --button-ghost:              rgba(255, 255, 255, 0);
+    --button-ghosthover:         rgba(255, 255, 255, 0.05);
+
+    /* Stroke */
+    --stroke-primary:            rgba(255, 255, 255, 0.05);
+    --stroke-secondarystrong:    rgba(255, 255, 255, 0.08);
+    --stroke-dashed:             rgba(255, 255, 255, 0.10);
+    --stroke-accent:             var(--blue-06);
+    --stroke-accentsoft:         var(--blue-07);
+    --stroke-internalnote:       rgba(233, 146, 67, 0.16);
+
+    /* Content */
+    --content-primary:           var(--grey-03);
+    --content-secondary:         var(--grey-06);
+    --content-tertiary:          var(--grey-07);
+    --content-tertiary-transparent: rgba(255, 255, 255, 0.36);
+    --content-quartenary:        rgba(255, 255, 255, 0.28);
+    --content-accent:            var(--blue-06);
+    --content-onaccentsecondary: rgba(255, 255, 255, 0.36);
+    --content-oninverse:         var(--grey-12);
+    --content-success:           var(--green-06);
+    --content-warning:           var(--orange-06);
+    --content-critical:          var(--red-06);
+    --content-internalnote:      var(--orange-05);
+
+    /* Charts */
+    --charts-positive:           var(--blue-06);
+    --charts-positivesubtle:     rgba(52, 79, 178, 0.10);
+    --charts-positiveghost:      rgba(52, 79, 178, 0.00);
+    --charts-neutralsubtle:      var(--grey-08);
+    --charts-neutralghost:       rgba(59, 60, 61, 0.00);
+    --charts-negative:           var(--red-06);
+    --charts-negativesubtle:     rgba(209, 76, 77, 0.10);
+  --charts-negativeghost:      rgba(209, 76, 77, 0.00);
+}
+
+/* ─── Layer 4: Non-colour shared tokens ───────────────────── */
+:root {
+  --font-family:    'Geist', sans-serif;
+  --shadow-e1:      0px 3px 6px 0px rgba(0, 0, 0, 0.04);
+  --shadow-toggle:  0 1px 2px rgba(0, 0, 0, 0.15);
+  --gradient-brand: linear-gradient(135deg, #a78bfa, #4061d8);
+}
+
+/* ─── Dev: theme switcher ─────────────────────────────────── */
+.theme-switcher {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 10px;
+  background: var(--surface-primary);
+  box-shadow: 0px -2px 40px 0px var(--elevation-e2);
+  cursor: grab;
+  user-select: none;
+}
+
+.theme-switcher-btn {
+  display: flex;
+  align-items: center;
+  padding: 6px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  font-family: var(--font-family);
+  font-size: 12px;
+  color: var(--content-secondary);
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.theme-switcher-btn.active {
+  background: var(--button-ghosthover);
+}
+
+.theme-switcher-btn:hover:not(.active) {
+  background: var(--surface-tint);
+}
+
+.theme-switcher-btn svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--content-secondary);
+}
+
+.theme-switcher-label {
+  padding: 0 4px;
+  line-height: 16px;
+}

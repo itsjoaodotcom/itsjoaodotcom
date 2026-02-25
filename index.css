@@ -1,19 +1,5 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root {
-  --font-family: 'Geist', sans-serif;
-  --content-primary: #010103;
-  --content-secondary: #262728;
-  --content-tertiary: #87888a;
-  --content-onaccent: #ffffff;
-  --surface-primary: #ffffff;
-  --surface-secondary: #fafafc;
-  --surface-tint: rgba(0,0,0,0.04);
-  --button-accent: #4061d8;
-  --stroke-primary: rgba(0,0,0,0.08);
-  --shadow-e1: 0px 3px 6px 0px rgba(0,0,0,0.04);
-}
-
 html, body {
   height: 100%;
   font-family: var(--font-family);
@@ -53,7 +39,7 @@ html, body {
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: linear-gradient(135deg, #a78bfa, #4061d8);
+  background: var(--gradient-brand);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -117,6 +103,7 @@ input {
   padding: 0 12px;
   font-family: var(--font-family);
   font-size: 14px;
+  line-height: 16px;
   color: var(--content-primary);
   background: var(--surface-primary);
   outline: none;
@@ -125,7 +112,7 @@ input {
 
 input::placeholder { color: var(--content-tertiary); }
 
-input:focus { border-color: var(--button-accent); }
+input:focus { border-color: var(--button-accent); caret-color: var(--button-accent); }
 
 .forgot {
   font-size: 13px;

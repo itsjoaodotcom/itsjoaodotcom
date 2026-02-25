@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/tokens.css" />
   <link rel="stylesheet" href="css/inbox.css" />
 
 </head>
@@ -317,10 +318,7 @@
         <div class="snav-item">
           <div class="snav-link">
             <div class="snav-icon">
-              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.2"/>
-                <path d="M8 2v1.2M8 12.8V14M2 8h1.2M12.8 8H14M3.757 3.757l.849.849M11.394 11.394l.849.849M3.757 12.243l.849-.849M11.394 4.606l.849-.849" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-              </svg>
+              <img src="icons/16px/Toggle.svg" width="16" height="16" alt="Settings"/>
             </div>
             <span class="snav-label">Settings</span>
           </div>
@@ -364,299 +362,7 @@
         </div>
 
         <!-- Conversation list -->
-        <div class="isb-list" id="isb-list">
-
-          <!-- Caroline Brennan — active, LiveChat -->
-          <div class="isb-item active">
-            <div class="isb-avatar-wrap">
-              <div class="isb-avatar" style="background: linear-gradient(135deg,#fbbf24,#f87171);">CB</div>
-              <div class="isb-channel"><!-- LiveChat -->
-                <svg viewBox="0 0 10 10" fill="none"><path d="M1 2.5C1 1.67 1.67 1 2.5 1h5C8.33 1 9 1.67 9 2.5v3C9 6.33 8.33 7 7.5 7H5.5L3 9V7H2.5C1.67 7 1 6.33 1 5.5v-3z" fill="#010103" opacity=".6"/></svg>
-              </div>
-            </div>
-            <div class="isb-message">
-              <div class="isb-header-row">
-                <span class="isb-name">Caroline Brennan</span>
-                <span class="isb-time">13min</span>
-              </div>
-              <div class="isb-bottom-row">
-                <span class="isb-preview">Hi. How can I top up with apple pay?</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Ethan Kim — WhatsApp, badge 1 -->
-          <div class="isb-item">
-            <div class="isb-avatar-wrap">
-              <div class="isb-avatar" style="background: linear-gradient(135deg,#34d399,#059669);">EK</div>
-              <div class="isb-channel"><!-- WhatsApp -->
-                <svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" fill="#25D366"/><path d="M7 6.2c-.1-.1-.7-.35-.8-.38-.1-.03-.18 0-.25.1l-.3.4c-.07.1-.15.1-.27.05-.6-.28-1-.6-1.35-1.1-.1-.15-.02-.23.07-.3l.25-.28c.07-.1.1-.18.03-.28L4.1 3.8c-.07-.1-.15-.1-.23-.07-.8.38-.82.75-.7 1.1.6 1.5 1.7 2.2 3.3 2.5.35.07.6-.1.65-.45.03-.2.02-.35-.12-.68z" fill="white"/></svg>
-              </div>
-            </div>
-            <div class="isb-message">
-              <div class="isb-header-row">
-                <span class="isb-name">Ethan Kim</span>
-                <span class="isb-time">2h</span>
-              </div>
-              <div class="isb-bottom-row">
-                <span class="isb-preview">Can I use multiple payment methods?</span>
-                <div class="isb-badge">1</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Jason Lee — initials, WhatsApp, badge 2 -->
-          <div class="isb-item">
-            <div class="isb-avatar-wrap">
-              <div class="isb-avatar" style="background: linear-gradient(135deg,#60a5fa,#3b82f6);">JL</div>
-              <div class="isb-channel">
-                <svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" fill="#25D366"/><path d="M7 6.2c-.1-.1-.7-.35-.8-.38-.1-.03-.18 0-.25.1l-.3.4c-.07.1-.15.1-.27.05-.6-.28-1-.6-1.35-1.1-.1-.15-.02-.23.07-.3l.25-.28c.07-.1.1-.18.03-.28L4.1 3.8c-.07-.1-.15-.1-.23-.07-.8.38-.82.75-.7 1.1.6 1.5 1.7 2.2 3.3 2.5.35.07.6-.1.65-.45.03-.2.02-.35-.12-.68z" fill="white"/></svg>
-              </div>
-            </div>
-            <div class="isb-message">
-              <div class="isb-header-row">
-                <span class="isb-name">Jason Lee</span>
-                <span class="isb-time">6h</span>
-              </div>
-              <div class="isb-bottom-row">
-                <span class="isb-preview">What's the best way to contact support?</span>
-                <div class="isb-badge">2</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Aisha Patel — LiveChat -->
-          <div class="isb-item">
-            <div class="isb-avatar-wrap">
-              <div class="isb-avatar" style="background: linear-gradient(135deg,#f9a8d4,#ec4899);">AP</div>
-              <div class="isb-channel">
-                <svg viewBox="0 0 10 10" fill="none"><path d="M1 2.5C1 1.67 1.67 1 2.5 1h5C8.33 1 9 1.67 9 2.5v3C9 6.33 8.33 7 7.5 7H5.5L3 9V7H2.5C1.67 7 1 6.33 1 5.5v-3z" fill="#010103" opacity=".6"/></svg>
-              </div>
-            </div>
-            <div class="isb-message">
-              <div class="isb-header-row">
-                <span class="isb-name">Aisha Patel</span>
-                <span class="isb-time">1d</span>
-              </div>
-              <div class="isb-bottom-row">
-                <span class="isb-preview">Can you help me with my account verification?</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Marcus Wu — Android, badge 4 -->
-          <div class="isb-item">
-            <div class="isb-avatar-wrap">
-              <div class="isb-avatar" style="background: linear-gradient(135deg,#86efac,#16a34a);">MW</div>
-              <div class="isb-channel"><!-- Android -->
-                <svg viewBox="0 0 10 10" fill="none"><path d="M2 6.5V4.5C2 3.12 3.12 2 4.5 2h1C6.88 2 8 3.12 8 4.5v2c0 .28-.22.5-.5.5h-5C2.22 7 2 6.78 2 6.5zM3.5 1l.5.8M6.5 1L6 1.8" stroke="#3ddc84" stroke-width=".8" stroke-linecap="round"/><rect x="1.5" y="7" width="7" height=".7" rx=".35" fill="#3ddc84"/></svg>
-              </div>
-            </div>
-            <div class="isb-message">
-              <div class="isb-header-row">
-                <span class="isb-name">Marcus Wu</span>
-                <span class="isb-time">1d</span>
-              </div>
-              <div class="isb-bottom-row">
-                <span class="isb-preview">Is there a way to change my subscription?</span>
-                <div class="isb-badge">4</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Linda Gomez — LiveChat, quote -->
-          <div class="isb-item">
-            <div class="isb-avatar-wrap">
-              <div class="isb-avatar" style="background: linear-gradient(135deg,#fcd34d,#f59e0b);">LG</div>
-              <div class="isb-channel">
-                <svg viewBox="0 0 10 10" fill="none"><path d="M1 2.5C1 1.67 1.67 1 2.5 1h5C8.33 1 9 1.67 9 2.5v3C9 6.33 8.33 7 7.5 7H5.5L3 9V7H2.5C1.67 7 1 6.33 1 5.5v-3z" fill="#010103" opacity=".6"/></svg>
-              </div>
-            </div>
-            <div class="isb-message">
-              <div class="isb-header-row">
-                <span class="isb-name">Linda Gomez</span>
-                <span class="isb-time">1d</span>
-              </div>
-              <div class="isb-bottom-row">
-                <div class="isb-quote-bar"></div>
-                <span class="isb-preview">How do I reset my password?</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Carlos Rodriguez — initials, LiveChat -->
-          <div class="isb-item">
-            <div class="isb-avatar-wrap">
-              <div class="isb-avatar" style="background: linear-gradient(135deg,#6ee7b7,#059669);">CR</div>
-              <div class="isb-channel">
-                <svg viewBox="0 0 10 10" fill="none"><path d="M1 2.5C1 1.67 1.67 1 2.5 1h5C8.33 1 9 1.67 9 2.5v3C9 6.33 8.33 7 7.5 7H5.5L3 9V7H2.5C1.67 7 1 6.33 1 5.5v-3z" fill="#010103" opacity=".6"/></svg>
-              </div>
-            </div>
-            <div class="isb-message">
-              <div class="isb-header-row">
-                <span class="isb-name">Carlos Rodriguez</span>
-                <span class="isb-time">2d</span>
-              </div>
-              <div class="isb-bottom-row">
-                <span class="isb-preview">What are the security measures for my data?</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Julia Chen — initials, LiveChat -->
-          <div class="isb-item">
-            <div class="isb-avatar-wrap">
-              <div class="isb-avatar" style="background: linear-gradient(135deg,#c4b5fd,#7c3aed);">JC</div>
-              <div class="isb-channel">
-                <svg viewBox="0 0 10 10" fill="none"><path d="M1 2.5C1 1.67 1.67 1 2.5 1h5C8.33 1 9 1.67 9 2.5v3C9 6.33 8.33 7 7.5 7H5.5L3 9V7H2.5C1.67 7 1 6.33 1 5.5v-3z" fill="#010103" opacity=".6"/></svg>
-              </div>
-            </div>
-            <div class="isb-message">
-              <div class="isb-header-row">
-                <span class="isb-name">Julia Chen</span>
-                <span class="isb-time">2d</span>
-              </div>
-              <div class="isb-bottom-row">
-                <span class="isb-preview">How to report a technical issue?</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Brandon Smith — LiveChat -->
-          <div class="isb-item">
-            <div class="isb-avatar-wrap">
-              <div class="isb-avatar" style="background: linear-gradient(135deg,#93c5fd,#2563eb);">BS</div>
-              <div class="isb-channel">
-                <svg viewBox="0 0 10 10" fill="none"><path d="M1 2.5C1 1.67 1.67 1 2.5 1h5C8.33 1 9 1.67 9 2.5v3C9 6.33 8.33 7 7.5 7H5.5L3 9V7H2.5C1.67 7 1 6.33 1 5.5v-3z" fill="#010103" opacity=".6"/></svg>
-              </div>
-            </div>
-            <div class="isb-message">
-              <div class="isb-header-row">
-                <span class="isb-name">Brandon Smith</span>
-                <span class="isb-time">2d</span>
-              </div>
-              <div class="isb-bottom-row">
-                <span class="isb-preview">What features are included in the free trial?</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Nina Brown — Android -->
-          <div class="isb-item">
-            <div class="isb-avatar-wrap">
-              <div class="isb-avatar" style="background: linear-gradient(135deg,#fda4af,#e11d48);">NB</div>
-              <div class="isb-channel">
-                <svg viewBox="0 0 10 10" fill="none"><path d="M2 6.5V4.5C2 3.12 3.12 2 4.5 2h1C6.88 2 8 3.12 8 4.5v2c0 .28-.22.5-.5.5h-5C2.22 7 2 6.78 2 6.5zM3.5 1l.5.8M6.5 1L6 1.8" stroke="#3ddc84" stroke-width=".8" stroke-linecap="round"/><rect x="1.5" y="7" width="7" height=".7" rx=".35" fill="#3ddc84"/></svg>
-              </div>
-            </div>
-            <div class="isb-message">
-              <div class="isb-header-row">
-                <span class="isb-name">Nina Brown</span>
-                <span class="isb-time">3d</span>
-              </div>
-              <div class="isb-bottom-row">
-                <span class="isb-preview">Can I change my email address linked to...</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Oliver Johnson — initials, Android, quote -->
-          <div class="isb-item">
-            <div class="isb-avatar-wrap">
-              <div class="isb-avatar" style="background: linear-gradient(135deg,#fdba74,#ea580c);">OJ</div>
-              <div class="isb-channel">
-                <svg viewBox="0 0 10 10" fill="none"><path d="M2 6.5V4.5C2 3.12 3.12 2 4.5 2h1C6.88 2 8 3.12 8 4.5v2c0 .28-.22.5-.5.5h-5C2.22 7 2 6.78 2 6.5zM3.5 1l.5.8M6.5 1L6 1.8" stroke="#3ddc84" stroke-width=".8" stroke-linecap="round"/><rect x="1.5" y="7" width="7" height=".7" rx=".35" fill="#3ddc84"/></svg>
-              </div>
-            </div>
-            <div class="isb-message">
-              <div class="isb-header-row">
-                <span class="isb-name">Oliver Johnson</span>
-                <span class="isb-time">3d</span>
-              </div>
-              <div class="isb-bottom-row">
-                <div class="isb-quote-bar"></div>
-                <span class="isb-preview">How do I contact customer service directly?</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Grace White — initials, Android -->
-          <div class="isb-item">
-            <div class="isb-avatar-wrap">
-              <div class="isb-avatar" style="background: linear-gradient(135deg,#5eead4,#0d9488);">GW</div>
-              <div class="isb-channel">
-                <svg viewBox="0 0 10 10" fill="none"><path d="M2 6.5V4.5C2 3.12 3.12 2 4.5 2h1C6.88 2 8 3.12 8 4.5v2c0 .28-.22.5-.5.5h-5C2.22 7 2 6.78 2 6.5zM3.5 1l.5.8M6.5 1L6 1.8" stroke="#3ddc84" stroke-width=".8" stroke-linecap="round"/><rect x="1.5" y="7" width="7" height=".7" rx=".35" fill="#3ddc84"/></svg>
-              </div>
-            </div>
-            <div class="isb-message">
-              <div class="isb-header-row">
-                <span class="isb-name">Grace White</span>
-                <span class="isb-time">4d</span>
-              </div>
-              <div class="isb-bottom-row">
-                <span class="isb-preview">What should I do if I forget my username?</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Leo Thompson — LiveChat -->
-          <div class="isb-item">
-            <div class="isb-avatar-wrap">
-              <div class="isb-avatar" style="background: linear-gradient(135deg,#a5b4fc,#6366f1);">LT</div>
-              <div class="isb-channel">
-                <svg viewBox="0 0 10 10" fill="none"><path d="M1 2.5C1 1.67 1.67 1 2.5 1h5C8.33 1 9 1.67 9 2.5v3C9 6.33 8.33 7 7.5 7H5.5L3 9V7H2.5C1.67 7 1 6.33 1 5.5v-3z" fill="#010103" opacity=".6"/></svg>
-              </div>
-            </div>
-            <div class="isb-message">
-              <div class="isb-header-row">
-                <span class="isb-name">Leo Thompson</span>
-                <span class="isb-time">4d</span>
-              </div>
-              <div class="isb-bottom-row">
-                <span class="isb-preview">Are there any promotions available right now?</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Emma Garcia — WhatsApp -->
-          <div class="isb-item">
-            <div class="isb-avatar-wrap">
-              <div class="isb-avatar" style="background: linear-gradient(135deg,#f9a8d4,#db2777);">EG</div>
-              <div class="isb-channel">
-                <svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" fill="#25D366"/><path d="M7 6.2c-.1-.1-.7-.35-.8-.38-.1-.03-.18 0-.25.1l-.3.4c-.07.1-.15.1-.27.05-.6-.28-1-.6-1.35-1.1-.1-.15-.02-.23.07-.3l.25-.28c.07-.1.1-.18.03-.28L4.1 3.8c-.07-.1-.15-.1-.23-.07-.8.38-.82.75-.7 1.1.6 1.5 1.7 2.2 3.3 2.5.35.07.6-.1.65-.45.03-.2.02-.35-.12-.68z" fill="white"/></svg>
-              </div>
-            </div>
-            <div class="isb-message">
-              <div class="isb-header-row">
-                <span class="isb-name">Emma Garcia</span>
-                <span class="isb-time">4d</span>
-              </div>
-              <div class="isb-bottom-row">
-                <span class="isb-preview">What are the returns policy options?</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Liam Johnson — LiveChat -->
-          <div class="isb-item">
-            <div class="isb-avatar-wrap">
-              <div class="isb-avatar" style="background: linear-gradient(135deg,#bfdbfe,#3b82f6);">LJ</div>
-              <div class="isb-channel">
-                <svg viewBox="0 0 10 10" fill="none"><path d="M1 2.5C1 1.67 1.67 1 2.5 1h5C8.33 1 9 1.67 9 2.5v3C9 6.33 8.33 7 7.5 7H5.5L3 9V7H2.5C1.67 7 1 6.33 1 5.5v-3z" fill="#010103" opacity=".6"/></svg>
-              </div>
-            </div>
-            <div class="isb-message">
-              <div class="isb-header-row">
-                <span class="isb-name">Liam Johnson</span>
-                <span class="isb-time">4d</span>
-              </div>
-              <div class="isb-bottom-row">
-                <span class="isb-preview">How can I track my order?</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
+        <div class="isb-list" id="isb-list"></div>
       </aside>
 
       <!-- Dialog (Chat) -->
@@ -758,9 +464,7 @@
         <!-- Composer -->
         <div class="composer-wrap">
           <div class="composer">
-            <div class="composer-input">
-              <span class="composer-placeholder">Write your answer…</span>
-            </div>
+            <div class="composer-input" contenteditable="true"></div>
             <div class="composer-actions">
               <div class="composer-left">
                 <button class="icon-btn" style="width:28px;height:28px" title="Attach file">
@@ -992,20 +696,21 @@
         <!-- AI Copilot Composer -->
         <div id="copilot-composer" class="copilot-composer">
           <div class="copilot-input">
-            <div class="copilot-input-row">
-              <span class="copilot-placeholder">Ask anything…</span>
-              <button class="copilot-send-btn">
-                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M8 12.5V3.5M4.5 7l3.5-3.5L11.5 7" stroke="white" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </button>
-            </div>
+            <div contenteditable="true" class="copilot-editable"></div>
+            <button class="copilot-send-btn">
+              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 12.5V3.5M4.5 7l3.5-3.5L11.5 7" stroke="white" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
           </div>
         </div>
 
       </div><!-- /copilot -->
     </div><!-- /content -->
   </div><!-- /frame-root -->
+  <script src="js/theme.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/components.js"></script>
   <script src="js/inbox.js"></script>
 </body>
 </html>
