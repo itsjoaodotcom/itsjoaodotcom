@@ -256,6 +256,14 @@
   align-items: center;
 }
 
+/* ─── Illustration: SelectConversation SVG token classes ─── */
+
+.c-fill         { fill: var(--surface-primary); }
+.c-skel         { fill: var(--stroke-secondarystrong); fill-opacity: 1; }
+.c-border-dash  { stroke: var(--stroke-secondarystrong); stroke-opacity: 1; }
+.c-border-solid { stroke: var(--stroke-primary); stroke-opacity: 1; }
+.c-border-accent{ stroke: var(--stroke-accentsoft); }
+
 /* ─── Illustration: Workflow ──────────────────────────────── */
 
 .illu-workflow {
