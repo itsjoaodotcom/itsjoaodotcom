@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inbox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/inbox.css" />
+
+</head>
+<body>
+  <div class="frame-root">
+
+    <!-- Left Nav Sidebar -->
+    <nav class="sidebar-nav">
+
+      <!-- Header: workspace + collapse button -->
+      <div class="snav-header">
+        <button class="snav-workspace-btn">
+          <div class="snav-workspace-avatar">
+            <img src="icons/16px/ClarityLogo.svg" width="12" height="12" alt="Workspace" style="filter: brightness(0) invert(0.53); color: var(--content-tertiary);" />
+          </div>
+          <span class="snav-workspace-name">Clarity</span>
+        </button>
+        <button class="snav-icon-btn" id="collapse-sidebar-btn" title="Collapse sidebar">
+          <img src="icons/16px/SidebarLeft.svg" width="16" height="16" alt="Collapse sidebar"/>
+        </button>
+      </div>
+
+      <!-- Section 1: Inbox tree + Contacts + AI Assistant -->
+      <div class="snav-links">
+
+        <!-- Inbox (expandable) -->
+        <div class="snav-item">
+          <div class="snav-link">
+            <div class="snav-icon">
+              <img src="icons/16px/Inbox.svg" width="16" height="16" alt="Inbox" style="filter: brightness(0) invert(0.53); color: var(--content-tertiary);" />
+            </div>
+            <span class="snav-label">Inbox</span>
+            <div class="snav-chevron">
+              <img src="icons/16px/ChevronRight.svg" width="16" height="16" alt=""/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub-items -->
+        <div class="snav-subitems">
+
+          <div class="snav-subitem active">
+            <div class="snav-tree"></div>
+            <div class="snav-sublink" data-view="assigned">
+              <div class="snav-icon">
+                <img src="icons/16px/User.svg" width="16" height="16" alt="Assigned to me" style="filter: brightness(0) invert(0.53); color: var(--content-tertiary);" />
+              </div>
+              <span class="snav-label">Assigned to me</span>
+              <div class="snav-badge-wrap">
+                <div class="snav-badge"><span>4</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="snav-subitem">
+            <div class="snav-tree"></div>
+            <div class="snav-sublink" data-view="mentions">
+              <div class="snav-icon">
+                <img src="icons/16px/At.svg" width="16" height="16" alt="Mentions" style="filter: brightness(0) invert(0.53); color: var(--content-tertiary);" />
+              </div>
+              <span class="snav-label">Mentions</span>
+              <div class="snav-badge-wrap">
+                <div class="snav-badge"><span>3</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="snav-subitem">
+            <div class="snav-tree"></div>
+            <div class="snav-sublink" data-view="unassigned">
+              <div class="snav-icon">
+                <img src="icons/16px/Unassigned.svg" width="16" height="16" alt="Unassigned" style="filter: brightness(0) invert(0.53); color: var(--content-tertiary);" />
+              </div>
+              <span class="snav-label">Unassigned</span>
+              <div class="snav-badge-wrap">
+                <div class="snav-badge"><span>3</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="snav-subitem">
+            <div class="snav-tree"></div>
+            <div class="snav-sublink" data-view="snoozed">
+              <div class="snav-icon">
+                <img src="icons/16px/Snooze.svg" width="16" height="16" alt="Snoozed" style="filter: brightness(0) invert(0.53); color: var(--content-tertiary);" />
+              </div>
+              <span class="snav-label">Snoozed</span>
+              <div class="snav-badge-wrap">
+                <div class="snav-badge"><span>2</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="snav-subitem">
+            <div class="snav-tree"></div>
+            <div class="snav-sublink" data-view="closed">
+              <div class="snav-icon">
+                <img src="icons/16px/CheckCircle.svg" width="16" height="16" alt="Closed" style="filter: brightness(0) invert(0.53); color: var(--content-tertiary);" />
+              </div>
+              <span class="snav-label">Closed</span>
+              <div class="snav-badge-wrap">
+                <div class="snav-badge"><span>3</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="snav-subitem">
+            <div class="snav-tree"></div>
+            <div class="snav-sublink" data-view="all">
+              <div class="snav-icon">
+                <img src="icons/16px/All.svg" width="16" height="16" alt="All" style="filter: brightness(0) invert(0.53); color: var(--content-tertiary);" />
+              </div>
+              <span class="snav-label">All</span>
+              <div class="snav-badge-wrap">
+                <div class="snav-badge"><span>15</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /snav-subitems -->
+
+        <!-- Contacts -->
+        <div class="snav-item">
+          <div class="snav-link">
+            <div class="snav-icon">
+              <img src="icons/16px/ActiveUser.svg" width="16" height="16" alt="Contacts" style="filter: brightness(0) invert(0.53); color: var(--content-tertiary);" />
+            </div>
+            <span class="snav-label">Contacts</span>
+            <div class="snav-chevron">
+              <img src="icons/16px/ChevronRight.svg" width="16" height="16" alt=""/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contacts Sub-items -->
+        <div class="snav-subitems">
+
+          <div class="snav-subitem">
+            <div class="snav-tree"></div>
+            <div class="snav-sublink">
+              <div class="snav-icon">
+                <img src="icons/16px/All.svg" width="16" height="16" alt="All" style="filter: brightness(0) invert(0.53); color: var(--content-tertiary);" />
+              </div>
+              <span class="snav-label">All</span>
+            </div>
+          </div>
+
+          <div class="snav-subitem">
+            <div class="snav-tree"></div>
+            <div class="snav-sublink">
+              <div class="snav-icon">
+                <img src="icons/16px/ActiveUser.svg" width="16" height="16" alt="Active" style="filter: brightness(0) invert(0.53); color: var(--content-tertiary);" />
+              </div>
+              <span class="snav-label">Active</span>
+            </div>
+          </div>
+
+        </div><!-- /contacts-subitems -->
+
+        <!-- AI Assistant -->
+        <div class="snav-item">
+          <div class="snav-link">
+            <div class="snav-icon">
+              <img src="icons/16px/AI.svg" width="16" height="16" alt="AI Assistant" style="filter: brightness(0) invert(0.53); color: var(--content-tertiary);" />
+            </div>
+            <span class="snav-label">AI Assistant</span>
+          </div>
+        </div>
+
+        <!-- Voice Assist -->
+        <div class="snav-item">
+          <div class="snav-link">
+            <div class="snav-icon">
+              <img src="icons/16px/Micro.svg" width="16" height="16" alt="Voice Assist" style="filter: brightness(0) invert(0.53); color: var(--content-tertiary);" />
+            </div>
+            <span class="snav-label">Voice Assist</span>
+          </div>
+        </div>
+
+      </div><!-- /snav-links section 1 -->
+
+      <div class="snav-divider"></div>
+
+      <!-- Section 2: AI Hub -->
+      <div class="snav-links mid">
+        <div class="snav-item">
+          <div class="snav-link">
+            <div class="snav-icon">
+              <img src="icons/16px/AIHub.svg" width="16" height="16" alt="AI Hub" style="filter: brightness(0) invert(0.53); color: var(--content-tertiary);" />
+            </div>
+            <span class="snav-label">AI Hub</span>
+            <div class="snav-chevron">
+              <img src="icons/16px/ChevronRight.svg" width="16" height="16" alt=""/>
+            </div>
+          </div>
+        </div>
+
+        <div class="snav-subitems">
+
+          <div class="snav-subitem">
+            <div class="snav-tree"></div>
+            <div class="snav-sublink">
+              <div class="snav-icon">
+                <img src="icons/16px/Documentation.svg" width="16" height="16" alt="Knowledge Base" style="filter: brightness(0) invert(0.53); color: var(--content-tertiary);" />
+              </div>
+              <span class="snav-label">Knowledge Base</span>
+            </div>
+          </div>
+
+          <div class="snav-subitem">
+            <div class="snav-tree"></div>
+            <div class="snav-sublink">
+              <div class="snav-icon">
+                <img src="icons/16px/Agent.svg" width="16" height="16" alt="Agent Assist" style="filter: brightness(0) invert(0.53); color: var(--content-tertiary);" />
+              </div>
+              <span class="snav-label">Agent Assist</span>
+            </div>
+          </div>
+
+          <div class="snav-subitem">
+            <div class="snav-tree"></div>
+            <div class="snav-sublink">
+              <div class="snav-icon">
+                <img src="icons/16px/Workflows.svg" width="16" height="16" alt="AI Automation Agent" style="filter: brightness(0) invert(0.53); color: var(--content-tertiary);" />
+              </div>
+              <span class="snav-label">AI Automation Agent</span>
+            </div>
+          </div>
+
+        </div><!-- /aihub-subitems -->
+      </div>
+
+      <div class="snav-divider"></div>
+
+      <!-- Section 3: Analytics -->
+      <div class="snav-links mid">
+        <div class="snav-item">
+          <div class="snav-link">
+            <div class="snav-icon">
+              <img src="icons/16px/ChartBars.svg" width="16" height="16" alt="Analytics" style="filter: brightness(0) invert(0.53); color: var(--content-tertiary);" />
+            </div>
+            <span class="snav-label">Analytics</span>
+            <div class="snav-chevron">
+              <img src="icons/16px/ChevronRight.svg" width="16" height="16" alt=""/>
+            </div>
+          </div>
+        </div>
+
+        <div class="snav-subitems">
+
+          <div class="snav-subitem">
+            <div class="snav-tree"></div>
+            <div class="snav-sublink">
+              <div class="snav-icon">
+                <img src="icons/16px/Grid2.svg" width="16" height="16" alt="Overview" style="filter: brightness(0) invert(0.53); color: var(--content-tertiary);" />
+              </div>
+              <span class="snav-label">Overview</span>
+            </div>
+          </div>
+
+          <div class="snav-subitem">
+            <div class="snav-tree"></div>
+            <div class="snav-sublink">
+              <div class="snav-icon">
+                <img src="icons/16px/AI.svg" width="16" height="16" alt="AI Insights" style="filter: brightness(0) invert(0.53); color: var(--content-tertiary);" />
+              </div>
+              <span class="snav-label">AI Insights</span>
+            </div>
+          </div>
+
+          <div class="snav-subitem">
+            <div class="snav-tree"></div>
+            <div class="snav-sublink">
+              <div class="snav-icon">
+                <img src="icons/16px/Users.svg" width="16" height="16" alt="Team Performance" style="filter: brightness(0) invert(0.53); color: var(--content-tertiary);" />
+              </div>
+              <span class="snav-label">Team Performance</span>
+            </div>
+          </div>
+
+          <div class="snav-subitem">
+            <div class="snav-tree"></div>
+            <div class="snav-sublink">
+              <div class="snav-icon">
+                <img src="icons/16px/Inbox.svg" width="16" height="16" alt="Conversations" style="filter: brightness(0) invert(0.53); color: var(--content-tertiary);" />
+              </div>
+              <span class="snav-label">Conversations</span>
+            </div>
+          </div>
+
+          <div class="snav-subitem">
+            <div class="snav-tree"></div>
+            <div class="snav-sublink">
+              <div class="snav-icon">
+                <img src="icons/16px/User.svg" width="16" height="16" alt="Customers" style="filter: brightness(0) invert(0.53); color: var(--content-tertiary);" />
+              </div>
+              <span class="snav-label">Customers</span>
+            </div>
+          </div>
+
+        </div><!-- /analytics-subitems -->
+      </div>
+
+      <div class="snav-divider"></div>
+
+      <!-- Section 4: Settings (flex grows to push footer down) -->
+      <div class="snav-links grow">
+        <div class="snav-item">
+          <div class="snav-link">
+            <div class="snav-icon">
+              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.2"/>
+                <path d="M8 2v1.2M8 12.8V14M2 8h1.2M12.8 8H14M3.757 3.757l.849.849M11.394 11.394l.849.849M3.757 12.243l.849-.849M11.394 4.606l.849-.849" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="snav-label">Settings</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- User profile footer -->
+      <div class="snav-footer">
+        <button class="snav-user-btn">
+          <div class="snav-user-avatar">
+            <div class="snav-online-dot"></div>
+          </div>
+          <span class="snav-user-name">George White</span>
+        </button>
+      </div>
+
+    </nav>
+
+    <!-- Main content -->
+    <div class="content">
+
+      <!-- Inbox list sidebar -->
+      <aside class="inbox-sidebar">
+
+        <!-- Topbar -->
+        <div class="isb-topbar">
+          <div class="isb-title-wrap">
+            <span class="isb-title" id="isb-title">Assigned to me</span>
+            <div class="isb-badge" id="isb-count">4</div>
+          </div>
+          <div class="isb-actions">
+            <!-- Search -->
+            <button class="isb-icon-btn" title="Search">
+              <img src="icons/16px/Search.svg" width="16" height="16" alt="Search" />
+            </button>
+            <!-- Filter -->
+            <button class="isb-icon-btn" title="Filter">
+              <img src="icons/16px/Filter.svg" width="16" height="16" alt="Filter"/>
+            </button>
+          </div>
+        </div>
+
+        <!-- Conversation list -->
+        <div class="isb-list" id="isb-list">
+
+          <!-- Caroline Brennan — active, LiveChat -->
+          <div class="isb-item active">
+            <div class="isb-avatar-wrap">
+              <div class="isb-avatar" style="background: linear-gradient(135deg,#fbbf24,#f87171);">CB</div>
+              <div class="isb-channel"><!-- LiveChat -->
+                <svg viewBox="0 0 10 10" fill="none"><path d="M1 2.5C1 1.67 1.67 1 2.5 1h5C8.33 1 9 1.67 9 2.5v3C9 6.33 8.33 7 7.5 7H5.5L3 9V7H2.5C1.67 7 1 6.33 1 5.5v-3z" fill="#010103" opacity=".6"/></svg>
+              </div>
+            </div>
+            <div class="isb-message">
+              <div class="isb-header-row">
+                <span class="isb-name">Caroline Brennan</span>
+                <span class="isb-time">13min</span>
+              </div>
+              <div class="isb-bottom-row">
+                <span class="isb-preview">Hi. How can I top up with apple pay?</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ethan Kim — WhatsApp, badge 1 -->
+          <div class="isb-item">
+            <div class="isb-avatar-wrap">
+              <div class="isb-avatar" style="background: linear-gradient(135deg,#34d399,#059669);">EK</div>
+              <div class="isb-channel"><!-- WhatsApp -->
+                <svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" fill="#25D366"/><path d="M7 6.2c-.1-.1-.7-.35-.8-.38-.1-.03-.18 0-.25.1l-.3.4c-.07.1-.15.1-.27.05-.6-.28-1-.6-1.35-1.1-.1-.15-.02-.23.07-.3l.25-.28c.07-.1.1-.18.03-.28L4.1 3.8c-.07-.1-.15-.1-.23-.07-.8.38-.82.75-.7 1.1.6 1.5 1.7 2.2 3.3 2.5.35.07.6-.1.65-.45.03-.2.02-.35-.12-.68z" fill="white"/></svg>
+              </div>
+            </div>
+            <div class="isb-message">
+              <div class="isb-header-row">
+                <span class="isb-name">Ethan Kim</span>
+                <span class="isb-time">2h</span>
+              </div>
+              <div class="isb-bottom-row">
+                <span class="isb-preview">Can I use multiple payment methods?</span>
+                <div class="isb-badge">1</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Jason Lee — initials, WhatsApp, badge 2 -->
+          <div class="isb-item">
+            <div class="isb-avatar-wrap">
+              <div class="isb-avatar" style="background: linear-gradient(135deg,#60a5fa,#3b82f6);">JL</div>
+              <div class="isb-channel">
+                <svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" fill="#25D366"/><path d="M7 6.2c-.1-.1-.7-.35-.8-.38-.1-.03-.18 0-.25.1l-.3.4c-.07.1-.15.1-.27.05-.6-.28-1-.6-1.35-1.1-.1-.15-.02-.23.07-.3l.25-.28c.07-.1.1-.18.03-.28L4.1 3.8c-.07-.1-.15-.1-.23-.07-.8.38-.82.75-.7 1.1.6 1.5 1.7 2.2 3.3 2.5.35.07.6-.1.65-.45.03-.2.02-.35-.12-.68z" fill="white"/></svg>
+              </div>
+            </div>
+            <div class="isb-message">
+              <div class="isb-header-row">
+                <span class="isb-name">Jason Lee</span>
+                <span class="isb-time">6h</span>
+              </div>
+              <div class="isb-bottom-row">
+                <span class="isb-preview">What's the best way to contact support?</span>
+                <div class="isb-badge">2</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Aisha Patel — LiveChat -->
+          <div class="isb-item">
+            <div class="isb-avatar-wrap">
+              <div class="isb-avatar" style="background: linear-gradient(135deg,#f9a8d4,#ec4899);">AP</div>
+              <div class="isb-channel">
+                <svg viewBox="0 0 10 10" fill="none"><path d="M1 2.5C1 1.67 1.67 1 2.5 1h5C8.33 1 9 1.67 9 2.5v3C9 6.33 8.33 7 7.5 7H5.5L3 9V7H2.5C1.67 7 1 6.33 1 5.5v-3z" fill="#010103" opacity=".6"/></svg>
+              </div>
+            </div>
+            <div class="isb-message">
+              <div class="isb-header-row">
+                <span class="isb-name">Aisha Patel</span>
+                <span class="isb-time">1d</span>
+              </div>
+              <div class="isb-bottom-row">
+                <span class="isb-preview">Can you help me with my account verification?</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Marcus Wu — Android, badge 4 -->
+          <div class="isb-item">
+            <div class="isb-avatar-wrap">
+              <div class="isb-avatar" style="background: linear-gradient(135deg,#86efac,#16a34a);">MW</div>
+              <div class="isb-channel"><!-- Android -->
+                <svg viewBox="0 0 10 10" fill="none"><path d="M2 6.5V4.5C2 3.12 3.12 2 4.5 2h1C6.88 2 8 3.12 8 4.5v2c0 .28-.22.5-.5.5h-5C2.22 7 2 6.78 2 6.5zM3.5 1l.5.8M6.5 1L6 1.8" stroke="#3ddc84" stroke-width=".8" stroke-linecap="round"/><rect x="1.5" y="7" width="7" height=".7" rx=".35" fill="#3ddc84"/></svg>
+              </div>
+            </div>
+            <div class="isb-message">
+              <div class="isb-header-row">
+                <span class="isb-name">Marcus Wu</span>
+                <span class="isb-time">1d</span>
+              </div>
+              <div class="isb-bottom-row">
+                <span class="isb-preview">Is there a way to change my subscription?</span>
+                <div class="isb-badge">4</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Linda Gomez — LiveChat, quote -->
+          <div class="isb-item">
+            <div class="isb-avatar-wrap">
+              <div class="isb-avatar" style="background: linear-gradient(135deg,#fcd34d,#f59e0b);">LG</div>
+              <div class="isb-channel">
+                <svg viewBox="0 0 10 10" fill="none"><path d="M1 2.5C1 1.67 1.67 1 2.5 1h5C8.33 1 9 1.67 9 2.5v3C9 6.33 8.33 7 7.5 7H5.5L3 9V7H2.5C1.67 7 1 6.33 1 5.5v-3z" fill="#010103" opacity=".6"/></svg>
+              </div>
+            </div>
+            <div class="isb-message">
+              <div class="isb-header-row">
+                <span class="isb-name">Linda Gomez</span>
+                <span class="isb-time">1d</span>
+              </div>
+              <div class="isb-bottom-row">
+                <div class="isb-quote-bar"></div>
+                <span class="isb-preview">How do I reset my password?</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Carlos Rodriguez — initials, LiveChat -->
+          <div class="isb-item">
+            <div class="isb-avatar-wrap">
+              <div class="isb-avatar" style="background: linear-gradient(135deg,#6ee7b7,#059669);">CR</div>
+              <div class="isb-channel">
+                <svg viewBox="0 0 10 10" fill="none"><path d="M1 2.5C1 1.67 1.67 1 2.5 1h5C8.33 1 9 1.67 9 2.5v3C9 6.33 8.33 7 7.5 7H5.5L3 9V7H2.5C1.67 7 1 6.33 1 5.5v-3z" fill="#010103" opacity=".6"/></svg>
+              </div>
+            </div>
+            <div class="isb-message">
+              <div class="isb-header-row">
+                <span class="isb-name">Carlos Rodriguez</span>
+                <span class="isb-time">2d</span>
+              </div>
+              <div class="isb-bottom-row">
+                <span class="isb-preview">What are the security measures for my data?</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Julia Chen — initials, LiveChat -->
+          <div class="isb-item">
+            <div class="isb-avatar-wrap">
+              <div class="isb-avatar" style="background: linear-gradient(135deg,#c4b5fd,#7c3aed);">JC</div>
+              <div class="isb-channel">
+                <svg viewBox="0 0 10 10" fill="none"><path d="M1 2.5C1 1.67 1.67 1 2.5 1h5C8.33 1 9 1.67 9 2.5v3C9 6.33 8.33 7 7.5 7H5.5L3 9V7H2.5C1.67 7 1 6.33 1 5.5v-3z" fill="#010103" opacity=".6"/></svg>
+              </div>
+            </div>
+            <div class="isb-message">
+              <div class="isb-header-row">
+                <span class="isb-name">Julia Chen</span>
+                <span class="isb-time">2d</span>
+              </div>
+              <div class="isb-bottom-row">
+                <span class="isb-preview">How to report a technical issue?</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Brandon Smith — LiveChat -->
+          <div class="isb-item">
+            <div class="isb-avatar-wrap">
+              <div class="isb-avatar" style="background: linear-gradient(135deg,#93c5fd,#2563eb);">BS</div>
+              <div class="isb-channel">
+                <svg viewBox="0 0 10 10" fill="none"><path d="M1 2.5C1 1.67 1.67 1 2.5 1h5C8.33 1 9 1.67 9 2.5v3C9 6.33 8.33 7 7.5 7H5.5L3 9V7H2.5C1.67 7 1 6.33 1 5.5v-3z" fill="#010103" opacity=".6"/></svg>
+              </div>
+            </div>
+            <div class="isb-message">
+              <div class="isb-header-row">
+                <span class="isb-name">Brandon Smith</span>
+                <span class="isb-time">2d</span>
+              </div>
+              <div class="isb-bottom-row">
+                <span class="isb-preview">What features are included in the free trial?</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Nina Brown — Android -->
+          <div class="isb-item">
+            <div class="isb-avatar-wrap">
+              <div class="isb-avatar" style="background: linear-gradient(135deg,#fda4af,#e11d48);">NB</div>
+              <div class="isb-channel">
+                <svg viewBox="0 0 10 10" fill="none"><path d="M2 6.5V4.5C2 3.12 3.12 2 4.5 2h1C6.88 2 8 3.12 8 4.5v2c0 .28-.22.5-.5.5h-5C2.22 7 2 6.78 2 6.5zM3.5 1l.5.8M6.5 1L6 1.8" stroke="#3ddc84" stroke-width=".8" stroke-linecap="round"/><rect x="1.5" y="7" width="7" height=".7" rx=".35" fill="#3ddc84"/></svg>
+              </div>
+            </div>
+            <div class="isb-message">
+              <div class="isb-header-row">
+                <span class="isb-name">Nina Brown</span>
+                <span class="isb-time">3d</span>
+              </div>
+              <div class="isb-bottom-row">
+                <span class="isb-preview">Can I change my email address linked to...</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Oliver Johnson — initials, Android, quote -->
+          <div class="isb-item">
+            <div class="isb-avatar-wrap">
+              <div class="isb-avatar" style="background: linear-gradient(135deg,#fdba74,#ea580c);">OJ</div>
+              <div class="isb-channel">
+                <svg viewBox="0 0 10 10" fill="none"><path d="M2 6.5V4.5C2 3.12 3.12 2 4.5 2h1C6.88 2 8 3.12 8 4.5v2c0 .28-.22.5-.5.5h-5C2.22 7 2 6.78 2 6.5zM3.5 1l.5.8M6.5 1L6 1.8" stroke="#3ddc84" stroke-width=".8" stroke-linecap="round"/><rect x="1.5" y="7" width="7" height=".7" rx=".35" fill="#3ddc84"/></svg>
+              </div>
+            </div>
+            <div class="isb-message">
+              <div class="isb-header-row">
+                <span class="isb-name">Oliver Johnson</span>
+                <span class="isb-time">3d</span>
+              </div>
+              <div class="isb-bottom-row">
+                <div class="isb-quote-bar"></div>
+                <span class="isb-preview">How do I contact customer service directly?</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Grace White — initials, Android -->
+          <div class="isb-item">
+            <div class="isb-avatar-wrap">
+              <div class="isb-avatar" style="background: linear-gradient(135deg,#5eead4,#0d9488);">GW</div>
+              <div class="isb-channel">
+                <svg viewBox="0 0 10 10" fill="none"><path d="M2 6.5V4.5C2 3.12 3.12 2 4.5 2h1C6.88 2 8 3.12 8 4.5v2c0 .28-.22.5-.5.5h-5C2.22 7 2 6.78 2 6.5zM3.5 1l.5.8M6.5 1L6 1.8" stroke="#3ddc84" stroke-width=".8" stroke-linecap="round"/><rect x="1.5" y="7" width="7" height=".7" rx=".35" fill="#3ddc84"/></svg>
+              </div>
+            </div>
+            <div class="isb-message">
+              <div class="isb-header-row">
+                <span class="isb-name">Grace White</span>
+                <span class="isb-time">4d</span>
+              </div>
+              <div class="isb-bottom-row">
+                <span class="isb-preview">What should I do if I forget my username?</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Leo Thompson — LiveChat -->
+          <div class="isb-item">
+            <div class="isb-avatar-wrap">
+              <div class="isb-avatar" style="background: linear-gradient(135deg,#a5b4fc,#6366f1);">LT</div>
+              <div class="isb-channel">
+                <svg viewBox="0 0 10 10" fill="none"><path d="M1 2.5C1 1.67 1.67 1 2.5 1h5C8.33 1 9 1.67 9 2.5v3C9 6.33 8.33 7 7.5 7H5.5L3 9V7H2.5C1.67 7 1 6.33 1 5.5v-3z" fill="#010103" opacity=".6"/></svg>
+              </div>
+            </div>
+            <div class="isb-message">
+              <div class="isb-header-row">
+                <span class="isb-name">Leo Thompson</span>
+                <span class="isb-time">4d</span>
+              </div>
+              <div class="isb-bottom-row">
+                <span class="isb-preview">Are there any promotions available right now?</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Emma Garcia — WhatsApp -->
+          <div class="isb-item">
+            <div class="isb-avatar-wrap">
+              <div class="isb-avatar" style="background: linear-gradient(135deg,#f9a8d4,#db2777);">EG</div>
+              <div class="isb-channel">
+                <svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" fill="#25D366"/><path d="M7 6.2c-.1-.1-.7-.35-.8-.38-.1-.03-.18 0-.25.1l-.3.4c-.07.1-.15.1-.27.05-.6-.28-1-.6-1.35-1.1-.1-.15-.02-.23.07-.3l.25-.28c.07-.1.1-.18.03-.28L4.1 3.8c-.07-.1-.15-.1-.23-.07-.8.38-.82.75-.7 1.1.6 1.5 1.7 2.2 3.3 2.5.35.07.6-.1.65-.45.03-.2.02-.35-.12-.68z" fill="white"/></svg>
+              </div>
+            </div>
+            <div class="isb-message">
+              <div class="isb-header-row">
+                <span class="isb-name">Emma Garcia</span>
+                <span class="isb-time">4d</span>
+              </div>
+              <div class="isb-bottom-row">
+                <span class="isb-preview">What are the returns policy options?</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Liam Johnson — LiveChat -->
+          <div class="isb-item">
+            <div class="isb-avatar-wrap">
+              <div class="isb-avatar" style="background: linear-gradient(135deg,#bfdbfe,#3b82f6);">LJ</div>
+              <div class="isb-channel">
+                <svg viewBox="0 0 10 10" fill="none"><path d="M1 2.5C1 1.67 1.67 1 2.5 1h5C8.33 1 9 1.67 9 2.5v3C9 6.33 8.33 7 7.5 7H5.5L3 9V7H2.5C1.67 7 1 6.33 1 5.5v-3z" fill="#010103" opacity=".6"/></svg>
+              </div>
+            </div>
+            <div class="isb-message">
+              <div class="isb-header-row">
+                <span class="isb-name">Liam Johnson</span>
+                <span class="isb-time">4d</span>
+              </div>
+              <div class="isb-bottom-row">
+                <span class="isb-preview">How can I track my order?</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </aside>
+
+      <!-- Dialog (Chat) -->
+      <div class="dialog">
+        <!-- Topbar -->
+        <div class="dialog-topbar">
+          <div class="dialog-title">
+            <div class="avatar-16"></div>
+            <span class="dialog-name" id="dialog-name">Caroline Brennan</span>
+          </div>
+          <div class="topbar-actions" id="dialog-topbar-actions">
+            <button class="icon-btn" title="Snooze">
+              <img src="icons/16px/Snooze.svg" width="16" height="16" alt="Snooze"/>
+            </button>
+            <button class="icon-btn" title="Resolve">
+              <img src="icons/16px/CheckCircle.svg" width="16" height="16" alt="Resolve"/>
+            </button>
+          </div>
+        </div>
+
+        <!-- Chat messages -->
+        <div class="dialog-content">
+          <div class="chat-scroll" id="chat-scroll">
+
+            <!-- Date divider -->
+            <div class="date-divider">
+              <div class="date-line"></div>
+              <span class="date-label">October 24</span>
+              <div class="date-line"></div>
+            </div>
+            <div class="system-alert"><strong>New ticket created</strong>&nbsp;·&nbsp;Carolinne Brennan</div>
+
+            <!-- Agent welcome (outbound) -->
+            <div class="msg-wrapper outbound">
+              <div class="msg-bubble">
+                <div class="msg-author">
+                  <div class="msg-author-logo"><img src="icons/16px/ClarityLogo.svg" width="16" height="16" alt=""/></div>
+                  <span class="msg-author-name">Agent</span>
+                </div>
+                <div class="msg-body">Welcome to Clarity! How can we help you today?</div>
+              </div>
+              <span class="msg-time">14:24</span>
+            </div>
+
+            <!-- Customer message (inbound) -->
+            <div class="msg-wrapper inbound">
+              <div class="msg-bubble">
+                <div class="msg-body">Hi, I'd like to reschedule my loan payment that's due on November 15. I'm having some cash flow issues this month.</div>
+              </div>
+              <span class="msg-time">14:25</span>
+            </div>
+
+            <!-- Agent (outbound) -->
+            <div class="msg-wrapper outbound">
+              <div class="msg-bubble">
+                <div class="msg-body">Thank you, Sarah. I see that this rescheduling requires approval because your last payment was a little late.<br><br>I will connect you with one of our staff members to review and finalize the request.</div>
+              </div>
+              <span class="msg-time">14:19</span>
+            </div>
+
+            <!-- Customer (inbound) -->
+            <div class="msg-wrapper inbound">
+              <div class="msg-bubble">
+                <div class="msg-body">Yes!</div>
+              </div>
+              <span class="msg-time">14:19</span>
+            </div>
+
+            <!-- Assignment divider -->
+            <div class="system-alert">Ticket assigned to <strong>&nbsp;You</strong></div>
+
+            <!-- Agent message (outbound) -->
+            <div class="msg-wrapper outbound">
+              <div class="msg-bubble">
+                <div class="msg-body">Hello Sarah, this is Fatima from customer service. I will help you with your request, God willing.<br><br>I will check your eligibility to reschedule your loan payment. Please hold for a moment.</div>
+              </div>
+              <span class="msg-time">14:21</span>
+            </div>
+
+            <!-- Agent message (outbound) — confirmed reply -->
+            <div class="msg-wrapper outbound">
+              <div class="msg-bubble">
+                <div class="msg-body">Thank you, Sarah. Your payment has been rescheduled for November 20, 2025.<br><br>You will retain your 3-day grace period.<br><br>Can I help you with anything else today?</div>
+              </div>
+              <span class="msg-time">14:21</span>
+            </div>
+
+            <!-- Customer (inbound) -->
+            <div class="msg-wrapper inbound">
+              <div class="msg-bubble">
+                <div class="msg-body">No, thank you!</div>
+              </div>
+              <span class="msg-time">14:19</span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Composer -->
+        <div class="composer-wrap">
+          <div class="composer">
+            <div class="composer-input">
+              <span class="composer-placeholder">Write your answer…</span>
+            </div>
+            <div class="composer-actions">
+              <div class="composer-left">
+                <button class="icon-btn" style="width:28px;height:28px" title="Attach file">
+                  <img src="icons/16px/Attachments.svg" width="16" height="16" alt="Attach file"/>
+                </button>
+                <div class="v-divider"></div>
+                <div class="toggle-wrap">
+                  <div class="toggle">
+                    <div class="toggle-thumb"></div>
+                  </div>
+                  <span class="toggle-label">Internal note</span>
+                </div>
+              </div>
+              <div class="composer-right">
+                <!-- Default state -->
+                <div class="composer-right-default" style="display:flex; gap:4px; align-items:center;">
+                  <button class="btn-secondary">
+                    <img src="icons/16px/AI.svg" width="16" height="16" alt=""/>
+                    Generate reply
+                  </button>
+                  <div class="btn-accent-split">
+                    <div class="btn-accent-split-main">Send</div>
+                    <div class="btn-accent-split-chevron">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4.5 6.5l3.5 3.5 3.5-3.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <!-- Internal note state -->
+                <div class="composer-right-note" style="display:none; gap:4px; align-items:center;">
+                  <button class="btn-secondary">
+                    <img src="icons/16px/AI.svg" width="16" height="16" alt=""/>
+                    Generate reply
+                  </button>
+                  <button class="btn-secondary" style="opacity:0.3;">Add note</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Copilot Panel -->
+      <div class="copilot">
+
+        <!-- Tabs -->
+        <div class="copilot-tabs" id="copilot-tabs">
+          <div class="tabs-list">
+            <div class="tab" data-tab="details">Details</div>
+            <div class="tab active" data-tab="copilot">AI Copilot</div>
+          </div>
+          <div class="copilot-tab-actions">
+            <button class="icon-btn" title="New message">
+              <img src="icons/16px/NewMessage.svg" width="16" height="16" alt="New message" />
+            </button>
+            <button class="icon-btn" id="toggle-copilot-btn" title="Toggle sidebar">
+              <img src="icons/16px/SidebarRight.svg" width="16" height="16" alt="Toggle sidebar" />
+            </button>
+          </div>
+        </div>
+
+        <!-- Copilot content -->
+        <div id="copilot-panel-copilot" class="copilot-content">
+        <div class="copilot-scroll">
+
+          <!-- AI Block 1: completed reasoning -->
+          <div class="ai-block">
+            <div class="ai-reasoning">
+              <div>
+                <button class="reasoning-btn">
+                  Reasoning
+                  <img src="icons/16px/ChevronRight.svg" width="16" height="16" alt=""/>
+                </button>
+              </div>
+              <div class="reasoning-message">Here is the ticket summary:</div>
+            </div>
+
+            <div class="ai-cards">
+              <!-- Ticket Summary -->
+              <div class="card">
+                <div class="card-summary">
+                  <div class="card-summary-title">Ticket summary</div>
+                  <div class="card-summary-text">Customer wants to reschedule payment.</div>
+                </div>
+                <div class="card-details">
+                  <div class="card-detail-item"><strong>Intent:</strong> Loan Payment Reschedule.</div>
+                  <div class="card-detail-item"><strong>Key Facts:</strong> Next payment 1,950 SAR due Nov 15; 3‑day grace; 2% late fee after grace.</div>
+                  <div class="card-detail-item"><strong>Policy status:</strong> One‑time reschedule up to 7 days; supervisor approval likely (last payment slightly delayed).</div>
+                  <div class="card-detail-item"><strong>Sentiment:</strong> Concern → neutral.</div>
+                </div>
+                <div class="internal-tip">
+                  <svg class="internal-tip-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 2C5 2 2.5 4.5 2.5 7.5c0 2 1.1 3.8 2.75 4.75V14h5.5v-1.75A5 5 0 0 0 13.5 7.5C13.5 4.5 11 2 8 2Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+                    <path d="M5.5 14h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                  </svg>
+                  <span class="internal-tip-text">Customer meets 3/4 conditions.<br>Eligible if manual override approved.</span>
+                </div>
+              </div>
+
+              <!-- Suggested Reply -->
+              <div class="card">
+                <div class="card-header">
+                  <span class="card-label">Suggested reply</span>
+                  <div class="confidence-badge">
+                    <div class="confidence-dot"></div>
+                    <span class="confidence-text">High</span>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <p>Hi Sara, I am Fatimah and I'll try to help you.</p>
+                  <p>I can confirm your reschedule request. Let me check your eligibility quickly.</p>
+                </div>
+                <div class="card-divider"></div>
+                <div class="card-actions">
+                  <div class="card-actions-left">
+                    <button class="action-btn" title="Thumbs up">
+                      <img src="icons/16px/ThumbsUp.svg" width="16" height="16" alt="Thumbs up"/>
+                    </button>
+                    <button class="action-btn" title="Thumbs down">
+                      <img src="icons/16px/ThumbsDown.svg" width="16" height="16" alt="Thumbs down"/>
+                    </button>
+                    <button class="action-btn" title="Retry">
+                      <img src="icons/16px/Retry.svg" width="16" height="16" alt="Retry"/>
+                    </button>
+                  </div>
+                  <div class="card-actions-right">
+                    <button class="action-btn" title="Info">
+                      <img src="icons/16px/Info.svg" width="16" height="16" alt="Info"/>
+                    </button>
+                    <button class="btn-insert">
+                      <img src="icons/16px/Copy.svg" width="16" height="16" alt=""/>
+                      Insert
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action Suggestion -->
+              <div class="card">
+                <div class="card-header">
+                  <span class="card-label">Suggested action</span>
+                </div>
+                <div class="card-body">
+                  <p>Customer wants to reschedule payment. Do you want me to reschedule to x/y/z</p>
+                </div>
+                <div class="card-divider"></div>
+                <div class="card-footer-actions">
+                  <button class="btn-confirmed">
+                    <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                      <path d="M3 8.5l3.5 3.5 6.5-7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Confirmed
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI Block 2: follow-up (elevated / current) -->
+          <div class="ai-block">
+            <div class="ai-reasoning">
+              <div>
+                <button class="reasoning-btn">
+                  Reasoning
+                  <img src="icons/16px/ChevronRight.svg" width="16" height="16" alt=""/>
+                </button>
+              </div>
+              <div class="reasoning-message">Here is the suggested reply:</div>
+            </div>
+
+            <div class="ai-cards">
+              <!-- Elevated suggested reply -->
+              <div class="card elevated">
+                <div class="card-header">
+                  <span class="card-label">Suggested reply</span>
+                  <div class="confidence-badge">
+                    <div class="confidence-dot"></div>
+                    <span class="confidence-text">High</span>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <p>Thank you, Sarah. Your payment has been rescheduled for November 20, 2025.</p>
+                  <br>
+                  <p>You will retain your 3-day grace period.</p>
+                  <br>
+                  <p>Can I help you with anything else today?</p>
+                </div>
+                <div class="card-divider"></div>
+                <div class="card-actions">
+                  <div class="card-actions-left">
+                    <button class="action-btn" title="Thumbs up">
+                      <img src="icons/16px/ThumbsUp.svg" width="16" height="16" alt="Thumbs up"/>
+                    </button>
+                    <button class="action-btn" title="Thumbs down">
+                      <img src="icons/16px/ThumbsDown.svg" width="16" height="16" alt="Thumbs down"/>
+                    </button>
+                    <button class="action-btn" title="Retry">
+                      <img src="icons/16px/Retry.svg" width="16" height="16" alt="Retry"/>
+                    </button>
+                  </div>
+                  <div class="card-actions-right">
+                    <button class="action-btn" title="Info">
+                      <img src="icons/16px/Info.svg" width="16" height="16" alt="Info"/>
+                    </button>
+                    <button class="btn-insert">
+                      <img src="icons/16px/Copy.svg" width="16" height="16" alt=""/>
+                      Insert
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Thinking state -->
+          <div class="thinking-section">
+            <div class="thinking-item">
+              <span class="thinking-text">Thinking…</span>
+            </div>
+          </div>
+
+        </div><!-- /.copilot-scroll -->
+        </div><!-- /.copilot-content -->
+
+        <!-- Details panel (empty) -->
+        <div id="copilot-panel-details" style="display:none; flex:1; min-height:0;"></div>
+
+        <!-- AI Copilot Composer -->
+        <div id="copilot-composer" class="copilot-composer">
+          <div class="copilot-input">
+            <div class="copilot-input-row">
+              <span class="copilot-placeholder">Ask anything…</span>
+              <button class="copilot-send-btn">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8 12.5V3.5M4.5 7l3.5-3.5L11.5 7" stroke="white" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /copilot -->
+    </div><!-- /content -->
+  </div><!-- /frame-root -->
+  <script src="js/inbox.js"></script>
+</body>
+</html>

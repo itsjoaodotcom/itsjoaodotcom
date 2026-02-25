@@ -1,0 +1,211 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --font-family: 'Geist', sans-serif;
+  --content-primary: #010103;
+  --content-secondary: #262728;
+  --content-tertiary: #87888a;
+  --content-onaccent: #ffffff;
+  --surface-primary: #ffffff;
+  --surface-secondary: #fafafc;
+  --surface-tint: rgba(0,0,0,0.04);
+  --button-accent: #4061d8;
+  --stroke-primary: rgba(0,0,0,0.08);
+  --shadow-e1: 0px 3px 6px 0px rgba(0,0,0,0.04);
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-family);
+  background: var(--surface-secondary);
+}
+
+.page {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.card {
+  background: var(--surface-primary);
+  border: 1px solid var(--stroke-primary);
+  border-radius: 16px;
+  box-shadow: var(--shadow-e1);
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-mark {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #a78bfa, #4061d8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.logo-mark img { filter: invert(1); }
+
+.logo-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--content-primary);
+  letter-spacing: -0.4px;
+}
+
+/* Heading */
+.card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.card-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--content-primary);
+  letter-spacing: -0.44px;
+}
+
+.card-subtitle {
+  font-size: 14px;
+  color: var(--content-tertiary);
+  line-height: 20px;
+  letter-spacing: -0.28px;
+}
+
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--content-secondary);
+  letter-spacing: -0.26px;
+}
+
+input {
+  height: 40px;
+  border: 1px solid var(--stroke-primary);
+  border-radius: 8px;
+  padding: 0 12px;
+  font-family: var(--font-family);
+  font-size: 14px;
+  color: var(--content-primary);
+  background: var(--surface-primary);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+input::placeholder { color: var(--content-tertiary); }
+
+input:focus { border-color: var(--button-accent); }
+
+.forgot {
+  font-size: 13px;
+  color: var(--button-accent);
+  text-decoration: none;
+  align-self: flex-end;
+  margin-top: -6px;
+  letter-spacing: -0.26px;
+}
+
+.forgot:hover { text-decoration: underline; }
+
+.btn-signin {
+  height: 40px;
+  background: var(--button-accent);
+  color: var(--content-onaccent);
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  letter-spacing: -0.28px;
+  margin-top: 4px;
+  transition: opacity 0.15s;
+}
+
+.btn-signin:hover { opacity: 0.9; }
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: var(--stroke-primary);
+}
+
+.divider-text {
+  font-size: 13px;
+  color: var(--content-tertiary);
+  letter-spacing: -0.26px;
+}
+
+/* SSO button */
+.btn-sso {
+  height: 40px;
+  background: var(--surface-primary);
+  color: var(--content-secondary);
+  border: 1px solid var(--stroke-primary);
+  border-radius: 8px;
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  letter-spacing: -0.28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.15s;
+}
+
+.btn-sso:hover { background: var(--surface-tint); }
+
+/* Footer */
+.card-footer {
+  font-size: 13px;
+  color: var(--content-tertiary);
+  text-align: center;
+  letter-spacing: -0.26px;
+}
+
+.card-footer a {
+  color: var(--button-accent);
+  text-decoration: none;
+}
+
+.card-footer a:hover { text-decoration: underline; }
