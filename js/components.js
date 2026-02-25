@@ -2,7 +2,7 @@
 function InboxItem(c, isActive) {
   return `<div class="isb-item${isActive ? ' active' : ''}">
     <div class="isb-avatar-wrap">
-      <div class="isb-avatar" style="background:${c.bg}">${c.initials}</div>
+      <div class="isb-avatar" style="background:${c.bg};color:${c.color}">${c.initials}</div>
       <div class="isb-channel">${CH[c.ch]}</div>
     </div>
     <div class="isb-message">

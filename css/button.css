@@ -1,0 +1,280 @@
+/*
+ * button.css — Button Component
+ *
+ * Variants:   btn-accent | btn-inverse | btn-secondary | btn-ghost
+ *             btn-destructive | btn-ghost-destructive
+ * Sizes:      (default 28px) | btn-sm (24px) | btn-micro (20px)
+ * Modifiers:  btn-icon (square, icon-only)
+ * States:     default | :hover | :active | :focus-visible
+ *             [disabled] / .is-disabled | .is-loading
+ */
+
+/* ─── Base ─────────────────────────────────────────────── */
+
+.btn {
+  /* Layout */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  /* Size: Default = 28px */
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+
+  /* Typography */
+  font-family: var(--font-family);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  white-space: nowrap;
+  text-decoration: none;
+  font-feature-settings: 'lnum' 1, 'pnum' 1;
+  -webkit-font-smoothing: antialiased;
+
+  /* Interaction */
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+
+  /* For focus ring & loading spinner */
+  position: relative;
+  overflow: hidden;
+
+  /* Animation */
+  transition: background 0.1s, border-color 0.1s, box-shadow 0.1s, opacity 0.1s;
+}
+
+.btn > svg,
+.btn > img {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+/* Focus ring */
+.btn:focus-visible {
+  outline: 2px solid var(--surface-accent);
+  outline-offset: 1px;
+}
+
+/* ─── Sizes ─────────────────────────────────────────────── */
+
+/* Small: 24px */
+.btn-sm {
+  height: 24px;
+  padding: 0 6px;
+  border-radius: 5px;
+  gap: 2px;
+}
+
+/* Micro: 20px */
+.btn-micro {
+  height: 20px;
+  padding: 0 4px;
+  border-radius: 5px;
+  gap: 2px;
+}
+
+.btn-micro > svg,
+.btn-micro > img {
+  width: 12px;
+  height: 12px;
+}
+
+/* ─── Modifier: Icon-only ───────────────────────────────── */
+
+.btn-icon {
+  padding: 0;
+  width: 28px;
+}
+
+.btn-sm.btn-icon  { width: 24px; }
+.btn-micro.btn-icon { width: 20px; }
+
+/* ─── Variant: Accent ───────────────────────────────────── */
+
+.btn-accent {
+  background: var(--button-accent);
+  color: var(--content-onaccent);
+}
+
+.btn-accent:hover:not(:disabled):not(.is-disabled) {
+  background: var(--button-accenthover);
+}
+
+.btn-accent:active:not(:disabled):not(.is-disabled) {
+  background: var(--button-accenthover);
+  filter: brightness(0.94);
+}
+
+.btn-accent > img { filter: brightness(0) invert(1); }
+
+/* ─── Variant: Inverse ──────────────────────────────────── */
+
+.btn-inverse {
+  background: var(--button-inverse);
+  color: var(--surface-secondary);
+}
+
+.btn-inverse:hover:not(:disabled):not(.is-disabled) {
+  background: var(--button-inversehover);
+}
+
+.btn-inverse:active:not(:disabled):not(.is-disabled) {
+  background: var(--button-inversehover);
+  filter: brightness(0.9);
+}
+
+.btn-inverse > img { filter: brightness(0) invert(1); }
+
+html.dark .btn-inverse > img { filter: brightness(0); }
+
+/* ─── Variant: Secondary ────────────────────────────────── */
+
+.btn-secondary {
+  background: var(--button-secondary);
+  border-color: var(--stroke-primary);
+  box-shadow: var(--shadow-e1);
+  color: var(--content-primary);
+}
+
+.btn-secondary:hover:not(:disabled):not(.is-disabled) {
+  background: var(--button-secondaryhover);
+}
+
+.btn-secondary:active:not(:disabled):not(.is-disabled) {
+  background: var(--surface-tintstrong);
+}
+
+.btn-secondary > img { filter: brightness(0) invert(1) brightness(0.534); }
+
+/* ─── Variant: Ghost ────────────────────────────────────── */
+
+.btn-ghost {
+  background: var(--button-ghost);
+  color: var(--content-secondary);
+}
+
+.btn-ghost:hover:not(:disabled):not(.is-disabled) {
+  background: var(--button-ghosthover);
+}
+
+.btn-ghost:active:not(:disabled):not(.is-disabled) {
+  background: var(--surface-tintstrong);
+}
+
+.btn-ghost > img { filter: brightness(0) invert(1) brightness(0.534); }
+
+/* ─── Variant: Destructive ──────────────────────────────── */
+
+.btn-destructive {
+  background: var(--button-critical);
+  color: var(--content-onaccent);
+}
+
+.btn-destructive:hover:not(:disabled):not(.is-disabled) {
+  background: var(--button-criticalhover);
+}
+
+.btn-destructive:active:not(:disabled):not(.is-disabled) {
+  background: var(--button-criticalhover);
+  filter: brightness(0.94);
+}
+
+.btn-destructive > img { filter: brightness(0) invert(1); }
+
+/* ─── Variant: Ghost Destructive ────────────────────────── */
+
+.btn-ghost-destructive {
+  background: var(--button-ghost);
+  color: var(--content-critical);
+}
+
+.btn-ghost-destructive:hover:not(:disabled):not(.is-disabled) {
+  background: var(--button-ghosthover);
+}
+
+.btn-ghost-destructive:active:not(:disabled):not(.is-disabled) {
+  background: var(--surface-tintstrong);
+}
+
+/* Use inline SVG with fill="currentColor" for red icons on this variant */
+
+/* ─── State: Disabled ───────────────────────────────────── */
+
+.btn:disabled,
+.btn.is-disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ─── State: Loading ────────────────────────────────────── */
+
+.btn.is-loading {
+  cursor: wait;
+  pointer-events: none;
+}
+
+.btn.is-loading > * {
+  visibility: hidden;
+}
+
+.btn.is-loading::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1.5px solid;
+  animation: btn-spin 0.65s linear infinite;
+}
+
+.btn-accent.is-loading::after,
+.btn-inverse.is-loading::after,
+.btn-destructive.is-loading::after {
+  border-color: rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+}
+
+.btn-secondary.is-loading::after,
+.btn-ghost.is-loading::after,
+.btn-ghost-destructive.is-loading::after {
+  border-color: var(--stroke-secondarystrong);
+  border-top-color: var(--content-secondary);
+}
+
+@keyframes btn-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── Split Button ──────────────────────────────────────── */
+
+.btn-split {
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-split > .btn {
+  border-radius: 0;
+}
+
+.btn-split > .btn:first-child {
+  border-radius: 6px 0 0 6px;
+}
+
+.btn-split > .btn:last-child {
+  border-radius: 0 6px 6px 0;
+  padding: 0 8px;
+}
+
+.btn-split.btn-sm > .btn:first-child { border-radius: 5px 0 0 5px; }
+.btn-split.btn-sm > .btn:last-child  { border-radius: 0 5px 5px 0; }
+
+/* Inner dividers */
+.btn-split > .btn-accent:first-child    { border-right: 1px solid var(--stroke-onaccent); }
+.btn-split > .btn-secondary:first-child { border-right: 1px solid var(--stroke-primary); }

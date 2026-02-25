@@ -1,0 +1,266 @@
+/*
+ * empty-state.css — Empty State Component
+ *
+ * Illustrations: illu-copilot | illu-workflow
+ * Sizes:         default (280px) | small (workflow, 118px illustration)
+ */
+
+/* ─── Empty State Layout ──────────────────────────────────── */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  width: 280px;
+  max-width: 280px;
+}
+
+.empty-state-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.empty-state-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+  width: 100%;
+}
+
+.empty-state-title {
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-secondary);
+  margin: 0;
+  font-feature-settings: 'lnum' 1, 'pnum' 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+.empty-state-description {
+  font-family: var(--font-family);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--content-tertiary);
+  margin: 0;
+  font-feature-settings: 'lnum' 1, 'pnum' 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Illustration: CoPilot Empty ────────────────────────── */
+
+.illu-copilot {
+  width: 236px;
+  height: 164px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.illu-copilot-inner {
+  width: 184px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.illu-copilot-top {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Skeleton bar — used for all placeholder lines */
+.illu-skel {
+  background: var(--stroke-secondarystrong);
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+/* Thinking section */
+.illu-thinking {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.illu-row {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.illu-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--stroke-secondarystrong);
+  flex-shrink: 0;
+}
+
+.illu-vdash {
+  width: 1px;
+  height: 6px;
+  align-self: flex-start;
+  margin-left: 1.5px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--stroke-secondarystrong) 0,
+    var(--stroke-secondarystrong) 2px,
+    transparent 2px,
+    transparent 4px
+  );
+}
+
+/* CoPilot card */
+.illu-card {
+  background: var(--surface-secondary);
+  border: 1px solid var(--stroke-primary);
+  border-radius: 8px;
+  box-shadow: var(--shadow-e1);
+  display: flex;
+  flex-direction: column;
+}
+
+.illu-card-top {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.illu-card-content {
+  padding: 0 8px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  opacity: 0.8;
+}
+
+.illu-card-divider {
+  height: 1px;
+  background: var(--stroke-primary);
+}
+
+.illu-card-bottom {
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0.8;
+}
+
+.illu-card-icons {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 4px;
+  flex-shrink: 0;
+}
+
+.illu-card-actions {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+}
+
+.illu-insert-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 20px;
+  width: 50px;
+  padding: 0 4px;
+  border-radius: 4px;
+  background: var(--surface-tooltip);
+  color: var(--content-ontooltip);
+  font-family: var(--font-family);
+  font-size: 9px;
+  line-height: 1;
+  white-space: nowrap;
+  flex-shrink: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Illustration: Inbox Empty ──────────────────────────── */
+
+.illu-inbox-empty {
+  width: 236px;
+  height: 164px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.illu-inbox-cards {
+  position: relative;
+  width: 208px;
+  height: 76px;
+  margin: 0 auto;
+}
+
+.illu-inbox-item {
+  position: absolute;
+  right: 0;
+  height: 36px;
+  display: flex;
+  align-items: flex-start;
+  background: var(--surface-primary);
+  border: 1px dashed var(--stroke-secondarystrong);
+  border-radius: 8px;
+  box-shadow: var(--shadow-e1);
+}
+
+.illu-inbox-item:nth-child(1) { top: 0;    left: 8px; }
+.illu-inbox-item:nth-child(2) { top: 20px; left: 4px; }
+.illu-inbox-item:nth-child(3) { bottom: 0; left: 0;   }
+
+.illu-inbox-user {
+  padding: 8px 0 8px 8px;
+  flex-shrink: 0;
+}
+
+.illu-inbox-avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--stroke-secondarystrong);
+  opacity: 0.6;
+}
+
+.illu-inbox-rows {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.illu-inbox-row {
+  display: flex;
+  align-items: center;
+}
+
+/* ─── Illustration: Workflow ──────────────────────────────── */
+
+.illu-workflow {
+  width: 118px;
+  height: 26px;
+  flex-shrink: 0;
+  overflow: visible;
+}

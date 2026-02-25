@@ -7,7 +7,7 @@ html, body {
 
 body {
   font-family: var(--font-family);
-  background: var(--surface-primary);
+  background: var(--surface-secondary);
   padding: 0;
 }
 
@@ -27,8 +27,6 @@ body {
   min-width: 180px;
   height: 100%;
   flex-shrink: 1;
-  background: var(--surface-secondary);
-  border-right: 1px solid var(--stroke-primary);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -106,23 +104,6 @@ body {
   padding: 0 4px;
 }
 
-.snav-icon-btn {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-  color: var(--content-tertiary);
-  flex-shrink: 0;
-}
-
-.snav-icon-btn:hover { background: var(--surface-tint); }
-.snav-icon-btn svg { width: 16px; height: 16px; }
-.snav-icon-btn img { filter: brightness(0) invert(1) brightness(0.534); }
 
 /* Link sections */
 .snav-links {
@@ -328,8 +309,33 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
 .content {
   flex: 1;
   display: flex;
-  height: 100%;
+  height: calc(100% - 8px);
   overflow: hidden;
+  border-radius: 8px;
+  margin: 4px 4px 4px 0;
+  box-shadow: -4px 0px 12px 0px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--stroke-secondarystrong);
+}
+
+/* ─── Empty state: no conversation selected ────────────── */
+
+#dialog-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-primary);
+}
+
+/* Hide dialog + copilot when nothing is selected */
+.content:not(.has-selection) .dialog,
+.content:not(.has-selection) .copilot {
+  display: none;
+}
+
+/* Hide empty state once a conversation is selected */
+.content.has-selection #dialog-empty {
+  display: none;
 }
 
 /* ─── Inbox Sidebar ────────────────────────────────────── */
@@ -380,22 +386,6 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
   flex-shrink: 0;
 }
 
-.isb-icon-btn {
-  width: 28px;
-  height: 28px;
-  border: none;
-  background: transparent;
-  border-radius: 6px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--content-tertiary);
-  padding: 0;
-}
-.isb-icon-btn:hover { background: var(--surface-tint); }
-.isb-icon-btn svg { width: 16px; height: 16px; }
-.isb-icon-btn img { filter: brightness(0) invert(1) brightness(0.534); }
 
 .isb-list {
   flex: 1;
@@ -429,13 +419,18 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
   width: 28px;
   height: 28px;
   border-radius: 999px;
+  border: 1px solid var(--stroke-primary);
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: var(--font-family);
   font-size: 10px;
   font-weight: 600;
-  color: white;
+  line-height: 12px;
   overflow: hidden;
+  flex-shrink: 0;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
 }
 
 .isb-channel {
@@ -445,7 +440,7 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
   width: 16px;
   height: 16px;
   border-radius: 999px;
-  background: white;
+  background: var(--surface-primary);
   border: 1px solid var(--stroke-primary);
   display: flex;
   align-items: center;
@@ -584,24 +579,6 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
   gap: 2px;
 }
 
-.icon-btn {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-  color: var(--content-tertiary);
-  transition: background 0.1s;
-}
-
-.icon-btn:hover { background: var(--surface-tint); }
-
-.icon-btn svg { width: 16px; height: 16px; }
-.icon-btn img { filter: brightness(0) invert(1) brightness(0.534); }
 
 /* ─── Chat messages ─────────────────────────────────────── */
 .dialog-content {
@@ -621,6 +598,9 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
   flex-direction: column;
   gap: 4px;
   padding: 12px 20px;
+  max-width: 1200px;
+  width: 100%;
+  align-self: center;
 }
 
 .date-divider {
@@ -666,7 +646,7 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
 .msg-wrapper.inbound  { align-items: flex-start; }
 
 .msg-bubble {
-  max-width: 480px;
+  max-width: 88%;
   border-radius: 8px 8px 4px 8px;
   border: 1px solid var(--stroke-primary);
   overflow: hidden;
@@ -730,6 +710,9 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
   border-radius: 8px;
   box-shadow: var(--shadow-e1);
   overflow: hidden;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .composer-input {
@@ -811,48 +794,6 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
   background: var(--stroke-primary);
 }
 
-.btn-secondary {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 6px 8px;
-  background: var(--button-secondary);
-  border: 1px solid var(--stroke-primary);
-  border-radius: 6px;
-  box-shadow: var(--shadow-e1);
-  cursor: pointer;
-  font-family: var(--font-family);
-  font-size: 12px;
-  color: var(--content-primary);
-  line-height: 16px;
-}
-
-.btn-secondary svg { width: 16px; height: 16px; }
-.btn-secondary img { filter: brightness(0) invert(1) brightness(0.534); }
-
-.btn-accent-split {
-  display: flex;
-  align-items: center;
-  background: var(--button-accent);
-  border-radius: 6px;
-  overflow: hidden;
-  opacity: 0.3;
-}
-
-.btn-accent-split-main {
-  padding: 6px 8px;
-  font-size: 12px;
-  color: white;
-  border-right: 1px solid var(--stroke-onaccent);
-  cursor: pointer;
-}
-
-.btn-accent-split-chevron {
-  padding: 6px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
 
 /* ─── Copilot panel ─────────────────────────────────────── */
 .copilot {
@@ -958,22 +899,6 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
   gap: 4px;
 }
 
-.reasoning-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  padding: 4px;
-  border-radius: 5px;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-  font-family: var(--font-family);
-  font-size: 12px;
-  color: var(--content-secondary);
-  line-height: 16px;
-}
-
-.reasoning-btn svg { width: 16px; height: 16px; }
 
 .reasoning-message {
   padding: 0 6px;
@@ -1143,41 +1068,6 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
   height: 40px;
 }
 
-.action-btn {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-  color: var(--content-tertiary);
-}
-
-.action-btn:hover { background: var(--surface-tint); }
-.action-btn svg { width: 16px; height: 16px; }
-.action-btn img { filter: brightness(0) invert(1) brightness(0.534); }
-
-.btn-insert {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 6px 8px;
-  background: var(--content-primary);
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-family: var(--font-family);
-  font-size: 12px;
-  color: var(--surface-secondary);
-  line-height: 16px;
-}
-
-.btn-insert svg { width: 16px; height: 16px; }
-.btn-insert img { filter: invert(1); }
-.btn-insert:hover { background: var(--content-secondary); }
 
 /* Action suggestion */
 .card-footer-actions {
@@ -1188,21 +1078,6 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
   padding: 6px;
 }
 
-.btn-confirmed {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 6px 8px;
-  background: transparent;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-family: var(--font-family);
-  font-size: 12px;
-  color: var(--content-secondary);
-}
-
-.btn-confirmed svg { width: 16px; height: 16px; color: var(--content-secondary); }
 
 /* Thinking section */
 .thinking-section {
@@ -1238,7 +1113,7 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 12px 12px 16px;
+  padding: 14px;
   background: var(--surface-primary);
 }
 
@@ -1294,21 +1169,6 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
   margin-right: 6px;
 }
 
-.copilot-send-btn {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  background: var(--button-accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.3;
-  cursor: not-allowed;
-  border: none;
-  flex-shrink: 0;
-}
-
-.copilot-send-btn svg { width: 16px; height: 16px; color: white; }
 
 /* ─── Icon helpers ──────────────────────────────────────── */
 svg { fill: none; }

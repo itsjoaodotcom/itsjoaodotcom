@@ -1,11 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Composer input: restore placeholder when emptied
   const composerInput = document.querySelector('.composer-input');
+  const addNoteBtn = document.querySelector('.composer-right-note button:last-child');
   if (composerInput) {
     composerInput.addEventListener('input', () => {
       if (composerInput.innerHTML === '<br>' || composerInput.innerHTML === '') {
         composerInput.innerHTML = '';
       }
+      if (addNoteBtn) addNoteBtn.disabled = composerInput.textContent.trim() === '';
     });
   }
 
@@ -15,11 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const copilotInput = copilotEditable.closest('.copilot-input');
     const singleLineHeight = 40; // 10px padding-top + 20px line-height + 10px padding-bottom
 
+    const copilotSendBtn = copilotInput.querySelector('button');
     copilotEditable.addEventListener('input', () => {
       if (copilotEditable.innerHTML === '<br>' || copilotEditable.innerHTML === '') {
         copilotEditable.innerHTML = '';
       }
       copilotInput.classList.toggle('multiline', copilotEditable.scrollHeight > singleLineHeight);
+      copilotSendBtn.disabled = copilotEditable.textContent.trim() === '';
     });
   }
 
@@ -123,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const items = allConversations.filter(c => c.views.includes(view));
     title.textContent = VIEW_LABELS[view];
     count.textContent = items.length;
-    list.innerHTML = items.map((c, i) => InboxItem(c, i === 0)).join('');
+    list.innerHTML = items.map(c => InboxItem(c, false)).join('');
   }
 
   renderInbox('assigned');
@@ -138,11 +142,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Click conversation → update dialog
+  const content = document.querySelector('.content');
   document.getElementById('isb-list').addEventListener('click', e => {
     const item = e.target.closest('.isb-item');
     if (!item) return;
     document.querySelectorAll('#isb-list .isb-item').forEach(i => i.classList.remove('active'));
     item.classList.add('active');
+    content.classList.add('has-selection');
     const name = item.querySelector('.isb-name')?.textContent;
     if (name) renderDialog(name);
   });

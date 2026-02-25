@@ -125,21 +125,21 @@ const CH = {
 
 // ── Inbox conversations ────────────────────────────────────
 const allConversations = [
-  { name:'Caroline Brennan', initials:'CB', bg:'linear-gradient(135deg,#fbbf24,#f87171)', ch:'livechat', time:'13min', preview:'Hi. How can I top up with apple pay?',           badge:0, views:['assigned','all'] },
-  { name:'Ethan Kim',        initials:'EK', bg:'linear-gradient(135deg,#34d399,#059669)', ch:'whatsapp', time:'2h',   preview:'Can I use multiple payment methods?',             badge:1, views:['assigned','all'] },
-  { name:'Jason Lee',        initials:'JL', bg:'linear-gradient(135deg,#60a5fa,#3b82f6)', ch:'whatsapp', time:'6h',   preview:"What's the best way to contact support?",         badge:2, views:['assigned','all'] },
-  { name:'Aisha Patel',      initials:'AP', bg:'linear-gradient(135deg,#f9a8d4,#ec4899)', ch:'livechat', time:'1d',   preview:'Can you help me with my account verification?',   badge:0, views:['assigned','all'] },
-  { name:'Marcus Wu',        initials:'MW', bg:'linear-gradient(135deg,#86efac,#16a34a)', ch:'android',  time:'1d',   preview:'Is there a way to change my subscription?',       badge:4, views:['unassigned','all'] },
-  { name:'Linda Gomez',      initials:'LG', bg:'linear-gradient(135deg,#fcd34d,#f59e0b)', ch:'livechat', time:'1d',   preview:'How do I reset my password?',                     badge:0, quote:true, views:['mentions','all'] },
-  { name:'Carlos Rodriguez', initials:'CR', bg:'linear-gradient(135deg,#6ee7b7,#059669)', ch:'livechat', time:'2d',   preview:'What are the security measures for my data?',     badge:0, views:['snoozed','all'] },
-  { name:'Julia Chen',       initials:'JC', bg:'linear-gradient(135deg,#c4b5fd,#7c3aed)', ch:'livechat', time:'2d',   preview:'How to report a technical issue?',                badge:0, views:['unassigned','all'] },
-  { name:'Brandon Smith',    initials:'BS', bg:'linear-gradient(135deg,#93c5fd,#2563eb)', ch:'livechat', time:'2d',   preview:'What features are included in the free trial?',   badge:0, views:['mentions','all'] },
-  { name:'Nina Brown',       initials:'NB', bg:'linear-gradient(135deg,#fda4af,#e11d48)', ch:'android',  time:'3d',   preview:'Can I change my email address linked to...',      badge:0, views:['snoozed','all'] },
-  { name:'Oliver Johnson',   initials:'OJ', bg:'linear-gradient(135deg,#fdba74,#ea580c)', ch:'android',  time:'3d',   preview:'How do I contact customer service directly?',     badge:0, quote:true, views:['unassigned','all'] },
-  { name:'Grace White',      initials:'GW', bg:'linear-gradient(135deg,#5eead4,#0d9488)', ch:'android',  time:'4d',   preview:'What should I do if I forget my username?',       badge:0, views:['closed','all'] },
-  { name:'Leo Thompson',     initials:'LT', bg:'linear-gradient(135deg,#a5b4fc,#6366f1)', ch:'livechat', time:'4d',   preview:'Are there any promotions available right now?',   badge:0, views:['closed','all'] },
-  { name:'Emma Garcia',      initials:'EG', bg:'linear-gradient(135deg,#f9a8d4,#db2777)', ch:'whatsapp', time:'4d',   preview:'What are the returns policy options?',            badge:0, views:['mentions','all'] },
-  { name:'Liam Johnson',     initials:'LJ', bg:'linear-gradient(135deg,#bfdbfe,#3b82f6)', ch:'livechat', time:'4d',   preview:'How can I track my order?',                       badge:0, views:['closed','all'] },
+  { name:'Caroline Brennan', initials:'CB', bg:'var(--utilities-surface-orangesubtle)', color:'var(--utilities-content-onsoft-orange)', ch:'livechat', time:'13min', preview:'Hi. How can I top up with apple pay?',           badge:0, views:['assigned','all'] },
+  { name:'Ethan Kim',        initials:'EK', bg:'var(--utilities-surface-cyansubtle)',   color:'var(--utilities-content-onsoft-cyan)',   ch:'whatsapp', time:'2h',   preview:'Can I use multiple payment methods?',             badge:1, views:['assigned','all'] },
+  { name:'Jason Lee',        initials:'JL', bg:'var(--utilities-surface-bluesubtle)',   color:'var(--utilities-content-onsoft-blue)',   ch:'whatsapp', time:'6h',   preview:"What's the best way to contact support?",         badge:2, views:['assigned','all'] },
+  { name:'Aisha Patel',      initials:'AP', bg:'var(--utilities-surface-pinksubtle)',   color:'var(--utilities-content-onsoft-pink)',   ch:'livechat', time:'1d',   preview:'Can you help me with my account verification?',   badge:0, views:['assigned','all'] },
+  { name:'Marcus Wu',        initials:'MW', bg:'var(--utilities-surface-cyansubtle)',   color:'var(--utilities-content-onsoft-cyan)',   ch:'android',  time:'1d',   preview:'Is there a way to change my subscription?',       badge:4, views:['unassigned','all'] },
+  { name:'Linda Gomez',      initials:'LG', bg:'var(--utilities-surface-orangesubtle)', color:'var(--utilities-content-onsoft-orange)', ch:'livechat', time:'1d',   preview:'How do I reset my password?',                     badge:0, quote:true, views:['mentions','all'] },
+  { name:'Carlos Rodriguez', initials:'CR', bg:'var(--utilities-surface-purplesubtle)', color:'var(--utilities-content-onsoft-purple)', ch:'livechat', time:'2d',   preview:'What are the security measures for my data?',     badge:0, views:['snoozed','all'] },
+  { name:'Julia Chen',       initials:'JC', bg:'var(--utilities-surface-purplesubtle)', color:'var(--utilities-content-onsoft-purple)', ch:'livechat', time:'2d',   preview:'How to report a technical issue?',                badge:0, views:['unassigned','all'] },
+  { name:'Brandon Smith',    initials:'BS', bg:'var(--utilities-surface-bluesubtle)',   color:'var(--utilities-content-onsoft-blue)',   ch:'livechat', time:'2d',   preview:'What features are included in the free trial?',   badge:0, views:['mentions','all'] },
+  { name:'Nina Brown',       initials:'NB', bg:'var(--utilities-surface-pinksubtle)',   color:'var(--utilities-content-onsoft-pink)',   ch:'android',  time:'3d',   preview:'Can I change my email address linked to...',      badge:0, views:['snoozed','all'] },
+  { name:'Oliver Johnson',   initials:'OJ', bg:'var(--utilities-surface-orangesubtle)', color:'var(--utilities-content-onsoft-orange)', ch:'android',  time:'3d',   preview:'How do I contact customer service directly?',     badge:0, quote:true, views:['unassigned','all'] },
+  { name:'Grace White',      initials:'GW', bg:'var(--utilities-surface-cyansubtle)',   color:'var(--utilities-content-onsoft-cyan)',   ch:'android',  time:'4d',   preview:'What should I do if I forget my username?',       badge:0, views:['closed','all'] },
+  { name:'Leo Thompson',     initials:'LT', bg:'var(--utilities-surface-purplesubtle)', color:'var(--utilities-content-onsoft-purple)', ch:'livechat', time:'4d',   preview:'Are there any promotions available right now?',   badge:0, views:['closed','all'] },
+  { name:'Emma Garcia',      initials:'EG', bg:'var(--utilities-surface-pinksubtle)',   color:'var(--utilities-content-onsoft-pink)',   ch:'whatsapp', time:'4d',   preview:'What are the returns policy options?',            badge:0, views:['mentions','all'] },
+  { name:'Liam Johnson',     initials:'LJ', bg:'var(--utilities-surface-bluesubtle)',   color:'var(--utilities-content-onsoft-blue)',   ch:'livechat', time:'4d',   preview:'How can I track my order?',                       badge:0, views:['closed','all'] },
 ];
 
 // ── View labels ────────────────────────────────────────────

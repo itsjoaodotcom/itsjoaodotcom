@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/button.css" />
+  <link rel="stylesheet" href="css/empty-state.css" />
   <link rel="stylesheet" href="css/inbox.css" />
 
 </head>
@@ -25,7 +27,7 @@
           </div>
           <span class="snav-workspace-name">Clarity</span>
         </button>
-        <button class="snav-icon-btn" id="collapse-sidebar-btn" title="Collapse sidebar">
+        <button class="btn btn-ghost btn-icon" id="collapse-sidebar-btn" title="Collapse sidebar">
           <img src="icons/16px/SidebarLeft.svg" width="16" height="16" alt="Collapse sidebar"/>
         </button>
       </div>
@@ -351,11 +353,11 @@
           </div>
           <div class="isb-actions">
             <!-- Search -->
-            <button class="isb-icon-btn" title="Search">
+            <button class="btn btn-ghost btn-icon" title="Search">
               <img src="icons/16px/Search.svg" width="16" height="16" alt="Search" />
             </button>
             <!-- Filter -->
-            <button class="isb-icon-btn" title="Filter">
+            <button class="btn btn-ghost btn-icon" title="Filter">
               <img src="icons/16px/Filter.svg" width="16" height="16" alt="Filter"/>
             </button>
           </div>
@@ -364,6 +366,19 @@
         <!-- Conversation list -->
         <div class="isb-list" id="isb-list"></div>
       </aside>
+
+      <!-- Empty state: no conversation selected -->
+      <div id="dialog-empty">
+        <div class="empty-state">
+          <img src="illustrations/SelectConversation.svg" alt="" />
+          <div class="empty-state-content">
+            <div class="empty-state-text">
+              <p class="empty-state-title">Select a conversation</p>
+              <p class="empty-state-description">Choose a conversation from the list on the left to start helping your customer.</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- Dialog (Chat) -->
       <div class="dialog">
@@ -374,10 +389,10 @@
             <span class="dialog-name" id="dialog-name">Caroline Brennan</span>
           </div>
           <div class="topbar-actions" id="dialog-topbar-actions">
-            <button class="icon-btn" title="Snooze">
+            <button class="btn btn-ghost btn-icon" title="Snooze">
               <img src="icons/16px/Snooze.svg" width="16" height="16" alt="Snooze"/>
             </button>
-            <button class="icon-btn" title="Resolve">
+            <button class="btn btn-ghost btn-icon" title="Resolve">
               <img src="icons/16px/CheckCircle.svg" width="16" height="16" alt="Resolve"/>
             </button>
           </div>
@@ -467,7 +482,7 @@
             <div class="composer-input" contenteditable="true"></div>
             <div class="composer-actions">
               <div class="composer-left">
-                <button class="icon-btn" style="width:28px;height:28px" title="Attach file">
+                <button class="btn btn-ghost btn-icon" title="Attach file">
                   <img src="icons/16px/Attachments.svg" width="16" height="16" alt="Attach file"/>
                 </button>
                 <div class="v-divider"></div>
@@ -481,26 +496,26 @@
               <div class="composer-right">
                 <!-- Default state -->
                 <div class="composer-right-default" style="display:flex; gap:4px; align-items:center;">
-                  <button class="btn-secondary">
+                  <button class="btn btn-secondary">
                     <img src="icons/16px/AI.svg" width="16" height="16" alt=""/>
                     Generate reply
                   </button>
-                  <div class="btn-accent-split">
-                    <div class="btn-accent-split-main">Send</div>
-                    <div class="btn-accent-split-chevron">
+                  <div class="btn-split">
+                    <button class="btn btn-accent">Send</button>
+                    <button class="btn btn-accent btn-icon">
                       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M4.5 6.5l3.5 3.5 3.5-3.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M4.5 6.5l3.5 3.5 3.5-3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
                       </svg>
-                    </div>
+                    </button>
                   </div>
                 </div>
                 <!-- Internal note state -->
                 <div class="composer-right-note" style="display:none; gap:4px; align-items:center;">
-                  <button class="btn-secondary">
+                  <button class="btn btn-secondary">
                     <img src="icons/16px/AI.svg" width="16" height="16" alt=""/>
                     Generate reply
                   </button>
-                  <button class="btn-secondary" style="opacity:0.3;">Add note</button>
+                  <button class="btn btn-secondary" disabled>Add note</button>
                 </div>
               </div>
             </div>
@@ -518,10 +533,10 @@
             <div class="tab active" data-tab="copilot">AI Copilot</div>
           </div>
           <div class="copilot-tab-actions">
-            <button class="icon-btn" title="New message">
+            <button class="btn btn-ghost btn-icon" title="New message">
               <img src="icons/16px/NewMessage.svg" width="16" height="16" alt="New message" />
             </button>
-            <button class="icon-btn" id="toggle-copilot-btn" title="Toggle sidebar">
+            <button class="btn btn-ghost btn-icon" id="toggle-copilot-btn" title="Toggle sidebar">
               <img src="icons/16px/SidebarRight.svg" width="16" height="16" alt="Toggle sidebar" />
             </button>
           </div>
@@ -535,7 +550,7 @@
           <div class="ai-block">
             <div class="ai-reasoning">
               <div>
-                <button class="reasoning-btn">
+                <button class="btn btn-ghost btn-sm">
                   Reasoning
                   <img src="icons/16px/ChevronRight.svg" width="16" height="16" alt=""/>
                 </button>
@@ -581,21 +596,21 @@
                 <div class="card-divider"></div>
                 <div class="card-actions">
                   <div class="card-actions-left">
-                    <button class="action-btn" title="Thumbs up">
+                    <button class="btn btn-ghost btn-icon" title="Thumbs up">
                       <img src="icons/16px/ThumbsUp.svg" width="16" height="16" alt="Thumbs up"/>
                     </button>
-                    <button class="action-btn" title="Thumbs down">
+                    <button class="btn btn-ghost btn-icon" title="Thumbs down">
                       <img src="icons/16px/ThumbsDown.svg" width="16" height="16" alt="Thumbs down"/>
                     </button>
-                    <button class="action-btn" title="Retry">
+                    <button class="btn btn-ghost btn-icon" title="Retry">
                       <img src="icons/16px/Retry.svg" width="16" height="16" alt="Retry"/>
                     </button>
                   </div>
                   <div class="card-actions-right">
-                    <button class="action-btn" title="Info">
+                    <button class="btn btn-ghost btn-icon" title="Info">
                       <img src="icons/16px/Info.svg" width="16" height="16" alt="Info"/>
                     </button>
-                    <button class="btn-insert">
+                    <button class="btn btn-inverse">
                       <img src="icons/16px/Copy.svg" width="16" height="16" alt=""/>
                       Insert
                     </button>
@@ -613,7 +628,7 @@
                 </div>
                 <div class="card-divider"></div>
                 <div class="card-footer-actions">
-                  <button class="btn-confirmed">
+                  <button class="btn btn-ghost">
                     <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
                       <path d="M3 8.5l3.5 3.5 6.5-7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -628,7 +643,7 @@
           <div class="ai-block">
             <div class="ai-reasoning">
               <div>
-                <button class="reasoning-btn">
+                <button class="btn btn-ghost btn-sm">
                   Reasoning
                   <img src="icons/16px/ChevronRight.svg" width="16" height="16" alt=""/>
                 </button>
@@ -656,21 +671,21 @@
                 <div class="card-divider"></div>
                 <div class="card-actions">
                   <div class="card-actions-left">
-                    <button class="action-btn" title="Thumbs up">
+                    <button class="btn btn-ghost btn-icon" title="Thumbs up">
                       <img src="icons/16px/ThumbsUp.svg" width="16" height="16" alt="Thumbs up"/>
                     </button>
-                    <button class="action-btn" title="Thumbs down">
+                    <button class="btn btn-ghost btn-icon" title="Thumbs down">
                       <img src="icons/16px/ThumbsDown.svg" width="16" height="16" alt="Thumbs down"/>
                     </button>
-                    <button class="action-btn" title="Retry">
+                    <button class="btn btn-ghost btn-icon" title="Retry">
                       <img src="icons/16px/Retry.svg" width="16" height="16" alt="Retry"/>
                     </button>
                   </div>
                   <div class="card-actions-right">
-                    <button class="action-btn" title="Info">
+                    <button class="btn btn-ghost btn-icon" title="Info">
                       <img src="icons/16px/Info.svg" width="16" height="16" alt="Info"/>
                     </button>
-                    <button class="btn-insert">
+                    <button class="btn btn-inverse">
                       <img src="icons/16px/Copy.svg" width="16" height="16" alt=""/>
                       Insert
                     </button>
@@ -697,9 +712,9 @@
         <div id="copilot-composer" class="copilot-composer">
           <div class="copilot-input">
             <div contenteditable="true" class="copilot-editable"></div>
-            <button class="copilot-send-btn">
+            <button class="btn btn-accent btn-icon" disabled>
               <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M8 12.5V3.5M4.5 7l3.5-3.5L11.5 7" stroke="white" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8 12.5V3.5M4.5 7l3.5-3.5L11.5 7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
           </div>

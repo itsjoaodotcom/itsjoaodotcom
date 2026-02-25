@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Button — Clarity Components</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/tokens.css" />
+  <link rel="stylesheet" href="../css/button.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-family);
+      background: var(--surface-secondary);
+      color: var(--content-primary);
+      min-height: 100vh;
+      padding: 48px 40px 80px;
+    }
+
+    /* ─── Page layout ─── */
+    .page { max-width: 780px; margin: 0 auto; }
+
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 40px;
+    }
+
+    .page-title {
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 24px;
+      color: var(--content-primary);
+    }
+
+    .page-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .page-tag {
+      font-size: 11px;
+      font-family: 'Geist Mono', monospace;
+      color: var(--content-tertiary);
+      background: var(--surface-tint);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .figma-link {
+      font-size: 11px;
+      color: var(--content-accent);
+      text-decoration: none;
+    }
+
+    .figma-link:hover { text-decoration: underline; }
+
+    /* ─── Sections ─── */
+    .section { margin-bottom: 40px; }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--content-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 16px;
+    }
+
+    /* ─── State grid ─── */
+    .state-grid {
+      display: grid;
+      grid-template-columns: 120px repeat(3, 1fr);
+      border: 1px solid var(--stroke-primary);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .grid-header {
+      display: contents;
+    }
+
+    .grid-header-cell {
+      padding: 8px 16px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--content-tertiary);
+      background: var(--surface-tint);
+      border-bottom: 1px solid var(--stroke-primary);
+    }
+
+    .grid-header-cell:not(:first-child) {
+      border-left: 1px solid var(--stroke-primary);
+    }
+
+    .grid-row {
+      display: contents;
+    }
+
+    .grid-label {
+      padding: 12px 16px;
+      font-size: 11px;
+      color: var(--content-tertiary);
+      font-family: 'Geist Mono', monospace;
+      background: var(--surface-primary);
+      display: flex;
+      align-items: center;
+      border-top: 1px solid var(--stroke-primary);
+    }
+
+    .grid-row:first-of-type .grid-label,
+    .grid-row:first-of-type .grid-cell {
+      border-top: none;
+    }
+
+    .grid-cell {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      border-top: 1px solid var(--stroke-primary);
+      border-left: 1px solid var(--stroke-primary);
+      background: var(--surface-primary);
+    }
+
+    /* ─── Size row ─── */
+    .size-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 16px;
+      background: var(--surface-primary);
+      border: 1px solid var(--stroke-primary);
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .size-label {
+      font-size: 11px;
+      color: var(--content-tertiary);
+      font-family: 'Geist Mono', monospace;
+      width: 80px;
+      flex-shrink: 0;
+    }
+
+    .size-items {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* ─── Icon row ─── */
+    .icon-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 16px;
+      background: var(--surface-primary);
+      border: 1px solid var(--stroke-primary);
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    /* ─── Split row ─── */
+    .split-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      padding: 16px;
+      background: var(--surface-primary);
+      border: 1px solid var(--stroke-primary);
+      border-radius: 8px;
+    }
+
+    /* ─── Code block ─── */
+    .code-block {
+      background: var(--surface-primary);
+      border: 1px solid var(--stroke-primary);
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      font-family: 'Geist Mono', monospace;
+      font-size: 11px;
+      line-height: 18px;
+      color: var(--content-secondary);
+      white-space: pre;
+    }
+
+    .code-block .c-comment { color: var(--content-tertiary); }
+    .code-block .c-tag     { color: var(--content-accent); }
+    .code-block .c-attr    { color: var(--content-secondary); }
+    .code-block .c-string  { color: var(--content-success); }
+
+    /* ─── Checkerboard bg for visual separation ─── */
+    .bg-check .grid-cell:nth-child(4n+3),
+    .bg-check .grid-cell:nth-child(4n+4) {
+      background: var(--surface-tint);
+    }
+
+    /* ─── SVG icons ─── */
+    .icon-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- Header -->
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Button</h1>
+        <div class="page-meta">
+          <span class="page-tag">css/button.css</span>
+          <a class="figma-link" href="https://www.figma.com/design/N17JbPWMPtDKXRE9uVPHJ9/%E2%9C%A8-Platform-%E2%80%94-DesignSystem?node-id=7-3124" target="_blank">Figma ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Variants & States ─── -->
+    <div class="section">
+      <div class="section-title">Variants &amp; States</div>
+
+      <div class="state-grid">
+        <!-- Headers -->
+        <div class="grid-header">
+          <div class="grid-header-cell">Variant</div>
+          <div class="grid-header-cell">Default</div>
+          <div class="grid-header-cell">Disabled</div>
+          <div class="grid-header-cell">Loading</div>
+        </div>
+
+        <!-- Accent -->
+        <div class="grid-row">
+          <div class="grid-label">btn-accent</div>
+          <div class="grid-cell">
+            <button class="btn btn-accent">Label</button>
+            <button class="btn btn-accent">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              Label
+            </button>
+          </div>
+          <div class="grid-cell">
+            <button class="btn btn-accent" disabled>Label</button>
+          </div>
+          <div class="grid-cell">
+            <button class="btn btn-accent is-loading">Label</button>
+          </div>
+        </div>
+
+        <!-- Inverse -->
+        <div class="grid-row">
+          <div class="grid-label">btn-inverse</div>
+          <div class="grid-cell">
+            <button class="btn btn-inverse">Label</button>
+            <button class="btn btn-inverse">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              Label
+            </button>
+          </div>
+          <div class="grid-cell">
+            <button class="btn btn-inverse" disabled>Label</button>
+          </div>
+          <div class="grid-cell">
+            <button class="btn btn-inverse is-loading">Label</button>
+          </div>
+        </div>
+
+        <!-- Secondary -->
+        <div class="grid-row">
+          <div class="grid-label">btn-secondary</div>
+          <div class="grid-cell">
+            <button class="btn btn-secondary">Label</button>
+            <button class="btn btn-secondary">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              Label
+            </button>
+          </div>
+          <div class="grid-cell">
+            <button class="btn btn-secondary" disabled>Label</button>
+          </div>
+          <div class="grid-cell">
+            <button class="btn btn-secondary is-loading">Label</button>
+          </div>
+        </div>
+
+        <!-- Ghost -->
+        <div class="grid-row">
+          <div class="grid-label">btn-ghost</div>
+          <div class="grid-cell">
+            <button class="btn btn-ghost">Label</button>
+            <button class="btn btn-ghost">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              Label
+            </button>
+          </div>
+          <div class="grid-cell">
+            <button class="btn btn-ghost" disabled>Label</button>
+          </div>
+          <div class="grid-cell">
+            <button class="btn btn-ghost is-loading">Label</button>
+          </div>
+        </div>
+
+        <!-- Destructive -->
+        <div class="grid-row">
+          <div class="grid-label">btn-destructive</div>
+          <div class="grid-cell">
+            <button class="btn btn-destructive">Label</button>
+            <button class="btn btn-destructive">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              Label
+            </button>
+          </div>
+          <div class="grid-cell">
+            <button class="btn btn-destructive" disabled>Label</button>
+          </div>
+          <div class="grid-cell">
+            <button class="btn btn-destructive is-loading">Label</button>
+          </div>
+        </div>
+
+        <!-- Ghost Destructive -->
+        <div class="grid-row">
+          <div class="grid-label">btn-ghost-destructive</div>
+          <div class="grid-cell">
+            <button class="btn btn-ghost-destructive">Label</button>
+            <button class="btn btn-ghost-destructive">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              Label
+            </button>
+          </div>
+          <div class="grid-cell">
+            <button class="btn btn-ghost-destructive" disabled>Label</button>
+          </div>
+          <div class="grid-cell">
+            <button class="btn btn-ghost-destructive is-loading">Label</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─── Sizes ─── -->
+    <div class="section">
+      <div class="section-title">Sizes</div>
+
+      <div class="size-row">
+        <span class="size-label">(default)</span>
+        <div class="size-items">
+          <button class="btn btn-accent">Label</button>
+          <button class="btn btn-secondary">Label</button>
+          <button class="btn btn-ghost">Label</button>
+          <span style="font-size:11px; color:var(--content-tertiary); font-family:'Geist Mono',monospace;">28px</span>
+        </div>
+      </div>
+
+      <div class="size-row">
+        <span class="size-label">btn-sm</span>
+        <div class="size-items">
+          <button class="btn btn-accent btn-sm">Label</button>
+          <button class="btn btn-secondary btn-sm">Label</button>
+          <button class="btn btn-ghost btn-sm">Label</button>
+          <span style="font-size:11px; color:var(--content-tertiary); font-family:'Geist Mono',monospace;">24px</span>
+        </div>
+      </div>
+
+      <div class="size-row">
+        <span class="size-label">btn-micro</span>
+        <div class="size-items">
+          <button class="btn btn-accent btn-micro">Label</button>
+          <button class="btn btn-secondary btn-micro">Label</button>
+          <button class="btn btn-ghost btn-micro">Label</button>
+          <span style="font-size:11px; color:var(--content-tertiary); font-family:'Geist Mono',monospace;">20px</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Icon-only ─── -->
+    <div class="section">
+      <div class="section-title">Icon-only · btn-icon</div>
+
+      <div class="icon-row">
+        <!-- Default size -->
+        <button class="btn btn-accent btn-icon" title="Accent">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </button>
+        <button class="btn btn-inverse btn-icon" title="Inverse">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </button>
+        <button class="btn btn-secondary btn-icon" title="Secondary">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </button>
+        <button class="btn btn-ghost btn-icon" title="Ghost">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </button>
+        <button class="btn btn-destructive btn-icon" title="Destructive">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </button>
+        <button class="btn btn-ghost-destructive btn-icon" title="Ghost destructive">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </button>
+
+        <span style="font-size:11px; color:var(--stroke-secondarystrong); margin: 0 4px;">|</span>
+
+        <!-- Small -->
+        <button class="btn btn-accent btn-sm btn-icon" title="Accent SM">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </button>
+        <button class="btn btn-secondary btn-sm btn-icon" title="Secondary SM">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </button>
+        <button class="btn btn-ghost btn-sm btn-icon" title="Ghost SM">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </button>
+
+        <span style="font-size:11px; color:var(--stroke-secondarystrong); margin: 0 4px;">|</span>
+
+        <!-- Disabled -->
+        <button class="btn btn-accent btn-icon" disabled title="Disabled">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </button>
+        <button class="btn btn-ghost btn-icon" disabled title="Ghost disabled">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ─── Split Button ─── -->
+    <div class="section">
+      <div class="section-title">Split Button · btn-split</div>
+
+      <div class="split-row">
+        <!-- Accent split -->
+        <div class="btn-split">
+          <button class="btn btn-accent">Send</button>
+          <button class="btn btn-accent btn-icon" title="More options">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M4.5 6.5l3.5 3.5 3.5-3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Secondary split -->
+        <div class="btn-split">
+          <button class="btn btn-secondary">Export</button>
+          <button class="btn btn-secondary btn-icon" title="More options">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M4.5 6.5l3.5 3.5 3.5-3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Small accent split -->
+        <div class="btn-split btn-sm">
+          <button class="btn btn-accent btn-sm">Send</button>
+          <button class="btn btn-accent btn-sm btn-icon" title="More options">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M4.5 6.5l3.5 3.5 3.5-3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Disabled split -->
+        <div class="btn-split">
+          <button class="btn btn-accent" disabled>Send</button>
+          <button class="btn btn-accent btn-icon" disabled title="More options">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M4.5 6.5l3.5 3.5 3.5-3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Usage ─── -->
+    <div class="section">
+      <div class="section-title">Usage</div>
+
+      <div class="code-block">
+        <pre><span class="c-comment">&lt;!-- Variants --&gt;</span>
+<span class="c-tag">&lt;button</span> <span class="c-attr">class=</span><span class="c-string">"btn btn-accent"</span><span class="c-tag">&gt;</span>Label<span class="c-tag">&lt;/button&gt;</span>
+<span class="c-tag">&lt;button</span> <span class="c-attr">class=</span><span class="c-string">"btn btn-inverse"</span><span class="c-tag">&gt;</span>Label<span class="c-tag">&lt;/button&gt;</span>
+<span class="c-tag">&lt;button</span> <span class="c-attr">class=</span><span class="c-string">"btn btn-secondary"</span><span class="c-tag">&gt;</span>Label<span class="c-tag">&lt;/button&gt;</span>
+<span class="c-tag">&lt;button</span> <span class="c-attr">class=</span><span class="c-string">"btn btn-ghost"</span><span class="c-tag">&gt;</span>Label<span class="c-tag">&lt;/button&gt;</span>
+<span class="c-tag">&lt;button</span> <span class="c-attr">class=</span><span class="c-string">"btn btn-destructive"</span><span class="c-tag">&gt;</span>Label<span class="c-tag">&lt;/button&gt;</span>
+<span class="c-tag">&lt;button</span> <span class="c-attr">class=</span><span class="c-string">"btn btn-ghost-destructive"</span><span class="c-tag">&gt;</span>Label<span class="c-tag">&lt;/button&gt;</span>
+
+<span class="c-comment">&lt;!-- Sizes --&gt;</span>
+<span class="c-tag">&lt;button</span> <span class="c-attr">class=</span><span class="c-string">"btn btn-accent btn-sm"</span><span class="c-tag">&gt;</span>Small<span class="c-tag">&lt;/button&gt;</span>
+<span class="c-tag">&lt;button</span> <span class="c-attr">class=</span><span class="c-string">"btn btn-accent btn-micro"</span><span class="c-tag">&gt;</span>Micro<span class="c-tag">&lt;/button&gt;</span>
+
+<span class="c-comment">&lt;!-- With icon (use SVG with currentColor) --&gt;</span>
+<span class="c-tag">&lt;button</span> <span class="c-attr">class=</span><span class="c-string">"btn btn-accent"</span><span class="c-tag">&gt;</span>
+  <span class="c-tag">&lt;svg</span> <span class="c-attr">width=</span><span class="c-string">"16"</span> <span class="c-attr">height=</span><span class="c-string">"16"</span> <span class="c-attr">fill=</span><span class="c-string">"none"</span><span class="c-tag">&gt;</span>...<span class="c-tag">&lt;/svg&gt;</span>
+  Label
+<span class="c-tag">&lt;/button&gt;</span>
+
+<span class="c-comment">&lt;!-- Icon-only --&gt;</span>
+<span class="c-tag">&lt;button</span> <span class="c-attr">class=</span><span class="c-string">"btn btn-ghost btn-icon"</span> <span class="c-attr">title=</span><span class="c-string">"Action"</span><span class="c-tag">&gt;</span>
+  <span class="c-tag">&lt;svg</span> ...<span class="c-tag">&gt;</span>...<span class="c-tag">&lt;/svg&gt;</span>
+<span class="c-tag">&lt;/button&gt;</span>
+
+<span class="c-comment">&lt;!-- States --&gt;</span>
+<span class="c-tag">&lt;button</span> <span class="c-attr">class=</span><span class="c-string">"btn btn-accent"</span> <span class="c-attr">disabled</span><span class="c-tag">&gt;</span>Disabled<span class="c-tag">&lt;/button&gt;</span>
+<span class="c-tag">&lt;button</span> <span class="c-attr">class=</span><span class="c-string">"btn btn-accent is-loading"</span><span class="c-tag">&gt;</span>Loading<span class="c-tag">&lt;/button&gt;</span>
+
+<span class="c-comment">&lt;!-- Split button --&gt;</span>
+<span class="c-tag">&lt;div</span> <span class="c-attr">class=</span><span class="c-string">"btn-split"</span><span class="c-tag">&gt;</span>
+  <span class="c-tag">&lt;button</span> <span class="c-attr">class=</span><span class="c-string">"btn btn-accent"</span><span class="c-tag">&gt;</span>Send<span class="c-tag">&lt;/button&gt;</span>
+  <span class="c-tag">&lt;button</span> <span class="c-attr">class=</span><span class="c-string">"btn btn-accent btn-icon"</span><span class="c-tag">&gt;</span>
+    <span class="c-tag">&lt;svg</span> ...<span class="c-tag">&gt;</span>...<span class="c-tag">&lt;/svg&gt;</span>
+  <span class="c-tag">&lt;/button&gt;</span>
+<span class="c-tag">&lt;/div&gt;</span></pre>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../js/theme.js"></script>
+</body>
+</html>

@@ -45,16 +45,20 @@
       localStorage.setItem('clarity-theme', 'dark');
     });
 
+    var dragHandle = document.createElement('button');
+    dragHandle.className = 'theme-switcher-drag';
+    dragHandle.innerHTML = '<img src="icons/16px/Drag.svg" width="16" height="16" alt=""/>';
+
+    switcher.appendChild(dragHandle);
     switcher.appendChild(lightBtn);
     switcher.appendChild(darkBtn);
     document.body.appendChild(switcher);
 
-    // Drag to reposition
+    // Drag to reposition — only from the handle
     var isDragging = false;
     var dragOffsetX, dragOffsetY;
 
-    switcher.addEventListener('pointerdown', function (e) {
-      if (e.target.closest('button')) return;
+    dragHandle.addEventListener('pointerdown', function (e) {
       isDragging = true;
       var rect = switcher.getBoundingClientRect();
       // Switch from transform-based centering to absolute pixel coords
@@ -65,7 +69,7 @@
       dragOffsetX = e.clientX - rect.left;
       dragOffsetY = e.clientY - rect.top;
       switcher.setPointerCapture(e.pointerId);
-      switcher.style.cursor = 'grabbing';
+      dragHandle.style.cursor = 'grabbing';
       e.preventDefault();
     });
 
@@ -78,7 +82,7 @@
     switcher.addEventListener('pointerup', function () {
       if (!isDragging) return;
       isDragging = false;
-      switcher.style.cursor = '';
+      dragHandle.style.cursor = '';
     });
   });
 })();

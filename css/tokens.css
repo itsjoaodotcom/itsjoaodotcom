@@ -121,7 +121,7 @@
   /* Surface */
   --surface-primary:           var(--grey-00);
   --surface-primaryhover:      rgba(0, 0, 0, 0.02);
-  --surface-secondary:         var(--grey-01);
+  --surface-secondary:         #FAFAFA;
   --surface-accent:            var(--blue-05);
   --surface-popover:           var(--grey-00);
   --surface-popoverhover:      var(--grey-01);
@@ -137,6 +137,18 @@
   --surface-criticalsubtle:    var(--red-02);
   --surface-callhover:         rgba(179, 199, 255, 0.50);
 
+  /* Utilities */
+  --utilities-surface-bluesubtle:    #e6ebff;
+  --utilities-content-onsoft-blue:   #1c2e66;
+  --utilities-surface-orangesubtle:  #fff2e6;
+  --utilities-content-onsoft-orange: #89461f;
+  --utilities-surface-purplesubtle:  #e6e8fa;
+  --utilities-content-onsoft-purple: #222766;
+  --utilities-surface-cyansubtle:    #e0f8fb;
+  --utilities-content-onsoft-cyan:   #11596d;
+  --utilities-surface-pinksubtle:    #f9f0ee;
+  --utilities-content-onsoft-pink:   #6b5452;
+
   /* Button */
   --button-accent:             var(--blue-05);
   --button-accenthover:        var(--blue-06);
@@ -144,6 +156,8 @@
   --button-criticalhover:      var(--red-06);
   --button-secondary:          var(--grey-00);
   --button-secondaryhover:     var(--grey-01);
+  --button-inverse:            var(--grey-12);
+  --button-inversehover:       var(--grey-09);
   --button-ghost:              rgba(0, 0, 0, 0);
   --button-ghosthover:         rgba(0, 0, 0, 0.04);
 
@@ -222,6 +236,8 @@ html.dark {
     --button-criticalhover:      var(--red-07);
     --button-secondary:          var(--grey-09);
     --button-secondaryhover:     var(--grey-08);
+    --button-inverse:            var(--grey-03);
+    --button-inversehover:       var(--grey-06);
     --button-ghost:              rgba(255, 255, 255, 0);
     --button-ghosthover:         rgba(255, 255, 255, 0.05);
 
@@ -279,8 +295,35 @@ html.dark {
   border-radius: 10px;
   background: var(--surface-primary);
   box-shadow: 0px -2px 40px 0px var(--elevation-e2);
-  cursor: grab;
   user-select: none;
+}
+
+.theme-switcher-drag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  cursor: grab;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.theme-switcher-drag:hover {
+  background: var(--surface-tint);
+}
+
+.theme-switcher-drag img {
+  opacity: 0.4;
+  pointer-events: none;
+  filter: brightness(0);
+}
+
+html.dark .theme-switcher-drag img {
+  filter: brightness(0) invert(1);
 }
 
 .theme-switcher-btn {
