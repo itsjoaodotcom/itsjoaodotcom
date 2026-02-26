@@ -562,8 +562,17 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
   height: 16px;
   border-radius: 999px;
   border: 1px solid var(--stroke-primary);
-  background: var(--gradient-brand);
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 12px;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
 }
 
 .dialog-name {

@@ -106,11 +106,15 @@ document.addEventListener('DOMContentLoaded', () => {
   requestAnimationFrame(() => document.body.classList.add('loaded'));
 
   // ── Render functions ────────────────────────────────────
-  function renderDialog(name) {
+  function renderDialog(c) {
     const chatScroll = document.getElementById('chat-scroll');
     const dialogName = document.getElementById('dialog-name');
-    dialogName.textContent = name;
-    const msgs = conversations[name] || [];
+    const dialogAvatar = document.getElementById('dialog-avatar');
+    dialogName.textContent = c.name;
+    dialogAvatar.textContent = c.initials[0];
+    dialogAvatar.style.background = c.bg;
+    dialogAvatar.style.color = c.color;
+    const msgs = conversations[c.name] || [];
     let firstOut = true;
     chatScroll.innerHTML = msgs.map(m => {
       const showAuthor = m.dir === 'out' && firstOut;
@@ -150,7 +154,8 @@ document.addEventListener('DOMContentLoaded', () => {
     item.classList.add('active');
     content.classList.add('has-selection');
     const name = item.querySelector('.isb-name')?.textContent;
-    if (name) renderDialog(name);
+    const conv = allConversations.find(c => c.name === name);
+    if (conv) renderDialog(conv);
   });
 
   // Insert button: Copy → Check → Copy
