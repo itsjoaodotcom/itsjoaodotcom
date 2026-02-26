@@ -229,6 +229,18 @@ html.dark {
     --surface-criticalsubtle:    var(--red-08);
     --surface-callhover:         var(--blue-03);
 
+    /* Utilities */
+    --utilities-surface-bluesubtle:    var(--blue-08);
+    --utilities-content-onsoft-blue:   var(--blue-02);
+    --utilities-surface-orangesubtle:  var(--orange-08);
+    --utilities-content-onsoft-orange: var(--orange-02);
+    --utilities-surface-purplesubtle:  var(--purple-08);
+    --utilities-content-onsoft-purple: var(--purple-02);
+    --utilities-surface-cyansubtle:    var(--cyan-08);
+    --utilities-content-onsoft-cyan:   var(--cyan-02);
+    --utilities-surface-pinksubtle:    var(--brown-08);
+    --utilities-content-onsoft-pink:   var(--brown-02);
+
     /* Button */
     --button-accent:             var(--blue-06);
     --button-accenthover:        var(--blue-07);
