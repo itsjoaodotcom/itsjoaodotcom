@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Selector — Clarity Components</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/tokens.css" />
+  <link rel="stylesheet" href="../css/avatar.css" />
+  <link rel="stylesheet" href="../css/button.css" />
+  <link rel="stylesheet" href="../css/data-selector.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-family);
+      background: var(--surface-secondary);
+      color: var(--content-primary);
+      min-height: 100vh;
+      padding: 48px 40px 80px;
+    }
+
+    .page { max-width: 780px; margin: 0 auto; }
+
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 40px;
+    }
+
+    .page-title {
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 24px;
+      color: var(--content-primary);
+    }
+
+    .page-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .page-tag {
+      font-size: 11px;
+      font-family: 'Geist Mono', monospace;
+      color: var(--content-tertiary);
+      background: var(--surface-tint);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .figma-link {
+      font-size: 11px;
+      color: var(--content-accent);
+      text-decoration: none;
+    }
+    .figma-link:hover { text-decoration: underline; }
+
+    /* ─── Sections ─── */
+    .section { margin-bottom: 48px; }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--content-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 16px;
+    }
+
+    /* ─── Demo card ─── */
+    .demo-card {
+      background: var(--surface-primary);
+      border: 1px solid var(--stroke-primary);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .demo-row-group {
+      width: 316px;
+      padding: 0 8px;
+    }
+
+    /* ─── Row label for showcase ─── */
+    .type-label {
+      font-size: 11px;
+      font-family: 'Geist Mono', monospace;
+      color: var(--content-tertiary);
+      padding: 16px 0 8px;
+    }
+
+    /* ─── States demo ─── */
+    .states-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .state-col { display: flex; flex-direction: column; gap: 8px; }
+
+    .state-label {
+      font-size: 11px;
+      font-weight: 500;
+      font-family: 'Geist Mono', monospace;
+      color: var(--content-tertiary);
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+
+    /* Simulate hover/active for showcase */
+    .is-hover { background: var(--button-ghosthover) !important; }
+
+  </style>
+  <script src="../js/theme.js" defer></script>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <div class="page-title">Data Selector</div>
+      <div class="page-meta">
+        <span class="page-tag">data-selector.css</span>
+        <a class="figma-link" href="https://www.figma.com/design/N17JbPWMPtDKXRE9uVPHJ9/?node-id=103-14346" target="_blank">View in Figma ↗</a>
+      </div>
+    </div>
+    <button class="btn btn-secondary btn-sm" onclick="document.documentElement.classList.toggle('dark')">Toggle dark</button>
+  </div>
+
+
+  <!-- ─── Data Selector Row ─── -->
+  <div class="section">
+    <div class="section-title">Data selector — types</div>
+    <div class="demo-card">
+      <div class="demo-row-group">
+
+        <!-- Empty -->
+        <div class="ds-row">
+          <div class="ds-label">
+            <img src="../icons/16px/User.svg" width="16" height="16" alt=""/>
+            <span class="ds-label-text">Assignee</span>
+          </div>
+          <div class="ds-value">
+            <img src="../icons/16px/Plus.svg" width="16" height="16" alt=""/>
+            <span class="ds-value-inner ds-empty">Set assignee</span>
+          </div>
+        </div>
+
+        <!-- User -->
+        <div class="ds-row">
+          <div class="ds-label">
+            <img src="../icons/16px/User.svg" width="16" height="16" alt=""/>
+            <span class="ds-label-text">Assignee</span>
+          </div>
+          <div class="ds-value ds-value-user">
+            <div class="avatar avatar-sm" style="background:#dbeafe;color:#1e40af">CB</div>
+            <span class="ds-value-inner">Caroline Brennan</span>
+          </div>
+        </div>
+
+        <!-- Text -->
+        <div class="ds-row">
+          <div class="ds-label">
+            <img src="../icons/16px/Label.svg" width="16" height="16" alt=""/>
+            <span class="ds-label-text">ID</span>
+          </div>
+          <div class="ds-value">
+            <span class="ds-value-inner">#864</span>
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="ds-row">
+          <div class="ds-label">
+            <img src="../icons/16px/AnswerCall.svg" width="16" height="16" alt=""/>
+            <span class="ds-label-text">Phone</span>
+          </div>
+          <div class="ds-value">
+            <span class="ds-value-inner">+351 918 273 721</span>
+          </div>
+        </div>
+
+        <!-- Tags -->
+        <div class="ds-row">
+          <div class="ds-label">
+            <img src="../icons/16px/Label.svg" width="16" height="16" alt=""/>
+            <span class="ds-label-text">Tags</span>
+          </div>
+          <div class="ds-value ds-value-tags">
+            <div class="tag-pill">
+              <span class="tag-dot" style="background:#4061d8"></span>Free plan
+            </div>
+            <div class="tag-pill">
+              <span class="tag-dot" style="background:#7c3aed"></span>Low Value
+            </div>
+          </div>
+        </div>
+
+        <!-- Priority — Critical -->
+        <div class="ds-row">
+          <div class="ds-label">
+            <img src="../icons/16px/Flag.svg" width="16" height="16" alt=""/>
+            <span class="ds-label-text">Priority</span>
+          </div>
+          <div class="ds-value ds-value-priority ds-priority-critical">
+            <div class="ds-priority-dot"></div>
+            <span class="ds-value-inner">Critical</span>
+          </div>
+        </div>
+
+        <!-- Priority — High -->
+        <div class="ds-row">
+          <div class="ds-label">
+            <img src="../icons/16px/Flag.svg" width="16" height="16" alt=""/>
+            <span class="ds-label-text">Priority</span>
+          </div>
+          <div class="ds-value ds-value-priority ds-priority-high">
+            <div class="ds-priority-dot"></div>
+            <span class="ds-value-inner">High</span>
+          </div>
+        </div>
+
+        <!-- Priority — Medium -->
+        <div class="ds-row">
+          <div class="ds-label">
+            <img src="../icons/16px/Flag.svg" width="16" height="16" alt=""/>
+            <span class="ds-label-text">Priority</span>
+          </div>
+          <div class="ds-value ds-value-priority ds-priority-medium">
+            <div class="ds-priority-dot"></div>
+            <span class="ds-value-inner">Medium</span>
+          </div>
+        </div>
+
+        <!-- Priority — Low -->
+        <div class="ds-row">
+          <div class="ds-label">
+            <img src="../icons/16px/Flag.svg" width="16" height="16" alt=""/>
+            <span class="ds-label-text">Priority</span>
+          </div>
+          <div class="ds-value ds-value-priority ds-priority-low">
+            <div class="ds-priority-dot"></div>
+            <span class="ds-value-inner">Low</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ─── Data Selector States ─── -->
+  <div class="section">
+    <div class="section-title">Data selector — states</div>
+    <div class="states-grid">
+
+      <div class="state-col">
+        <div class="state-label">Default</div>
+        <div class="demo-card" style="padding: 0 8px;">
+          <div class="ds-row">
+            <div class="ds-label">
+              <img src="../icons/16px/User.svg" width="16" height="16" alt=""/>
+              <span class="ds-label-text">Assignee</span>
+            </div>
+            <div class="ds-value ds-value-user">
+              <div class="avatar avatar-sm" style="background:#dbeafe;color:#1e40af">CB</div>
+              <span class="ds-value-inner">Caroline B.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="state-col">
+        <div class="state-label">Hover</div>
+        <div class="demo-card" style="padding: 0 8px;">
+          <div class="ds-row">
+            <div class="ds-label">
+              <img src="../icons/16px/User.svg" width="16" height="16" alt=""/>
+              <span class="ds-label-text">Assignee</span>
+            </div>
+            <div class="ds-value ds-value-user is-hover">
+              <div class="avatar avatar-sm" style="background:#dbeafe;color:#1e40af">CB</div>
+              <span class="ds-value-inner">Caroline B.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="state-col">
+        <div class="state-label">Empty</div>
+        <div class="demo-card" style="padding: 0 8px;">
+          <div class="ds-row">
+            <div class="ds-label">
+              <img src="../icons/16px/User.svg" width="16" height="16" alt=""/>
+              <span class="ds-label-text">Assignee</span>
+            </div>
+            <div class="ds-value">
+              <img src="../icons/16px/Plus.svg" width="16" height="16" alt=""/>
+              <span class="ds-value-inner ds-empty">Set assignee</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ─── Ticket List Item ─── -->
+  <div class="section">
+    <div class="section-title">Ticket list item</div>
+    <div class="demo-card" style="padding: 8px; width: 332px;">
+      <div class="tli-list" style="padding: 0;">
+
+        <!-- Current -->
+        <div class="tli current">
+          <div class="tli-step">
+            <div class="tli-dot tli-dot-open"></div>
+            <div class="tli-line"></div>
+          </div>
+          <div class="tli-body">
+            <div class="tli-header">
+              <span class="tli-status">Open</span>
+              <span class="tli-date">2 Jan</span>
+            </div>
+            <p class="tli-preview">Hi. How can I top up with apple pay?</p>
+          </div>
+        </div>
+
+        <!-- Default -->
+        <div class="tli">
+          <div class="tli-step">
+            <div class="tli-dot tli-dot-closed"></div>
+            <div class="tli-line"></div>
+          </div>
+          <div class="tli-body">
+            <div class="tli-header">
+              <span class="tli-status">Closed</span>
+              <span class="tli-date">18 Dec</span>
+            </div>
+            <p class="tli-preview">My card was declined at checkout again</p>
+          </div>
+        </div>
+
+        <!-- Default -->
+        <div class="tli">
+          <div class="tli-step">
+            <div class="tli-dot tli-dot-closed"></div>
+          </div>
+          <div class="tli-body">
+            <div class="tli-header">
+              <span class="tli-status">Closed</span>
+              <span class="tli-date">3 Nov</span>
+            </div>
+            <p class="tli-preview">I can't find the transaction history</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ─── Ticket List Item States ─── -->
+  <div class="section">
+    <div class="section-title">Ticket list item — states</div>
+    <div class="states-grid">
+
+      <div class="state-col">
+        <div class="state-label">Current</div>
+        <div class="demo-card">
+          <div class="tli current" style="margin: 0;">
+            <div class="tli-step">
+              <div class="tli-dot tli-dot-open"></div>
+            </div>
+            <div class="tli-body">
+              <div class="tli-header">
+                <span class="tli-status">Open</span>
+                <span class="tli-date">2 Jan</span>
+              </div>
+              <p class="tli-preview">Top up with apple pay?</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="state-col">
+        <div class="state-label">Hover</div>
+        <div class="demo-card">
+          <div class="tli" style="background: var(--surface-primaryhover); margin: 0;">
+            <div class="tli-step">
+              <div class="tli-dot tli-dot-closed"></div>
+            </div>
+            <div class="tli-body">
+              <div class="tli-header">
+                <span class="tli-status">Closed</span>
+                <span class="tli-date">18 Dec</span>
+              </div>
+              <p class="tli-preview">Card declined at checkout</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="state-col">
+        <div class="state-label">Default</div>
+        <div class="demo-card">
+          <div class="tli" style="margin: 0;">
+            <div class="tli-step">
+              <div class="tli-dot tli-dot-closed"></div>
+            </div>
+            <div class="tli-body">
+              <div class="tli-header">
+                <span class="tli-status">Closed</span>
+                <span class="tli-date">3 Nov</span>
+              </div>
+              <p class="tli-preview">Transaction history missing</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

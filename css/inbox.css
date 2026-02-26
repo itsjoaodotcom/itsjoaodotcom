@@ -711,7 +711,7 @@ body:not(.is-loading) .content #dialog-loading {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 12px 20px;
+  padding: 24px 20px 12px;
   max-width: 1200px;
   width: 100%;
   align-self: center;
@@ -748,6 +748,8 @@ body:not(.is-loading) .content #dialog-loading {
 }
 
 .system-alert strong { font-weight: 500; }
+
+.chat-scroll .da { margin: 4px 0 28px; }
 
 .msg-wrapper {
   display: flex;
@@ -1246,6 +1248,7 @@ body:not(.is-loading) .content #dialog-loading {
 
 .copilot-editable {
   flex: 1;
+  min-width: 0;
   display: block;
   font-family: var(--font-family);
   font-size: 14px;
@@ -1281,6 +1284,41 @@ body:not(.is-loading) .content #dialog-loading {
 .copilot-input.multiline .copilot-send-btn {
   align-self: flex-end;
   margin-right: 6px;
+}
+
+
+/* ─── Details panel ─────────────────────────────────────── */
+#copilot-panel-details {
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.det-section {
+  border-bottom: 1px solid var(--stroke-primary);
+}
+
+.det-section-header {
+  padding: 12px 8px 4px;
+  transition: padding-bottom 0.22s ease;
+}
+
+.det-collapsed .det-section-header {
+  padding-bottom: 12px;
+}
+
+.det-section-content {
+  overflow: hidden;
+  transition: height 0.22s ease;
+}
+
+.det-collapsed .det-section-content {
+  height: 0;
+}
+
+.det-section-inner {
+  display: flex;
+  flex-direction: column;
+  padding: 0 8px 8px 16px;
 }
 
 

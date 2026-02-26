@@ -1,0 +1,32 @@
+/*
+ * avatar.css — Avatar Component
+ *
+ * Sizes: avatar-sm (16px) | avatar-md (28px)
+ */
+
+.avatar {
+  border-radius: 999px;
+  border: 1px solid var(--stroke-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: var(--font-family);
+  font-weight: 600;
+  line-height: 1;
+  overflow: hidden;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.avatar-sm {
+  width: 16px;
+  height: 16px;
+  font-size: 8px;
+}
+
+.avatar-md {
+  width: 28px;
+  height: 28px;
+  font-size: 10px;
+}

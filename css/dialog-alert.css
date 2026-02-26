@@ -1,0 +1,143 @@
+/*
+ * dialog-alert.css — Dialog Alert
+ *
+ * Types: date | ticket-created | not-assigned | assign-to | reassigned
+ *        snooze-started | snooze-ended | change-status | priority
+ *        feedback | new-chat
+ */
+
+/* ─── Base ───────────────────────────────────────────────── */
+
+.da {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  min-height: 24px;
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  font-feature-settings: 'lnum' 1, 'pnum' 1;
+  color: var(--content-secondary);
+}
+
+/* ─── Date separator ─────────────────────────────────────── */
+
+.da-date-sep {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  height: 16px;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.da-line {
+  flex: 1;
+  height: 1px;
+  background: var(--stroke-primary);
+}
+
+/* ─── Bold name chip ─────────────────────────────────────── */
+
+.da-name {
+  font-weight: 500;
+  color: var(--content-primary);
+}
+
+/* ─── Ticket created ─────────────────────────────────────── */
+
+.da-ticket-title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-secondary);
+}
+
+.da-ticket-dot {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--content-tertiary);
+}
+
+.da-ticket-name {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--content-secondary);
+}
+
+/* ─── Status tag ─────────────────────────────────────────── */
+
+.da-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  border: 1px solid var(--stroke-primary);
+  border-radius: 999px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--content-primary);
+}
+
+.da-tag-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 99px;
+  flex-shrink: 0;
+}
+
+/* ─── Feedback tag ───────────────────────────────────────── */
+
+.da-feedback-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 4px;
+  border: 1px solid var(--stroke-primary);
+  border-radius: 999px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--content-primary);
+  background: var(--surface-secondary);
+}
+
+.da-feedback-tag .da-score { color: var(--content-primary); }
+.da-feedback-tag .da-total { color: var(--content-tertiary); }
+
+/* ─── Priority ───────────────────────────────────────────── */
+
+.da-priority {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.da-priority img {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.da-priority-critical { color: var(--content-critical, #d14c4d); }
+.da-priority-high     { color: #f97316; }
+.da-priority-medium   { color: #eab308; }
+.da-priority-low      { color: #22c55e; }
+
+/* ─── Icon (clock, etc.) ─────────────────────────────────── */
+
+.da img {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  filter: brightness(0) invert(1) brightness(0.534);
+}
+
+html.dark .da img {
+  filter: brightness(0) invert(1) brightness(0.62);
+}

@@ -1,0 +1,281 @@
+/*
+ * data-selector.css — Data Selector & Ticket List Item
+ *
+ * Components:  ds-row (data selector row) | tli (ticket list item)
+ * DS types:    empty | user | text | phone | tags | priority
+ * TLI states:  default | :hover | .current
+ */
+
+/* ─── Data Selector Row ─────────────────────────────────── */
+
+.ds-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-radius: 6px;
+}
+
+/* Label column */
+.ds-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 8px 7px 0;
+  flex-shrink: 0;
+}
+
+.ds-label img {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  filter: brightness(0);
+  opacity: 0.5;
+}
+
+html.dark .ds-label img {
+  filter: brightness(0) invert(1);
+  opacity: 0.38;
+}
+
+.ds-label-text {
+  width: 72px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--content-tertiary-transparent, rgba(0, 0, 0, 0.5));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+html.dark .ds-label-text {
+  color: rgba(255, 255, 255, 0.38);
+}
+
+/* Value column */
+.ds-value {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.ds-value:hover {
+  background: var(--button-ghosthover);
+  padding-right: 28px;
+}
+
+.ds-value-user  { gap: 6px; }
+.ds-value-priority { gap: 6px; }
+
+.ds-value-tags {
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+}
+
+/* Shared value text */
+.ds-value-inner {
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  font-feature-settings: 'lnum' 1, 'pnum' 1;
+  color: var(--content-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.ds-value-inner.ds-empty {
+  color: var(--content-quartenary, rgba(0, 0, 0, 0.4));
+}
+
+/* Icon wrapper for empty/add states */
+.ds-value > img {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  filter: brightness(0);
+  opacity: 0.4;
+}
+
+/* Priority dot */
+.ds-priority-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 99px;
+  flex-shrink: 0;
+}
+
+.ds-priority-critical .ds-priority-dot { background: var(--content-critical, #ef4444); }
+.ds-priority-critical .ds-value-inner   { color: var(--content-critical, #ef4444); }
+.ds-priority-high .ds-priority-dot      { background: #f97316; }
+.ds-priority-medium .ds-priority-dot    { background: #eab308; }
+.ds-priority-low .ds-priority-dot       { background: #22c55e; }
+
+
+/* ─── Ticket List Item ──────────────────────────────────── */
+
+.tli-list {
+  display: flex;
+  flex-direction: column;
+  padding: 0 8px 8px;
+}
+
+.tli {
+  display: flex;
+  gap: 2px;
+  align-items: flex-start;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+}
+
+.tli:hover { background: var(--surface-primaryhover, rgba(0, 0, 0, 0.02)); }
+.tli.current { background: var(--surface-tint); }
+
+/* Timeline column */
+.tli-step {
+  width: 16px;
+  flex-shrink: 0;
+  align-self: stretch;
+  position: relative;
+}
+
+.tli-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 99px;
+  position: absolute;
+  left: 2px;
+  top: 3px;
+}
+
+.tli-line {
+  position: absolute;
+  left: 7.5px;
+  top: 16px;
+  bottom: -8px;
+  width: 1px;
+  background: var(--stroke-secondarystrong);
+}
+
+.tli:last-child .tli-line { display: none; }
+
+/* Content column */
+.tli-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.tli-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  line-height: 16px;
+  font-feature-settings: 'lnum' 1, 'pnum' 1;
+}
+
+.tli-status {
+  font-weight: 500;
+  color: var(--content-secondary);
+}
+
+.tli-date {
+  font-weight: 400;
+  color: var(--content-quartenary, rgba(0, 0, 0, 0.4));
+}
+
+html.dark .tli-date { color: rgba(255, 255, 255, 0.3); }
+
+.tli-preview {
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  font-feature-settings: 'lnum' 1, 'pnum' 1;
+  color: var(--content-tertiary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Dot colors by ticket status */
+.tli-dot-open     { background: var(--utilities-content-onsoft-orange, #d97706); }
+.tli-dot-pending  { background: var(--utilities-content-onsoft-orange, #d97706); }
+.tli-dot-closed   { background: var(--content-tertiary, #87888a); }
+.tli-dot-snoozed  { background: var(--utilities-content-onsoft-purple, #7c3aed); }
+
+
+/* ─── Tag Pill ───────────────────────────────────────────── */
+
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  padding: 0 6px;
+  border: 1px solid var(--stroke-primary);
+  border-radius: 999px;
+  font-size: 14px;
+  letter-spacing: -0.28px;
+  color: var(--content-primary);
+  white-space: nowrap;
+}
+
+.tag-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 99px;
+  flex-shrink: 0;
+}
+
+
+/* ─── Status color variants ──────────────────────────────── */
+
+.ds-status-open    { color: var(--utilities-content-onsoft-orange); }
+.ds-status-pending { color: var(--utilities-content-onsoft-orange); }
+.ds-status-closed  { color: var(--content-tertiary); }
+.ds-status-snoozed { color: var(--utilities-content-onsoft-purple); }
+
+
+/* ─── Action button (visible on hover / active) ─────────── */
+
+.ds-action-btn {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ds-value:hover .ds-action-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+/* ─── Dark mode: icon in empty states ───────────────────── */
+
+html.dark .ds-value > img {
+  filter: brightness(0) invert(1);
+  opacity: 0.4;
+}

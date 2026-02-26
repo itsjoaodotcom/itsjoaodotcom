@@ -8,7 +8,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/avatar.css" />
   <link rel="stylesheet" href="css/button.css" />
+  <link rel="stylesheet" href="css/dialog-alert.css" />
+  <link rel="stylesheet" href="css/data-selector.css" />
   <link rel="stylesheet" href="css/empty-state.css" />
   <link rel="stylesheet" href="css/inbox.css" />
 
@@ -627,165 +630,7 @@
 
         <!-- Copilot content -->
         <div id="copilot-panel-copilot" class="copilot-content">
-        <div class="copilot-scroll">
-
-          <!-- AI Block 1: completed reasoning -->
-          <div class="ai-block">
-            <div class="ai-reasoning">
-              <div>
-                <button class="btn btn-ghost btn-sm">
-                  Reasoning
-                  <img src="icons/16px/ChevronRight.svg" width="16" height="16" alt=""/>
-                </button>
-              </div>
-              <div class="reasoning-message">Here is the ticket summary:</div>
-            </div>
-
-            <div class="ai-cards">
-              <!-- Ticket Summary -->
-              <div class="card">
-                <div class="card-summary">
-                  <div class="card-summary-title">Ticket summary</div>
-                  <div class="card-summary-text">Customer wants to reschedule payment.</div>
-                </div>
-                <div class="card-details">
-                  <div class="card-detail-item"><strong>Intent:</strong> Loan Payment Reschedule.</div>
-                  <div class="card-detail-item"><strong>Key Facts:</strong> Next payment 1,950 SAR due Nov 15; 3‑day grace; 2% late fee after grace.</div>
-                  <div class="card-detail-item"><strong>Policy status:</strong> One‑time reschedule up to 7 days; supervisor approval likely (last payment slightly delayed).</div>
-                  <div class="card-detail-item"><strong>Sentiment:</strong> Concern → neutral.</div>
-                </div>
-                <div class="internal-tip">
-                  <svg class="internal-tip-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M8 2C5 2 2.5 4.5 2.5 7.5c0 2 1.1 3.8 2.75 4.75V14h5.5v-1.75A5 5 0 0 0 13.5 7.5C13.5 4.5 11 2 8 2Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
-                    <path d="M5.5 14h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-                  </svg>
-                  <span class="internal-tip-text">Customer meets 3/4 conditions.<br>Eligible if manual override approved.</span>
-                </div>
-              </div>
-
-              <!-- Suggested Reply -->
-              <div class="card">
-                <div class="card-header">
-                  <span class="card-label">Suggested reply</span>
-                  <div class="confidence-badge">
-                    <div class="confidence-dot"></div>
-                    <span class="confidence-text">High</span>
-                  </div>
-                </div>
-                <div class="card-body">
-                  <p>Hi Sara, I am Fatimah and I'll try to help you.</p>
-                  <p>I can confirm your reschedule request. Let me check your eligibility quickly.</p>
-                </div>
-                <div class="card-divider"></div>
-                <div class="card-actions">
-                  <div class="card-actions-left">
-                    <button class="btn btn-ghost btn-icon" title="Thumbs up">
-                      <img src="icons/16px/ThumbsUp.svg" width="16" height="16" alt="Thumbs up"/>
-                    </button>
-                    <button class="btn btn-ghost btn-icon" title="Thumbs down">
-                      <img src="icons/16px/ThumbsDown.svg" width="16" height="16" alt="Thumbs down"/>
-                    </button>
-                    <button class="btn btn-ghost btn-icon" title="Retry">
-                      <img src="icons/16px/Retry.svg" width="16" height="16" alt="Retry"/>
-                    </button>
-                  </div>
-                  <div class="card-actions-right">
-                    <button class="btn btn-ghost btn-icon" title="Info">
-                      <img src="icons/16px/Info.svg" width="16" height="16" alt="Info"/>
-                    </button>
-                    <button class="btn btn-inverse">
-                      <img src="icons/16px/Copy.svg" width="16" height="16" alt=""/>
-                      Insert
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Action Suggestion -->
-              <div class="card">
-                <div class="card-header">
-                  <span class="card-label">Suggested action</span>
-                </div>
-                <div class="card-body">
-                  <p>Customer wants to reschedule payment. Do you want me to reschedule to x/y/z</p>
-                </div>
-                <div class="card-divider"></div>
-                <div class="card-footer-actions">
-                  <button class="btn btn-ghost">
-                    <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                      <path d="M3 8.5l3.5 3.5 6.5-7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    Confirmed
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- AI Block 2: follow-up (elevated / current) -->
-          <div class="ai-block">
-            <div class="ai-reasoning">
-              <div>
-                <button class="btn btn-ghost btn-sm">
-                  Reasoning
-                  <img src="icons/16px/ChevronRight.svg" width="16" height="16" alt=""/>
-                </button>
-              </div>
-              <div class="reasoning-message">Here is the suggested reply:</div>
-            </div>
-
-            <div class="ai-cards">
-              <!-- Elevated suggested reply -->
-              <div class="card elevated">
-                <div class="card-header">
-                  <span class="card-label">Suggested reply</span>
-                  <div class="confidence-badge">
-                    <div class="confidence-dot"></div>
-                    <span class="confidence-text">High</span>
-                  </div>
-                </div>
-                <div class="card-body">
-                  <p>Thank you, Sarah. Your payment has been rescheduled for November 20, 2025.</p>
-                  <br>
-                  <p>You will retain your 3-day grace period.</p>
-                  <br>
-                  <p>Can I help you with anything else today?</p>
-                </div>
-                <div class="card-divider"></div>
-                <div class="card-actions">
-                  <div class="card-actions-left">
-                    <button class="btn btn-ghost btn-icon" title="Thumbs up">
-                      <img src="icons/16px/ThumbsUp.svg" width="16" height="16" alt="Thumbs up"/>
-                    </button>
-                    <button class="btn btn-ghost btn-icon" title="Thumbs down">
-                      <img src="icons/16px/ThumbsDown.svg" width="16" height="16" alt="Thumbs down"/>
-                    </button>
-                    <button class="btn btn-ghost btn-icon" title="Retry">
-                      <img src="icons/16px/Retry.svg" width="16" height="16" alt="Retry"/>
-                    </button>
-                  </div>
-                  <div class="card-actions-right">
-                    <button class="btn btn-ghost btn-icon" title="Info">
-                      <img src="icons/16px/Info.svg" width="16" height="16" alt="Info"/>
-                    </button>
-                    <button class="btn btn-inverse">
-                      <img src="icons/16px/Copy.svg" width="16" height="16" alt=""/>
-                      Insert
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Thinking state -->
-          <div class="thinking-section">
-            <div class="thinking-item">
-              <span class="thinking-text">Thinking…</span>
-            </div>
-          </div>
-
-        </div><!-- /.copilot-scroll -->
+        <div id="copilot-scroll" class="copilot-scroll"></div><!-- /.copilot-scroll -->
         </div><!-- /.copilot-content -->
 
         <!-- Details panel (empty) -->
@@ -795,7 +640,7 @@
         <div id="copilot-composer" class="copilot-composer">
           <div class="copilot-input">
             <div contenteditable="true" class="copilot-editable"></div>
-            <button class="btn btn-accent btn-icon" disabled>
+            <button class="btn btn-accent btn-icon copilot-send-btn" disabled>
               <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M8 12.5V3.5M4.5 7l3.5-3.5L11.5 7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>

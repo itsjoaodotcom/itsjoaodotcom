@@ -8,10 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const addNoteBtn = document.querySelector('.composer-right-note button:last-child');
   if (composerInput) {
     composerInput.addEventListener('input', () => {
-      if (composerInput.innerHTML === '<br>' || composerInput.innerHTML === '') {
-        composerInput.innerHTML = '';
-      }
-      if (addNoteBtn) addNoteBtn.disabled = composerInput.textContent.trim() === '';
+      const isEmpty = composerInput.textContent.trim() === '';
+      if (isEmpty) composerInput.innerHTML = '';
+      if (addNoteBtn) addNoteBtn.disabled = isEmpty;
     });
   }
 
@@ -19,15 +18,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const copilotEditable = document.querySelector('.copilot-editable');
   if (copilotEditable) {
     const copilotInput = copilotEditable.closest('.copilot-input');
-    const singleLineHeight = 40; // 10px padding-top + 20px line-height + 10px padding-bottom
-
     const copilotSendBtn = copilotInput.querySelector('button');
+    // 40 = min-height from CSS (padding 12 + line-height 16 + padding 12)
+    // offsetHeight is read during the input event when the element IS visible
+    const singleLineH = 40;
+    let isMultiline = false;
+
     copilotEditable.addEventListener('input', () => {
-      if (copilotEditable.innerHTML === '<br>' || copilotEditable.innerHTML === '') {
+      const isEmpty = copilotEditable.textContent.trim() === '';
+      if (isEmpty) {
         copilotEditable.innerHTML = '';
+        isMultiline = false;
+      } else {
+        const h = copilotEditable.scrollHeight;
+        if (!isMultiline && h > singleLineH) isMultiline = true;
+        else if (isMultiline && h <= singleLineH) isMultiline = false;
       }
-      copilotInput.classList.toggle('multiline', copilotEditable.scrollHeight > singleLineHeight);
-      copilotSendBtn.disabled = copilotEditable.textContent.trim() === '';
+      copilotInput.classList.toggle('multiline', isMultiline);
+      copilotSendBtn.disabled = isEmpty;
     });
   }
 
@@ -67,12 +75,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const dialogTopbarActions = document.getElementById('dialog-topbar-actions');
   const dialogTopbar = document.querySelector('.dialog-topbar');
 
+  let savedCopilotWidth = '';
   toggleCopilotBtn.addEventListener('click', () => {
     const isCollapsed = copilotPanel.classList.toggle('collapsed');
     dialogTopbar.classList.toggle('copilot-closed', isCollapsed);
     if (isCollapsed) {
+      savedCopilotWidth = copilotPanel.style.width;
+      copilotPanel.style.width = '';
       dialogTopbarActions.appendChild(copilotTabActions);
     } else {
+      copilotPanel.style.width = savedCopilotWidth;
       copilotTabs.appendChild(copilotTabActions);
     }
   });
@@ -109,6 +121,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   requestAnimationFrame(() => document.body.classList.add('loaded'));
 
+  // Send button → append Thinking to copilot
+  const sendBtn = document.querySelector('.btn-split .btn-accent:first-child');
+  if (sendBtn) {
+    sendBtn.addEventListener('click', () => {
+      const copilotScroll = document.getElementById('copilot-scroll');
+      if (!copilotScroll) return;
+      const thinking = document.createElement('div');
+      thinking.className = 'thinking-section';
+      thinking.innerHTML = '<div class="thinking-item"><span class="thinking-text">Thinking…</span></div>';
+      copilotScroll.appendChild(thinking);
+      copilotScroll.scrollTop = copilotScroll.scrollHeight;
+    });
+  }
+
   // ── Render functions ────────────────────────────────────
   function renderDialog(c) {
     const chatScroll = document.getElementById('chat-scroll');
@@ -121,11 +147,60 @@ document.addEventListener('DOMContentLoaded', () => {
     const msgs = conversations[c.name] || [];
     let firstOut = true;
     chatScroll.innerHTML = msgs.map(m => {
+      if (m.da) return DialogAlert(m.da);
       const showAuthor = m.dir === 'out' && firstOut;
       if (m.dir === 'out') firstOut = false;
       return MessageBubble(m, showAuthor);
     }).join('');
     chatScroll.scrollTop = chatScroll.scrollHeight;
+
+    const copilotScroll = document.getElementById('copilot-scroll');
+    const d = copilotData[c.name];
+    if (copilotScroll && d) {
+      copilotScroll.innerHTML = CopilotContent(d);
+      copilotScroll.scrollTop = copilotScroll.scrollHeight;
+      copilotScroll.querySelectorAll('.btn-insert').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const img = btn.querySelector('img');
+          img.src = 'icons/16px/Check.svg';
+          setTimeout(() => { img.src = 'icons/16px/Copy.svg'; }, 4000);
+        });
+      });
+    }
+
+    const detailsPanel = document.getElementById('copilot-panel-details');
+    const dd = detailsData[c.name];
+    if (detailsPanel && dd) {
+      detailsPanel.innerHTML = DetailsContent(dd);
+      detailsPanel.querySelectorAll('.det-section-header button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const section = btn.closest('.det-section');
+          const content = section.querySelector('.det-section-content');
+          const chevron = btn.querySelector('img');
+
+          if (!content) return; // sections with no content (e.g. Recent tickets placeholder)
+
+          if (section.classList.contains('det-collapsed')) {
+            // Expanding: set explicit 0 → scrollHeight
+            content.style.height = '0';
+            section.classList.remove('det-collapsed');
+            content.offsetHeight; // force reflow
+            content.style.height = content.scrollHeight + 'px';
+            content.addEventListener('transitionend', () => {
+              content.style.height = 'auto';
+            }, { once: true });
+            chevron.src = 'icons/16px/ChevronBottom.svg';
+          } else {
+            // Collapsing: scrollHeight → 0
+            content.style.height = content.scrollHeight + 'px';
+            content.offsetHeight; // force reflow
+            content.style.height = '0';
+            section.classList.add('det-collapsed');
+            chevron.src = 'icons/16px/ChevronRight.svg';
+          }
+        });
+      });
+    }
   }
 
   function renderInbox(view) {
@@ -146,6 +221,9 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.snav-sublink[data-view]').forEach(l => l.closest('.snav-subitem').classList.remove('active'));
       link.closest('.snav-subitem').classList.add('active');
       renderInbox(link.dataset.view);
+      content.classList.remove('has-selection');
+      const copilotScroll = document.getElementById('copilot-scroll');
+      if (copilotScroll) copilotScroll.innerHTML = '';
     });
   });
 
@@ -160,15 +238,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const name = item.querySelector('.isb-name')?.textContent;
     const conv = allConversations.find(c => c.name === name);
     if (conv) renderDialog(conv);
-  });
-
-  // Insert button: Copy → Check → Copy
-  document.querySelectorAll('.btn-insert').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const img = btn.querySelector('img');
-      img.src = 'icons/16px/Check.svg';
-      setTimeout(() => { img.src = 'icons/16px/Copy.svg'; }, 4000);
-    });
   });
 
   // ── Inbox sidebar resize ──────────────────────────────────

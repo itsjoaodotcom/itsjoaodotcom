@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dialog Alert — Clarity Components</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/tokens.css" />
+  <link rel="stylesheet" href="../css/avatar.css" />
+  <link rel="stylesheet" href="../css/button.css" />
+  <link rel="stylesheet" href="../css/dialog-alert.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-family);
+      background: var(--surface-secondary);
+      color: var(--content-primary);
+      min-height: 100vh;
+      padding: 48px 40px 80px;
+    }
+
+    .page { max-width: 780px; margin: 0 auto; }
+
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 40px;
+    }
+
+    .page-title {
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 24px;
+    }
+
+    .page-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .page-tag {
+      font-size: 11px;
+      font-family: 'Geist Mono', monospace;
+      color: var(--content-tertiary);
+      background: var(--surface-tint);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .figma-link {
+      font-size: 11px;
+      color: var(--content-accent);
+      text-decoration: none;
+    }
+    .figma-link:hover { text-decoration: underline; }
+
+    .section { margin-bottom: 48px; }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--content-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 16px;
+    }
+
+    .demo-card {
+      background: var(--surface-primary);
+      border: 1px solid var(--stroke-primary);
+      border-radius: 8px;
+      padding: 24px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .demo-divider {
+      height: 1px;
+      background: var(--stroke-primary);
+      margin: 4px 0;
+    }
+  </style>
+  <script src="../js/theme.js" defer></script>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <div class="page-title">Dialog Alert</div>
+      <div class="page-meta">
+        <span class="page-tag">dialog-alert.css</span>
+        <a class="figma-link" href="https://www.figma.com/design/N17JbPWMPtDKXRE9uVPHJ9/?node-id=64-1836" target="_blank">View in Figma ↗</a>
+      </div>
+    </div>
+    <button class="btn btn-secondary btn-sm" onclick="document.documentElement.classList.toggle('dark')">Toggle dark</button>
+  </div>
+
+
+  <!-- ─── All types ─── -->
+  <div class="section">
+    <div class="section-title">All types</div>
+    <div class="demo-card">
+
+      <!-- Ticket created (includes date) -->
+      <div class="da da-ticket-created">
+        <div class="da-date-sep">
+          <div class="da-line"></div>
+          <span>October 24</span>
+          <div class="da-line"></div>
+        </div>
+        <div class="da-content">
+          <span class="da-ticket-title">New ticket created</span>
+          <span class="da-ticket-dot">·</span>
+          <span class="da-ticket-name">Caroline Brennan</span>
+        </div>
+      </div>
+
+      <div class="demo-divider"></div>
+
+      <!-- Date -->
+      <div class="da">
+        <div class="da-date-sep">
+          <div class="da-line"></div>
+          <span>October 24</span>
+          <div class="da-line"></div>
+        </div>
+      </div>
+
+      <!-- Ticket not assigned -->
+      <div class="da">
+        <span>Ticket is not assigned yet</span>
+        <button class="btn btn-secondary btn-sm">Assign to me</button>
+      </div>
+
+      <!-- Assign to -->
+      <div class="da">
+        <span>Ticket assigned to</span>
+        <span class="da-name">Caroline Brennan</span>
+      </div>
+
+      <!-- Feedback -->
+      <div class="da">
+        <span>Received</span>
+        <div class="da-feedback-tag">
+          <span class="da-score">3</span><span class="da-total">/5</span>
+        </div>
+        <span>feedback points</span>
+      </div>
+
+      <!-- Reassigned -->
+      <div class="da">
+        <span>Ticket was reassigned from</span>
+        <span class="da-name">Caroline Brennan</span>
+        <span>to</span>
+        <span class="da-name">Mark Johnson</span>
+      </div>
+
+      <!-- Snooze started -->
+      <div class="da">
+        <img src="../icons/12px/Clock.svg" width="12" height="12" alt=""/>
+        <span>Ticket snoozed until 12:54</span>
+      </div>
+
+      <!-- Snooze ended -->
+      <div class="da">
+        <img src="../icons/12px/Clock.svg" width="12" height="12" alt=""/>
+        <span>Ticket snooze ended</span>
+      </div>
+
+      <!-- Change status -->
+      <div class="da">
+        <span>Ticket status changed to</span>
+        <div class="da-tag">
+          <div class="da-tag-dot" style="background:#4061d8"></div>
+          <span>Done</span>
+        </div>
+      </div>
+
+      <!-- Priority -->
+      <div class="da">
+        <span>Priority changed to</span>
+        <div class="da-priority da-priority-critical">
+          <img src="../icons/12px/Critical.svg" width="12" height="12" alt=""/>
+          <span>Critical</span>
+        </div>
+      </div>
+
+      <!-- New chat -->
+      <div class="da">
+        <span>A new version of the AI agent is available</span>
+        <button class="btn btn-accent btn-sm">Start new chat</button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ─── Priority variants ─── -->
+  <div class="section">
+    <div class="section-title">Priority variants</div>
+    <div class="demo-card">
+      <div class="da">
+        <span>Priority changed to</span>
+        <div class="da-priority da-priority-critical">
+          <img src="../icons/12px/Critical.svg" width="12" height="12" alt=""/>
+          <span>Critical</span>
+        </div>
+      </div>
+      <div class="da">
+        <span>Priority changed to</span>
+        <div class="da-priority da-priority-high">
+          <img src="../icons/12px/High.svg" width="12" height="12" alt=""/>
+          <span>High</span>
+        </div>
+      </div>
+      <div class="da">
+        <span>Priority changed to</span>
+        <div class="da-priority da-priority-medium">
+          <img src="../icons/12px/Medium.svg" width="12" height="12" alt=""/>
+          <span>Medium</span>
+        </div>
+      </div>
+      <div class="da">
+        <span>Priority changed to</span>
+        <div class="da-priority da-priority-low">
+          <img src="../icons/12px/Low.svg" width="12" height="12" alt=""/>
+          <span>Low</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
