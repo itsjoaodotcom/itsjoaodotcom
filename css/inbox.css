@@ -87,12 +87,8 @@ body {
   width: 20px;
   height: 20px;
   border-radius: 5px;
-  border: 1px solid var(--stroke-primary);
-  background: var(--button-accent);
   flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
 }
 
 .snav-workspace-name {
@@ -267,8 +263,6 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
   background: transparent;
   border: none;
   font-family: var(--font-family);
-  width: 100%;
-  min-width: 0;
   text-align: left;
   transition: padding 0.2s ease;
 }
@@ -279,9 +273,19 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
   width: 20px;
   height: 20px;
   border-radius: 999px;
-  background: var(--gradient-brand);
+  background: var(--utilities-surface-bluesubtle);
+  color: var(--utilities-content-onsoft-blue);
   flex-shrink: 0;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 12px;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
 }
 
 .snav-online-dot {
@@ -290,7 +294,7 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
   width: 6px; height: 6px;
   border-radius: 999px;
   background: var(--content-success);
-  border: 1px solid var(--surface-secondary);
+  outline: 1.5px solid var(--surface-secondary);
 }
 
 .snav-user-name {
@@ -350,26 +354,68 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
   display: none;
 }
 
-/* Loading state: show loading, hide empty */
-.content.is-loading #dialog-empty {
+/* Loading state: show loading, hide empty + hide sidebar badges */
+body.is-loading .content #dialog-empty {
   display: none;
+}
+body.is-loading .snav-badge-wrap {
+  visibility: hidden;
 }
 
 /* Not loading: hide loading panel */
-.content:not(.is-loading) #dialog-loading {
+body:not(.is-loading) .content #dialog-loading {
   display: none;
 }
 
 /* ─── Inbox Sidebar ────────────────────────────────────── */
 .inbox-sidebar {
+  position: relative;
+  z-index: 2;
   width: 332px;
-  max-width: 332px;
+  max-width: 70vw;
   min-width: 220px;
   flex-shrink: 1;
   border-right: 1px solid var(--stroke-primary);
   display: flex;
   flex-direction: column;
   height: 100%;
+  transition: border-right-color 0.1s;
+}
+
+.inbox-sidebar:has(.isb-resize-zone:hover) {
+  border-right-color: var(--stroke-accentsoft);
+  transition: border-right-color 0.1s 200ms;
+}
+
+.isb-resize-zone {
+  position: absolute;
+  top: 0;
+  right: -5px;
+  width: 9px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.isb-resize-handle {
+  width: 7px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--surface-primary);
+  border: 1px solid var(--stroke-accentsoft);
+  box-shadow: var(--shadow-e1);
+  opacity: 0;
+  pointer-events: none;
+  flex-shrink: 0;
+  transition: opacity 0.1s;
+}
+
+.isb-resize-zone:hover .isb-resize-handle {
+  opacity: 1;
+  transition: opacity 0.1s 200ms;
 }
 
 /* ─── Inbox Sidebar inner ───────────────────────────────── */
@@ -555,6 +601,43 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
   height: 100%;
   position: relative;
   z-index: 1;
+  transition: border-right-color 0.1s;
+}
+
+.dialog:has(.cop-resize-zone:hover) {
+  border-right-color: var(--stroke-accentsoft);
+  transition: border-right-color 0.1s 200ms;
+}
+
+.cop-resize-zone {
+  position: absolute;
+  top: 0;
+  right: -5px;
+  width: 9px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cop-resize-handle {
+  width: 7px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--surface-primary);
+  border: 1px solid var(--stroke-accentsoft);
+  box-shadow: var(--shadow-e1);
+  opacity: 0;
+  pointer-events: none;
+  flex-shrink: 0;
+  transition: opacity 0.1s;
+}
+
+.cop-resize-zone:hover .cop-resize-handle {
+  opacity: 1;
+  transition: opacity 0.1s 200ms;
 }
 
 .dialog-topbar {
@@ -829,7 +912,7 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
 /* ─── Copilot panel ─────────────────────────────────────── */
 .copilot {
   width: 332px;
-  max-width: 332px;
+  max-width: 70vw;
   min-width: 220px;
   flex-shrink: 1;
   display: flex;

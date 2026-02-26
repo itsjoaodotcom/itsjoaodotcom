@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Loading state: show Switching Organization illustration for 5s
-  const contentEl = document.querySelector('.content');
-  contentEl.classList.add('is-loading');
-  setTimeout(() => contentEl.classList.remove('is-loading'), 5000);
+  document.body.classList.add('is-loading');
+  setTimeout(() => document.body.classList.remove('is-loading'), 5000);
 
   // Composer input: restore placeholder when emptied
   const composerInput = document.querySelector('.composer-input');
@@ -170,5 +169,70 @@ document.addEventListener('DOMContentLoaded', () => {
       img.src = 'icons/16px/Check.svg';
       setTimeout(() => { img.src = 'icons/16px/Copy.svg'; }, 4000);
     });
+  });
+
+  // ── Inbox sidebar resize ──────────────────────────────────
+  const inboxSidebar = document.querySelector('.inbox-sidebar');
+  const resizeZone = document.querySelector('.isb-resize-zone');
+  let isResizing = false;
+  let startX = 0;
+  let startWidth = 0;
+
+  resizeZone.addEventListener('mousedown', e => {
+    isResizing = true;
+    startX = e.clientX;
+    startWidth = inboxSidebar.getBoundingClientRect().width;
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (!isResizing) return;
+    const newWidth = Math.min(
+      Math.max(startWidth + (e.clientX - startX), 220),
+      window.innerWidth * 0.7
+    );
+    inboxSidebar.style.width = newWidth + 'px';
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (!isResizing) return;
+    isResizing = false;
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+  });
+
+  // ── Copilot panel resize ──────────────────────────────────
+  const copResizeZone = document.querySelector('.cop-resize-zone');
+  let isCopResizing = false;
+  let copStartX = 0;
+  let copStartWidth = 0;
+
+  copResizeZone.addEventListener('mousedown', e => {
+    isCopResizing = true;
+    copStartX = e.clientX;
+    copStartWidth = copilotPanel.getBoundingClientRect().width;
+    copilotPanel.style.transition = 'none';
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (!isCopResizing) return;
+    const newWidth = Math.min(
+      Math.max(copStartWidth - (e.clientX - copStartX), 220),
+      window.innerWidth * 0.7
+    );
+    copilotPanel.style.width = newWidth + 'px';
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (!isCopResizing) return;
+    isCopResizing = false;
+    copilotPanel.style.transition = '';
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
   });
 });
