@@ -16,9 +16,9 @@
   width: 100%;
   min-height: 24px;
   font-family: var(--font-family);
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 400;
-  line-height: 20px;
+  line-height: 16px;
   font-feature-settings: 'lnum' 1, 'pnum' 1;
   color: var(--content-secondary);
 }
@@ -38,7 +38,20 @@
 .da-line {
   flex: 1;
   height: 1px;
-  background: var(--stroke-primary);
+  background: repeating-linear-gradient(
+    to right,
+    var(--stroke-primary) 0,
+    var(--stroke-primary) 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  -webkit-mask-image: linear-gradient(to right, transparent, black);
+  mask-image: linear-gradient(to right, transparent, black);
+}
+
+.da-date-sep .da-line:last-of-type {
+  -webkit-mask-image: linear-gradient(to left, transparent, black);
+  mask-image: linear-gradient(to left, transparent, black);
 }
 
 /* ─── Bold name chip ─────────────────────────────────────── */
@@ -49,6 +62,18 @@
 }
 
 /* ─── Ticket created ─────────────────────────────────────── */
+
+.da-ticket-created {
+  flex-direction: column;
+  gap: 8px;
+}
+
+.da-ticket-created .da-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
 
 .da-ticket-title {
   font-size: 14px;
@@ -81,8 +106,8 @@
   padding: 2px 4px;
   border: 1px solid var(--stroke-primary);
   border-radius: 999px;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 12px;
+  line-height: 16px;
   color: var(--content-primary);
 }
 
@@ -101,8 +126,8 @@
   padding: 2px 4px;
   border: 1px solid var(--stroke-primary);
   border-radius: 999px;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 12px;
+  line-height: 16px;
   color: var(--content-primary);
   background: var(--surface-secondary);
 }

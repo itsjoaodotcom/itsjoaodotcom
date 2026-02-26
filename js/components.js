@@ -244,17 +244,17 @@ function DialogAlert(d) {
       </div>`;
 
     case 'ticket-created':
-      return `<div class="da da-date-grouped">
+      return `<div class="da da-ticket-created">
         <div class="da-date-sep">
           <div class="da-line"></div>
           <span>${d.date}</span>
           <div class="da-line"></div>
         </div>
-      </div>
-      <div class="da">
-        <span class="da-ticket-title">New ticket created</span>
-        <span class="da-ticket-dot">·</span>
-        <span class="da-ticket-name">${d.name}</span>
+        <div class="da-content">
+          <span class="da-ticket-title">New ticket created</span>
+          <span class="da-ticket-dot">·</span>
+          <span class="da-ticket-name">${d.name}</span>
+        </div>
       </div>`;
 
     case 'not-assigned':

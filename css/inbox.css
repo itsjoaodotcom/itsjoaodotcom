@@ -750,7 +750,6 @@ body:not(.is-loading) .content #dialog-loading {
 .system-alert strong { font-weight: 500; }
 
 .chat-scroll .da { margin: 4px 0 28px; }
-.chat-scroll .da-date-grouped { margin-bottom: 4px; }
 
 .msg-wrapper {
   display: flex;
