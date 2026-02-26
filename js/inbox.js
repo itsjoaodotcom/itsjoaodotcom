@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // Loading state: show Switching Organization illustration for 5s
+  const contentEl = document.querySelector('.content');
+  contentEl.classList.add('is-loading');
+  setTimeout(() => contentEl.classList.remove('is-loading'), 5000);
+
   // Composer input: restore placeholder when emptied
   const composerInput = document.querySelector('.composer-input');
   const addNoteBtn = document.querySelector('.composer-right-note button:last-child');

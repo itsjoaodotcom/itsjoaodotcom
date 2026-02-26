@@ -307,6 +307,7 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
 
 /* ─── Content area ─────────────────────────────────────── */
 .content {
+  position: relative;
   flex: 1;
   display: flex;
   height: calc(100% - 8px);
@@ -327,6 +328,16 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
   background: var(--surface-primary);
 }
 
+#dialog-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-primary);
+  z-index: 10;
+}
+
 /* Hide dialog + copilot when nothing is selected */
 .content:not(.has-selection) .dialog,
 .content:not(.has-selection) .copilot {
@@ -334,7 +345,18 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
 }
 
 /* Hide empty state once a conversation is selected */
-.content.has-selection #dialog-empty {
+.content.has-selection #dialog-empty,
+.content.has-selection #dialog-loading {
+  display: none;
+}
+
+/* Loading state: show loading, hide empty */
+.content.is-loading #dialog-empty {
+  display: none;
+}
+
+/* Not loading: hide loading panel */
+.content:not(.is-loading) #dialog-loading {
   display: none;
 }
 

@@ -264,6 +264,27 @@
 .c-border-solid { stroke: var(--stroke-primary); stroke-opacity: 1; }
 .c-border-accent{ stroke: var(--stroke-accentsoft); }
 
+/* ─── Illustration: Switching Organization SVG tokens ─────── */
+
+/* White card backgrounds + wipe masks → surface-primary */
+#_R_G_L_13_G_D_0_P_0, #_R_G_L_8_G_D_0_P_0,
+#_R_G_L_3_G_D_0_P_0,
+#_R_G_L_5_G_D_0_P_0,  #_R_G_L_4_G_D_0_P_0  { fill: var(--surface-primary); fill-opacity: 1; }
+
+/* Card border rings → stroke-primary */
+#_R_G_L_17_G_D_0_P_0, #_R_G_L_14_G_D_0_P_0,
+#_R_G_L_11_G_D_0_P_0, #_R_G_L_9_G_D_0_P_0,
+#_R_G_L_6_G_D_0_P_0,
+#_R_G_L_5_G_D_1_P_0,  #_R_G_L_4_G_D_1_P_0  { fill: var(--stroke-primary); fill-opacity: 1; }
+
+/* Skeleton avatars + bars → stroke-secondarystrong */
+#_R_G_L_16_G_D_0_P_0, #_R_G_L_16_G_D_1_P_0,
+#_R_G_L_15_G_D_0_P_0, #_R_G_L_15_G_D_1_P_0,
+#_R_G_L_12_G_D_0_P_0, #_R_G_L_12_G_D_1_P_0,
+#_R_G_L_10_G_D_0_P_0, #_R_G_L_10_G_D_1_P_0,
+#_R_G_L_7_G_D_0_P_0,  #_R_G_L_7_G_D_1_P_0,
+#_R_G_L_1_G_D_0_P_0,  #_R_G_L_1_G_D_1_P_0  { fill: var(--stroke-secondarystrong); fill-opacity: 1; }
+
 /* ─── Illustration: Workflow ──────────────────────────────── */
 
 .illu-workflow {
