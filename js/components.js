@@ -244,7 +244,7 @@ function DialogAlert(d) {
       </div>`;
 
     case 'ticket-created':
-      return `<div class="da">
+      return `<div class="da da-date-grouped">
         <div class="da-date-sep">
           <div class="da-line"></div>
           <span>${d.date}</span>
