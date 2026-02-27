@@ -42,15 +42,12 @@ html.dark .ds-label img {
   font-size: 12px;
   font-weight: 400;
   line-height: 16px;
-  color: var(--content-tertiary-transparent, rgba(0, 0, 0, 0.5));
+  color: var(--content-tertiary-transparent);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-html.dark .ds-label-text {
-  color: rgba(255, 255, 255, 0.38);
-}
 
 /* Value column */
 .ds-value {
@@ -99,7 +96,7 @@ html.dark .ds-label-text {
 }
 
 .ds-value-inner.ds-empty {
-  color: var(--content-quartenary, rgba(0, 0, 0, 0.4));
+  color: var(--content-quartenary);
 }
 
 /* Icon wrapper for empty/add states */
@@ -119,11 +116,11 @@ html.dark .ds-label-text {
   flex-shrink: 0;
 }
 
-.ds-priority-critical .ds-priority-dot { background: var(--content-critical, #ef4444); }
-.ds-priority-critical .ds-value-inner   { color: var(--content-critical, #ef4444); }
-.ds-priority-high .ds-priority-dot      { background: #f97316; }
-.ds-priority-medium .ds-priority-dot    { background: #eab308; }
-.ds-priority-low .ds-priority-dot       { background: #22c55e; }
+.ds-priority-critical .ds-priority-dot { background: var(--content-critical); }
+.ds-priority-critical .ds-value-inner   { color: var(--content-critical); }
+.ds-priority-high .ds-priority-dot      { background: var(--content-priority-high); }
+.ds-priority-medium .ds-priority-dot    { background: var(--content-priority-medium); }
+.ds-priority-low .ds-priority-dot       { background: var(--content-priority-low); }
 
 
 /* ─── Ticket List Item ──────────────────────────────────── */
@@ -144,7 +141,7 @@ html.dark .ds-label-text {
   position: relative;
 }
 
-.tli:hover { background: var(--surface-primaryhover, rgba(0, 0, 0, 0.02)); }
+.tli:hover { background: var(--surface-primaryhover); }
 .tli.current { background: var(--surface-tint); }
 
 /* Timeline column */
@@ -199,10 +196,8 @@ html.dark .ds-label-text {
 
 .tli-date {
   font-weight: 400;
-  color: var(--content-quartenary, rgba(0, 0, 0, 0.4));
+  color: var(--content-quartenary);
 }
-
-html.dark .tli-date { color: rgba(255, 255, 255, 0.3); }
 
 .tli-preview {
   font-family: var(--font-family);
@@ -218,10 +213,10 @@ html.dark .tli-date { color: rgba(255, 255, 255, 0.3); }
 }
 
 /* Dot colors by ticket status */
-.tli-dot-open     { background: var(--utilities-content-onsoft-orange, #d97706); }
-.tli-dot-pending  { background: var(--utilities-content-onsoft-orange, #d97706); }
-.tli-dot-closed   { background: var(--content-tertiary, #87888a); }
-.tli-dot-snoozed  { background: var(--utilities-content-onsoft-purple, #7c3aed); }
+.tli-dot-open     { background: var(--utilities-content-onsoft-orange); }
+.tli-dot-pending  { background: var(--utilities-content-onsoft-orange); }
+.tli-dot-closed   { background: var(--content-tertiary); }
+.tli-dot-snoozed  { background: var(--utilities-content-onsoft-purple); }
 
 
 /* ─── Tag Pill ───────────────────────────────────────────── */

@@ -21,13 +21,22 @@ function InboxItem(c, isActive) {
 
 // ── CopilotContent ──────────────────────────────────────────
 function CopilotContent(d) {
-  const replyCard = (text, elevated) => `
-    <div class="card${elevated ? ' elevated' : ''}">
+  const replyCard = (text, elevated, details) => `
+    <div class="card">
       <div class="card-header">
         <span class="card-label">Suggested reply</span>
         <div class="confidence-badge"><div class="confidence-dot"></div><span class="confidence-text">High</span></div>
       </div>
       <div class="card-body"><p>${text}</p></div>
+      <div class="card-details-header">
+        <div>
+          <button class="btn btn-ghost btn-sm">
+            Details
+            <img src="icons/16px/ChevronRight.svg" width="16" height="16" alt=""/>
+          </button>
+        </div>
+        ${details ? `<div class="card-details-body"><p>${details}</p></div>` : ''}
+      </div>
       <div class="card-divider"></div>
       <div class="card-actions">
         <div class="card-actions-left">
@@ -36,7 +45,6 @@ function CopilotContent(d) {
           <button class="btn btn-ghost btn-icon"><img src="icons/16px/Retry.svg" width="16" height="16" alt=""/></button>
         </div>
         <div class="card-actions-right">
-          <button class="btn btn-ghost btn-icon"><img src="icons/16px/Info.svg" width="16" height="16" alt=""/></button>
           <button class="btn btn-inverse btn-insert">
             <img src="icons/16px/Copy.svg" width="16" height="16" alt=""/> Insert
           </button>
@@ -67,28 +75,8 @@ function CopilotContent(d) {
             <div class="card-detail-item"><strong>Policy status:</strong> ${d.policy}</div>
             <div class="card-detail-item"><strong>Sentiment:</strong> ${d.sentiment}</div>
           </div>
-          <div class="internal-tip">
-            <svg class="internal-tip-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M8 2C5 2 2.5 4.5 2.5 7.5c0 2 1.1 3.8 2.75 4.75V14h5.5v-1.75A5 5 0 0 0 13.5 7.5C13.5 4.5 11 2 8 2Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
-              <path d="M5.5 14h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-            </svg>
-            <span class="internal-tip-text">${d.tip}</span>
-          </div>
         </div>
-        ${replyCard(d.reply1, false)}
-        <div class="card">
-          <div class="card-header"><span class="card-label">Suggested action</span></div>
-          <div class="card-body"><p>${d.action}</p></div>
-          <div class="card-divider"></div>
-          <div class="card-footer-actions">
-            <button class="btn btn-ghost">
-              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                <path d="M3 8.5l3.5 3.5 6.5-7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              Confirmed
-            </button>
-          </div>
-        </div>
+        ${replyCard(d.reply1, false, d.tip)}
       </div>
     </div>
     <div class="ai-block">
@@ -102,7 +90,7 @@ function CopilotContent(d) {
         <div class="reasoning-message">${d.reasoning2}</div>
       </div>
       <div class="ai-cards">
-        ${replyCard(d.reply2, true)}
+        ${replyCard(d.reply2, true, d.tip)}
       </div>
     </div>
     `;
@@ -230,7 +218,12 @@ function DetailsContent(d) {
 // ── DialogAlert ─────────────────────────────────────────────
 function DialogAlert(d) {
   const PRIORITY_LABELS = { critical: 'Critical', high: 'High', medium: 'Medium', low: 'Low' };
-  const PRIORITY_ICONS  = { critical: 'Critical', high: 'High', medium: 'Medium', low: 'Low' };
+  const PRIORITY_ICONS  = {
+    critical: `<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.08937 1.125C7.85592 1.125 8.57016 1.51585 8.9839 2.16113L10.6665 4.78613C11.1407 5.52603 11.1407 6.47397 10.6665 7.21387L8.9839 9.83887C8.57016 10.4842 7.85592 10.875 7.08937 10.875H4.90968C4.14323 10.8748 3.42879 10.4841 3.01515 9.83887L1.33253 7.21387C0.858555 6.47408 0.858555 5.52592 1.33253 4.78613L3.01515 2.16113C3.42879 1.51585 4.14323 1.12516 4.90968 1.125H7.08937Z" fill="currentColor"/><path d="M6.12541 7.5498C6.51182 7.55003 6.82561 7.86354 6.82561 8.25C6.82561 8.63646 6.51182 8.94997 6.12541 8.9502C5.73881 8.9502 5.42522 8.6366 5.42522 8.25C5.42522 7.8634 5.73881 7.5498 6.12541 7.5498ZM6.12541 3.25C6.40136 3.25022 6.62541 3.47399 6.62541 3.75V6.25C6.62541 6.52601 6.40136 6.74978 6.12541 6.75C5.84927 6.75 5.62541 6.52614 5.62541 6.25V3.75C5.62541 3.47386 5.84927 3.25 6.12541 3.25Z" fill="white"/></svg>`,
+    high:     `<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1.5C8.48528 1.5 10.5 3.51472 10.5 6C10.5 8.48528 8.48528 10.5 6 10.5C3.51472 10.5 1.5 8.48528 1.5 6C1.5 3.51472 3.51472 1.5 6 1.5ZM6 2.40039C5.04522 2.40039 4.12923 2.77897 3.4541 3.4541C2.77897 4.12923 2.40039 5.04522 2.40039 6H6V2.40039Z" fill="currentColor"/></svg>`,
+    medium:   `<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1.5C8.48528 1.5 10.5 3.51472 10.5 6C10.5 8.48528 8.48528 10.5 6 10.5C3.51472 10.5 1.5 8.48528 1.5 6C1.5 3.51472 3.51472 1.5 6 1.5ZM6 2.40039C5.04522 2.40039 4.12923 2.77897 3.4541 3.4541C2.77897 4.12923 2.40039 5.04522 2.40039 6C2.40039 6.95477 2.77898 7.87077 3.4541 8.5459C4.12923 9.22103 5.04522 9.59961 6 9.59961V2.40039Z" fill="currentColor"/></svg>`,
+    low:      `<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1.5C8.48528 1.5 10.5 3.51472 10.5 6C10.5 8.48528 8.48528 10.5 6 10.5C3.51472 10.5 1.5 8.48528 1.5 6C1.5 3.51472 3.51472 1.5 6 1.5ZM6 2.40039C5.28799 2.40039 4.59202 2.61126 4 3.00684C3.40804 3.40238 2.94631 3.96433 2.67383 4.62207C2.40138 5.27981 2.32991 6.00389 2.46875 6.70215C2.60766 7.40048 2.95063 8.04243 3.4541 8.5459C3.95757 9.04936 4.59952 9.39234 5.29785 9.53125C5.9961 9.67009 6.7202 9.59861 7.37793 9.32617C8.03567 9.05369 8.59763 8.59196 8.99316 8C9.38874 7.40798 9.59961 6.71201 9.59961 6H6V2.40039Z" fill="currentColor"/></svg>`,
+  };
 
   switch (d.type) {
 
@@ -245,22 +238,17 @@ function DialogAlert(d) {
 
     case 'ticket-created':
       return `<div class="da da-ticket-created">
-        <div class="da-date-sep">
-          <div class="da-line"></div>
-          <span>${d.date}</span>
-          <div class="da-line"></div>
-        </div>
         <div class="da-content">
           <span class="da-ticket-title">New ticket created</span>
           <span class="da-ticket-dot">·</span>
-          <span class="da-ticket-name">${d.name}</span>
+          <span class="da-ticket-name">${d.date}</span>
         </div>
       </div>`;
 
     case 'not-assigned':
       return `<div class="da">
         <span>Ticket is not assigned yet</span>
-        <button class="btn btn-secondary btn-sm">Assign to me</button>
+        <button class="btn btn-secondary">Assign to me</button>
       </div>`;
 
     case 'assign-to':
@@ -292,17 +280,17 @@ function DialogAlert(d) {
     case 'change-status':
       return `<div class="da">
         <span>Ticket status changed to</span>
-        <div class="da-tag">
-          <div class="da-tag-dot" style="background:${d.color}"></div>
-          <span>${d.status}</span>
-        </div>
+        <span class="tag tag-sm">
+          <span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="${d.color}"/></svg></span>
+          <span class="tag-label">${d.status}</span>
+        </span>
       </div>`;
 
     case 'priority':
       return `<div class="da">
         <span>Priority changed to</span>
         <div class="da-priority da-priority-${d.priority}">
-          <img src="icons/12px/${PRIORITY_ICONS[d.priority]}.svg" width="12" height="12" alt=""/>
+          ${PRIORITY_ICONS[d.priority]}
           <span>${PRIORITY_LABELS[d.priority]}</span>
         </div>
       </div>`;
@@ -310,16 +298,16 @@ function DialogAlert(d) {
     case 'feedback':
       return `<div class="da">
         <span>Received</span>
-        <div class="da-feedback-tag">
-          <span class="da-score">${d.score}</span><span class="da-total">/${d.total}</span>
-        </div>
+        <span class="tag tag-sm">
+          <span class="tag-label">${d.score}/${d.total}</span>
+        </span>
         <span>feedback points</span>
       </div>`;
 
     case 'new-chat':
       return `<div class="da">
         <span>${d.text || 'A new version of the AI agent is available'}</span>
-        <button class="btn btn-accent btn-sm">Start new chat</button>
+        <button class="btn btn-accent">Start new chat</button>
       </div>`;
 
     default:

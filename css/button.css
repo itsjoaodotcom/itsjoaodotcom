@@ -111,7 +111,7 @@
   filter: brightness(0.94);
 }
 
-.btn-accent > img { filter: brightness(0) invert(1); }
+.btn-accent > img { filter: var(--icon-filter-on-color); }
 
 /* ─── Variant: Inverse ──────────────────────────────────── */
 
@@ -129,7 +129,7 @@
   filter: brightness(0.9);
 }
 
-.btn-inverse > img { filter: brightness(0) invert(1); }
+.btn-inverse > img { filter: var(--icon-filter-on-color); }
 
 html.dark .btn-inverse > img { filter: brightness(0); }
 
@@ -150,7 +150,7 @@ html.dark .btn-inverse > img { filter: brightness(0); }
   background: var(--surface-tintstrong);
 }
 
-.btn-secondary > img { filter: brightness(0) invert(1) brightness(0.534); }
+.btn-secondary > img { filter: var(--icon-filter); }
 
 /* ─── Variant: Ghost ────────────────────────────────────── */
 
@@ -167,7 +167,7 @@ html.dark .btn-inverse > img { filter: brightness(0); }
   background: var(--surface-tintstrong);
 }
 
-.btn-ghost > img { filter: brightness(0) invert(1) brightness(0.534); }
+.btn-ghost > img { filter: var(--icon-filter); }
 
 /* ─── Variant: Destructive ──────────────────────────────── */
 
@@ -185,7 +185,7 @@ html.dark .btn-inverse > img { filter: brightness(0); }
   filter: brightness(0.94);
 }
 
-.btn-destructive > img { filter: brightness(0) invert(1); }
+.btn-destructive > img { filter: var(--icon-filter-on-color); }
 
 /* ─── Variant: Ghost Destructive ────────────────────────── */
 

@@ -16,11 +16,11 @@
   width: 100%;
   min-height: 24px;
   font-family: var(--font-family);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
-  line-height: 16px;
+  line-height: 20px;
   font-feature-settings: 'lnum' 1, 'pnum' 1;
-  color: var(--content-secondary);
+  color: var(--content-tertiary);
 }
 
 /* ─── Date separator ─────────────────────────────────────── */
@@ -30,9 +30,7 @@
   align-items: center;
   gap: 12px;
   width: 100%;
-  height: 16px;
-  font-size: 12px;
-  line-height: 16px;
+  height: 20px;
 }
 
 .da-line {
@@ -58,82 +56,26 @@
 
 .da-name {
   font-weight: 500;
-  color: var(--content-primary);
+  color: var(--content-tertiary);
 }
 
 /* ─── Ticket created ─────────────────────────────────────── */
 
-.da-ticket-created {
-  flex-direction: column;
-  gap: 8px;
-}
-
-.da-ticket-created .da-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-}
-
 .da-ticket-title {
-  font-size: 14px;
   font-weight: 500;
-  line-height: 20px;
   letter-spacing: -0.28px;
-  color: var(--content-secondary);
+  color: var(--content-tertiary);
 }
 
 .da-ticket-dot {
-  font-size: 14px;
   font-weight: 500;
-  line-height: 20px;
   color: var(--content-tertiary);
 }
 
 .da-ticket-name {
-  font-size: 14px;
   font-weight: 500;
-  line-height: 20px;
-  color: var(--content-secondary);
+  color: var(--content-tertiary);
 }
-
-/* ─── Status tag ─────────────────────────────────────────── */
-
-.da-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 4px;
-  border: 1px solid var(--stroke-secondarystrong);
-  border-radius: 999px;
-  font-size: 12px;
-  line-height: 16px;
-  color: var(--content-primary);
-}
-
-.da-tag-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 99px;
-  flex-shrink: 0;
-}
-
-/* ─── Feedback tag ───────────────────────────────────────── */
-
-.da-feedback-tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 2px 4px;
-  border: 1px solid var(--stroke-secondarystrong);
-  border-radius: 999px;
-  font-size: 12px;
-  line-height: 16px;
-  color: var(--content-primary);
-  background: var(--surface-secondary);
-}
-
-.da-feedback-tag .da-score { color: var(--content-primary); }
-.da-feedback-tag .da-total { color: var(--content-tertiary); }
 
 /* ─── Priority ───────────────────────────────────────────── */
 
@@ -143,17 +85,19 @@
   gap: 4px;
 }
 
-.da .da-priority img {
-  width: 12px;
-  height: 12px;
-  flex-shrink: 0;
-  filter: none;
-}
 
-.da-priority-critical { color: var(--content-critical, #d14c4d); }
-.da-priority-high     { color: #f97316; }
-.da-priority-medium   { color: #eab308; }
-.da-priority-low      { color: #22c55e; }
+.da-priority-critical { color: var(--content-critical); }
+.da-priority-high     { color: var(--content-priority-high); }
+.da-priority-medium   { color: var(--content-priority-medium); }
+.da-priority-low      { color: var(--content-priority-low); }
+
+/* ─── Tags ───────────────────────────────────────────────── */
+
+.da .tag { color: var(--content-tertiary); }
+
+/* ─── With button ────────────────────────────────────────── */
+
+.da:has(.btn) { gap: 6px; }
 
 /* ─── Icon (clock, etc.) ─────────────────────────────────── */
 

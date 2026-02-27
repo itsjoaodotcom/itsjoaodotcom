@@ -160,7 +160,7 @@ body {
 }
 
 .snav-icon svg { width: 16px; height: 16px; color: var(--content-tertiary); fill: none; }
-.snav-icon img { width: 16px; height: 16px; filter: brightness(0) invert(53%); }
+.snav-icon img { width: 16px; height: 16px; filter: var(--icon-filter); }
 
 .snav-label {
   font-size: 14px;
@@ -175,8 +175,7 @@ body {
 
 .snav-chevron { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .snav-chevron svg { width: 16px; height: 16px; color: var(--content-tertiary); fill: none; }
-.snav-chevron img { filter: brightness(0) invert(1) brightness(0.534); }
-html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); }
+.snav-chevron img { filter: var(--icon-filter); }
 
 .snav-subitems.collapsed { display: none; }
 
@@ -320,7 +319,6 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
   overflow: hidden;
   border-radius: 8px;
   margin: 4px 4px 4px 0;
-  box-shadow: -4px 0px 12px 0px rgba(0, 0, 0, 0.04);
   border: 1px solid var(--stroke-secondarystrong);
   background: var(--surface-primary);
 }
@@ -356,6 +354,8 @@ html.dark .snav-chevron img { filter: brightness(0) invert(1) brightness(0.38); 
 .content.has-selection #dialog-loading {
   display: none;
 }
+
+
 
 /* Loading state: show loading, hide empty + hide sidebar badges */
 body.is-loading .content #dialog-empty {
@@ -405,7 +405,7 @@ body:not(.is-loading) .content #dialog-loading {
 
 .isb-resize-handle {
   width: 7px;
-  height: 8px;
+  height: 10px;
   border-radius: 2px;
   background: var(--surface-primary);
   border: 1px solid var(--stroke-accentsoft);
@@ -518,7 +518,7 @@ body:not(.is-loading) .content #dialog-loading {
   justify-content: center;
 }
 .isb-channel svg { width: 10px; height: 10px; }
-.isb-channel img { width: 12px; height: 12px; filter: brightness(0) invert(53%); }
+.isb-channel img { width: 12px; height: 12px; filter: var(--icon-filter); }
 
 .isb-message {
   flex: 1;
@@ -605,6 +605,8 @@ body:not(.is-loading) .content #dialog-loading {
   position: relative;
   z-index: 1;
   transition: border-right-color 0.1s;
+  padding-bottom: 116px; /* reserve space for absolute-positioned composer */
+  background: var(--surface-secondary);
 }
 
 .dialog:has(.cop-resize-zone:hover) {
@@ -715,7 +717,7 @@ body:not(.is-loading) .content #dialog-loading {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 24px 20px 12px;
+  padding: 24px 20px 20px;
   max-width: 1200px;
   width: 100%;
   align-self: center;
@@ -808,7 +810,7 @@ body:not(.is-loading) .content #dialog-loading {
 
 .msg-time {
   font-size: 12px;
-  color: var(--content-tertiary-transparent);
+  color: var(--content-quartenary);
   line-height: 16px;
   padding: 0 4px;
   visibility: hidden;
@@ -817,11 +819,33 @@ body:not(.is-loading) .content #dialog-loading {
 .msg-wrapper:hover .msg-time { visibility: visible; }
 
 /* ─── Composer ──────────────────────────────────────────── */
+.composer-back-to-bottom {
+  display: none;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 6px;
+}
+
+.composer-back-to-bottom.is-visible {
+  display: flex;
+}
+
 .composer-wrap {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   padding: 14px;
-  background: var(--surface-secondary);
-  flex-shrink: 0;
-  z-index: 1;
+  background: linear-gradient(180deg, transparent 0%, var(--surface-secondary) 88%);
+  z-index: 10;
+}
+
+@keyframes composer-shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-5px); }
+  40%       { transform: translateX(5px); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(4px); }
 }
 
 .composer {
@@ -833,6 +857,10 @@ body:not(.is-loading) .content #dialog-loading {
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
+}
+
+.composer.is-shake {
+  animation: composer-shake 0.35s ease;
 }
 
 .composer-input {
@@ -928,6 +956,7 @@ body:not(.is-loading) .content #dialog-loading {
   position: relative;
   overflow: hidden;
   transition: width 0.2s ease, min-width 0.2s ease;
+  padding-bottom: 54px; /* reserve space for absolute-positioned composer */
 }
 
 .copilot.collapsed {
@@ -1002,7 +1031,35 @@ body:not(.is-loading) .content #dialog-loading {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 18px 12px 96px;
+  padding: 18px 12px 20px;
+}
+
+.copilot-empty-state {
+  display: none;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+#copilot-scroll:empty + .copilot-empty-state {
+  display: flex;
+}
+
+/* User message in copilot chat */
+.copilot-user-msg {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: flex-end;
+  max-width: 276px;
+  padding: 8px 10px;
+  border-radius: 8px 8px 4px 8px;
+  background: var(--surface-tint);
+  font-size: 14px;
+  color: var(--content-primary);
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  word-break: break-word;
 }
 
 /* AI Copilot message block */
@@ -1117,7 +1174,7 @@ body:not(.is-loading) .content #dialog-loading {
 .card-header {
   display: flex;
   align-items: center;
-  padding: 10px 12px 4px;
+  padding: 10px 12px 8px;
   gap: 4px;
 }
 
@@ -1150,6 +1207,37 @@ body:not(.is-loading) .content #dialog-loading {
 
 .card-body {
   padding: 0 12px 10px;
+}
+
+.card-details-header {
+  padding: 0 6px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.card-details-header.is-open {
+  gap: 4px;
+}
+
+.card-details-header .btn {
+  color: var(--content-tertiary);
+}
+
+.card-details-body {
+  display: none;
+  padding: 0 6px 4px;
+}
+
+.card-details-header.is-open .card-details-body {
+  display: block;
+}
+
+.card-details-body p {
+  font-size: 14px;
+  color: var(--content-primary);
+  letter-spacing: -0.28px;
+  line-height: 20px;
 }
 
 .card-body p {
@@ -1203,22 +1291,80 @@ body:not(.is-loading) .content #dialog-loading {
   display: flex;
   flex-direction: column;
   width: 100%;
+  min-height: 260px;
+  flex-shrink: 0;
 }
 
-.thinking-item {
+.thinking-label {
   display: flex;
   align-items: center;
+  gap: 4px;
   height: 24px;
   padding: 0 6px;
-  border-radius: 8px 8px 4px 8px;
-}
-
-.thinking-text {
+  margin-bottom: 4px;
   font-size: 12px;
   font-weight: 500;
-  color: var(--content-tertiary-transparent);
   line-height: 16px;
+  color: var(--content-tertiary-transparent);
   animation: pulse 1.5s ease-in-out infinite;
+}
+
+.thinking-label img {
+  filter: var(--icon-filter);
+}
+
+.thinking-steps {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.thinking-step {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  padding: 0 6px;
+  animation: stepFadeIn 0.3s ease forwards;
+}
+
+.thinking-step-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.thinking-step-icon::after {
+  content: '';
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--content-tertiary-transparent);
+  top: 4.5px;
+  left: 4.5px;
+}
+
+.thinking-step-text {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: var(--content-tertiary-transparent);
+}
+
+.thinking-connector {
+  padding: 2px 6px;
+  animation: stepFadeIn 0.3s ease forwards;
+}
+
+.thinking-connector::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 12px;
+  background: var(--stroke-primary);
+  margin-left: 7.5px;
 }
 
 @keyframes pulse {
@@ -1226,14 +1372,30 @@ body:not(.is-loading) .content #dialog-loading {
   50% { opacity: 1; }
 }
 
+@keyframes stepFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* Copilot composer */
+.copilot-back-to-bottom {
+  display: none;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 6px;
+}
+
+.copilot-back-to-bottom.is-visible {
+  display: flex;
+}
+
 .copilot-composer {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   padding: 14px;
-  background: var(--surface-primary);
+  background: linear-gradient(180deg, transparent 0%, var(--surface-secondary) 88%);
 }
 
 .copilot-input {
@@ -1287,6 +1449,10 @@ body:not(.is-loading) .content #dialog-loading {
 .copilot-input.multiline .copilot-send-btn {
   align-self: flex-end;
   margin-right: 6px;
+}
+
+.copilot-input.is-shake {
+  animation: composer-shake 0.35s ease;
 }
 
 

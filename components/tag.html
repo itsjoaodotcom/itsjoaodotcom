@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tag — Clarity Components</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/tokens.css" />
+  <link rel="stylesheet" href="../css/tag.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-family);
+      background: var(--surface-secondary);
+      color: var(--content-primary);
+      min-height: 100vh;
+      padding: 48px 40px 80px;
+    }
+
+    .page { max-width: 780px; margin: 0 auto; }
+
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 40px;
+    }
+
+    .page-title {
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 24px;
+      color: var(--content-primary);
+    }
+
+    .page-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .page-tag {
+      font-size: 11px;
+      font-family: 'Geist Mono', monospace;
+      color: var(--content-tertiary);
+      background: var(--surface-tint);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .figma-link {
+      font-size: 11px;
+      color: var(--content-accent);
+      text-decoration: none;
+    }
+
+    .figma-link:hover { text-decoration: underline; }
+
+    .section { margin-bottom: 40px; }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--content-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 16px;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .color-grid {
+      display: grid;
+      grid-template-columns: 80px 1fr 1fr;
+      gap: 12px 24px;
+      align-items: center;
+    }
+
+    .color-label {
+      font-size: 12px;
+      color: var(--content-tertiary);
+      font-family: 'Geist Mono', monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <div class="page-header">
+      <div>
+        <div class="page-title">Tag</div>
+        <div class="page-meta">
+          <span class="page-tag">.tag</span>
+          <a class="figma-link" href="https://www.figma.com/design/N17JbPWMPtDKXRE9uVPHJ9/?node-id=66-1007" target="_blank">Open in Figma ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ghost / Default -->
+    <div class="section">
+      <div class="section-title">Ghost — Default size</div>
+      <div class="color-grid">
+        <span class="color-label">blue</span>
+        <span class="tag tag-blue"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+        <span class="tag tag-sm tag-blue"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+
+        <span class="color-label">red</span>
+        <span class="tag tag-red"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+        <span class="tag tag-sm tag-red"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+
+        <span class="color-label">green</span>
+        <span class="tag tag-green"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+        <span class="tag tag-sm tag-green"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+
+        <span class="color-label">orange</span>
+        <span class="tag tag-orange"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+        <span class="tag tag-sm tag-orange"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+
+        <span class="color-label">purple</span>
+        <span class="tag tag-purple"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+        <span class="tag tag-sm tag-purple"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+
+        <span class="color-label">cyan</span>
+        <span class="tag tag-cyan"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+        <span class="tag tag-sm tag-cyan"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+
+        <span class="color-label">brown</span>
+        <span class="tag tag-brown"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+        <span class="tag tag-sm tag-brown"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+
+        <span class="color-label">grey</span>
+        <span class="tag tag-grey"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+        <span class="tag tag-sm tag-grey"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+      </div>
+    </div>
+
+    <!-- Filled -->
+    <div class="section">
+      <div class="section-title">Filled</div>
+      <div class="color-grid">
+        <span class="color-label">blue</span>
+        <span class="tag tag-filled tag-blue"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+        <span class="tag tag-sm tag-filled tag-blue"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+
+        <span class="color-label">red</span>
+        <span class="tag tag-filled tag-red"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+        <span class="tag tag-sm tag-filled tag-red"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+
+        <span class="color-label">green</span>
+        <span class="tag tag-filled tag-green"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+        <span class="tag tag-sm tag-filled tag-green"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+
+        <span class="color-label">orange</span>
+        <span class="tag tag-filled tag-orange"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+        <span class="tag tag-sm tag-filled tag-orange"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+
+        <span class="color-label">purple</span>
+        <span class="tag tag-filled tag-purple"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+        <span class="tag tag-sm tag-filled tag-purple"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+
+        <span class="color-label">cyan</span>
+        <span class="tag tag-filled tag-cyan"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+        <span class="tag tag-sm tag-filled tag-cyan"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+
+        <span class="color-label">brown</span>
+        <span class="tag tag-filled tag-brown"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+        <span class="tag tag-sm tag-filled tag-brown"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+
+        <span class="color-label">grey</span>
+        <span class="tag tag-filled tag-grey"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+        <span class="tag tag-sm tag-filled tag-grey"><span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="currentColor"/></svg></span><span class="tag-label">Done</span></span>
+      </div>
+    </div>
+
+  </div>
+  <script src="../js/theme.js"></script>
+</body>
+</html>

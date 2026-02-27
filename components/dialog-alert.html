@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="../css/tokens.css" />
   <link rel="stylesheet" href="../css/avatar.css" />
   <link rel="stylesheet" href="../css/button.css" />
+  <link rel="stylesheet" href="../css/tag.css" />
   <link rel="stylesheet" href="../css/dialog-alert.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -111,17 +112,12 @@
     <div class="section-title">All types</div>
     <div class="demo-card">
 
-      <!-- Ticket created (includes date) -->
+      <!-- Ticket created -->
       <div class="da da-ticket-created">
-        <div class="da-date-sep">
-          <div class="da-line"></div>
-          <span>October 24</span>
-          <div class="da-line"></div>
-        </div>
         <div class="da-content">
           <span class="da-ticket-title">New ticket created</span>
           <span class="da-ticket-dot">·</span>
-          <span class="da-ticket-name">Caroline Brennan</span>
+          <span class="da-ticket-name">October 24, 2024</span>
         </div>
       </div>
 
@@ -139,7 +135,7 @@
       <!-- Ticket not assigned -->
       <div class="da">
         <span>Ticket is not assigned yet</span>
-        <button class="btn btn-secondary btn-sm">Assign to me</button>
+        <button class="btn btn-secondary">Assign to me</button>
       </div>
 
       <!-- Assign to -->
@@ -151,9 +147,9 @@
       <!-- Feedback -->
       <div class="da">
         <span>Received</span>
-        <div class="da-feedback-tag">
-          <span class="da-score">3</span><span class="da-total">/5</span>
-        </div>
+        <span class="tag tag-sm">
+          <span class="tag-label">3/5</span>
+        </span>
         <span>feedback points</span>
       </div>
 
@@ -180,10 +176,10 @@
       <!-- Change status -->
       <div class="da">
         <span>Ticket status changed to</span>
-        <div class="da-tag">
-          <div class="da-tag-dot" style="background:#4061d8"></div>
-          <span>Done</span>
-        </div>
+        <span class="tag tag-sm">
+          <span class="tag-dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill="#4061d8"/></svg></span>
+          <span class="tag-label">Done</span>
+        </span>
       </div>
 
       <!-- Priority -->
@@ -198,7 +194,7 @@
       <!-- New chat -->
       <div class="da">
         <span>A new version of the AI agent is available</span>
-        <button class="btn btn-accent btn-sm">Start new chat</button>
+        <button class="btn btn-accent">Start new chat</button>
       </div>
 
     </div>

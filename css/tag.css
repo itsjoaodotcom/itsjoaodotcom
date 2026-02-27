@@ -1,0 +1,101 @@
+/*
+ * tag.css — Tag Component
+ *
+ * Styles: ghost (default) | filled
+ * Sizes:  default (24px)  | sm (20px)
+ * Colors: blue | red | green | orange | purple | cyan | brown | grey
+ *
+ * HTML:
+ *   <span class="tag tag-blue">
+ *     <span class="tag-dot">
+ *       <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+ *         <rect width="12" height="12" rx="6" fill="currentColor"/>
+ *       </svg>
+ *     </span>
+ *     <span class="tag-label">Done</span>
+ *   </span>
+ */
+
+/* ─── Base ───────────────────────────────────────────────── */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  border-radius: 999px;
+  border: 1px solid var(--stroke-primary);
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  font-feature-settings: 'lnum' 1, 'pnum' 1;
+  color: var(--content-primary);
+  white-space: nowrap;
+}
+
+/* ─── Label ─────────────────────────────────────────────── */
+
+.tag-label {
+  padding: 0 2px;
+}
+
+/* ─── Dot (use icons/12px/Color.svg inline with fill="currentColor") ── */
+
+.tag-dot {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tag-dot svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+/* ─── Size: Small ───────────────────────────────────────── */
+
+.tag.tag-sm {
+  padding: 2px 6px;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0;
+}
+
+/* ─── Colors (dot) ──────────────────────────────────────── */
+
+.tag-blue   .tag-dot { color: var(--blue-05);   }
+.tag-red    .tag-dot { color: var(--red-05);    }
+.tag-green  .tag-dot { color: var(--green-05);  }
+.tag-orange .tag-dot { color: var(--orange-05); }
+.tag-purple .tag-dot { color: var(--purple-05); }
+.tag-cyan   .tag-dot { color: var(--cyan-05);   }
+.tag-brown  .tag-dot { color: var(--brown-05);  }
+.tag-grey   .tag-dot { color: var(--grey-05);   }
+
+/* ─── Style: Filled ─────────────────────────────────────── */
+
+.tag-filled.tag-blue   { background: rgba(230, 235, 255, 0.4); border-color: var(--blue-01);   }
+.tag-filled.tag-red    { background: rgba(255, 230, 230, 0.4); border-color: var(--red-01);    }
+.tag-filled.tag-green  { background: rgba(230, 247, 239, 0.4); border-color: var(--green-01);  }
+.tag-filled.tag-orange { background: rgba(255, 242, 230, 0.4); border-color: var(--orange-01); }
+.tag-filled.tag-purple { background: rgba(230, 232, 250, 0.4); border-color: var(--purple-01); }
+.tag-filled.tag-cyan   { background: rgba(224, 248, 251, 0.4); border-color: var(--cyan-01);   }
+.tag-filled.tag-brown  { background: rgba(249, 240, 238, 0.4); border-color: var(--brown-01);  }
+.tag-filled.tag-grey   { background: var(--grey-01);           border-color: var(--stroke-primary); }
+
+/* ─── Dark mode: Filled ─────────────────────────────────── */
+
+html.dark .tag-filled.tag-blue   { background: rgba(28,  46,  102, 0.4); border-color: var(--blue-08);   }
+html.dark .tag-filled.tag-red    { background: rgba(130, 43,  44,  0.4); border-color: var(--red-08);    }
+html.dark .tag-filled.tag-green  { background: rgba(42,  107, 74,  0.4); border-color: var(--green-08);  }
+html.dark .tag-filled.tag-orange { background: rgba(137, 70,  31,  0.4); border-color: var(--orange-08); }
+html.dark .tag-filled.tag-purple { background: rgba(34,  39,  102, 0.4); border-color: var(--purple-08); }
+html.dark .tag-filled.tag-cyan   { background: rgba(17,  89,  109, 0.4); border-color: var(--cyan-08);   }
+html.dark .tag-filled.tag-brown  { background: rgba(107, 84,  82,  0.4); border-color: var(--brown-08);  }
+html.dark .tag-filled.tag-grey   { background: var(--grey-09);           border-color: var(--stroke-primary); }
