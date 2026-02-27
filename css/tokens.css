@@ -334,6 +334,14 @@ html.dark {
   filter: brightness(0);
 }
 
+body {
+  background: var(--surface-secondary);
+}
+
+html.dark body {
+  background: var(--surface-secondary);
+}
+
 html.dark .theme-switcher-drag img {
   filter: brightness(0) invert(1);
 }
