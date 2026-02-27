@@ -40,8 +40,8 @@
   height: 1px;
   background: repeating-linear-gradient(
     to right,
-    var(--stroke-primary) 0,
-    var(--stroke-primary) 2px,
+    var(--stroke-secondarystrong) 0,
+    var(--stroke-secondarystrong) 2px,
     transparent 2px,
     transparent 4px
   );
@@ -104,7 +104,7 @@
   align-items: center;
   gap: 4px;
   padding: 2px 4px;
-  border: 1px solid var(--stroke-primary);
+  border: 1px solid var(--stroke-secondarystrong);
   border-radius: 999px;
   font-size: 12px;
   line-height: 16px;
@@ -124,7 +124,7 @@
   display: inline-flex;
   align-items: center;
   padding: 2px 4px;
-  border: 1px solid var(--stroke-primary);
+  border: 1px solid var(--stroke-secondarystrong);
   border-radius: 999px;
   font-size: 12px;
   line-height: 16px;
@@ -143,10 +143,11 @@
   gap: 4px;
 }
 
-.da-priority img {
+.da .da-priority img {
   width: 12px;
   height: 12px;
   flex-shrink: 0;
+  filter: none;
 }
 
 .da-priority-critical { color: var(--content-critical, #d14c4d); }

@@ -1045,8 +1045,7 @@ body:not(.is-loading) .content #dialog-loading {
 }
 
 .card.elevated {
-  background: var(--surface-popover);
-  box-shadow: var(--shadow-e1);
+  background: var(--surface-secondary);
 }
 
 .card-summary {
