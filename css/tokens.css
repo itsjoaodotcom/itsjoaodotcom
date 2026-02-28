@@ -389,3 +389,10 @@ html.dark .theme-switcher-drag img {
   padding: 0 4px;
   line-height: 16px;
 }
+
+.theme-switcher-divider {
+  width: 1px;
+  align-self: stretch;
+  background: var(--stroke-secondarystrong);
+  margin: 2px 0;
+}

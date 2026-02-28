@@ -49,9 +49,21 @@
     dragHandle.className = 'theme-switcher-drag';
     dragHandle.innerHTML = '<img src="icons/16px/Drag.svg" width="16" height="16" alt=""/>';
 
+    var divider = document.createElement('div');
+    divider.className = 'theme-switcher-divider';
+
+    var tourBtn = document.createElement('button');
+    tourBtn.className = 'theme-switcher-btn';
+    tourBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M8 11v-1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M6.5 6.5a1.5 1.5 0 1 1 1.5 1.5V9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="theme-switcher-label">Tour</span>';
+    tourBtn.addEventListener('click', function () {
+      if (typeof startTour === 'function') startTour();
+    });
+
     switcher.appendChild(dragHandle);
     switcher.appendChild(lightBtn);
     switcher.appendChild(darkBtn);
+    switcher.appendChild(divider);
+    switcher.appendChild(tourBtn);
     document.body.appendChild(switcher);
 
     // Drag to reposition — only from the handle

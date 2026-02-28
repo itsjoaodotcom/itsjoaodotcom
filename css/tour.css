@@ -1,0 +1,175 @@
+/* ─── Tour ──────────────────────────────────────────────── */
+
+.tour-spotlight {
+  position: fixed;
+  z-index: 10001;
+  border-radius: 8px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.48);
+  outline: 2px solid var(--stroke-accent);
+  outline-offset: 3px;
+  pointer-events: none;
+  transition:
+    top    0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    left   0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    width  0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tour-tooltip {
+  position: fixed;
+  z-index: 10002;
+  width: 280px;
+  background: var(--surface-popover);
+  border: 1px solid var(--stroke-primary);
+  border-radius: 12px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.14);
+  padding: 16px;
+  font-family: var(--font-family);
+  transition:
+    top  0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    left 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.2s ease;
+}
+
+/* Arrow */
+.tour-tooltip::before {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--surface-popover);
+  transform: rotate(45deg);
+}
+
+.tour-tooltip.arrow-left::before {
+  left: -5px;
+  top: 24px;
+  border-left: 1px solid var(--stroke-primary);
+  border-bottom: 1px solid var(--stroke-primary);
+}
+
+.tour-tooltip.arrow-right::before {
+  right: -5px;
+  top: 24px;
+  border-right: 1px solid var(--stroke-primary);
+  border-top: 1px solid var(--stroke-primary);
+}
+
+.tour-tooltip.arrow-top::before {
+  top: -5px;
+  left: 24px;
+  border-top: 1px solid var(--stroke-primary);
+  border-left: 1px solid var(--stroke-primary);
+}
+
+.tour-tooltip.arrow-bottom::before {
+  bottom: -5px;
+  left: 24px;
+  border-bottom: 1px solid var(--stroke-primary);
+  border-right: 1px solid var(--stroke-primary);
+}
+
+.tour-tooltip.arrow-none::before {
+  display: none;
+}
+
+/* Header */
+.tour-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.tour-header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Step label */
+.tour-step-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--content-accent);
+  line-height: 16px;
+}
+
+/* Title */
+.tour-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--content-primary);
+  margin: 0;
+  letter-spacing: -0.28px;
+  line-height: 20px;
+}
+
+/* Close button */
+.tour-close {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  color: var(--content-tertiary);
+  padding: 0;
+}
+
+.tour-close:hover {
+  background: var(--button-ghosthover);
+  color: var(--content-primary);
+}
+
+/* Description */
+.tour-description {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--content-secondary);
+  margin: 0 0 16px;
+  line-height: 18px;
+  letter-spacing: -0.26px;
+}
+
+/* Footer */
+.tour-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* Progress dots */
+.tour-dots {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.tour-dot {
+  height: 6px;
+  width: 6px;
+  border-radius: 3px;
+  background: var(--stroke-secondary);
+  transition: width 0.2s ease, background 0.2s ease;
+}
+
+.tour-dot.active {
+  width: 16px;
+  background: var(--content-accent);
+}
+
+/* Actions */
+.tour-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
