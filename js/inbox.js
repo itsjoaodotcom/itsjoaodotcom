@@ -521,16 +521,38 @@ document.addEventListener('DOMContentLoaded', () => {
     // Suggestion chips
     const suggestionsEl = document.querySelector('.copilot-suggestions');
     const copilotScrollEl = document.getElementById('copilot-scroll');
+    let suggestionsHiddenByTyping = false;
+
+    function suggestionsOverlapContent() {
+      if (!copilotScrollEl) return false;
+      const canScroll = copilotScrollEl.scrollHeight > copilotScrollEl.clientHeight;
+      if (!canScroll) return false;
+      const distFromBottom = copilotScrollEl.scrollHeight - copilotScrollEl.scrollTop - copilotScrollEl.clientHeight;
+      return distFromBottom > 40;
+    }
+
     function hideSuggestions() {
+      suggestionsHiddenByTyping = true;
       if (suggestionsEl) suggestionsEl.classList.add('is-hidden');
     }
+
     function showSuggestions() {
+      suggestionsHiddenByTyping = false;
       if (!suggestionsEl) return;
-      suggestionsEl.classList.remove('is-hidden');
-      if (copilotScrollEl) copilotScrollEl.addEventListener('scroll', hideSuggestions, { once: true });
+      if (!suggestionsOverlapContent()) suggestionsEl.classList.remove('is-hidden');
       copilotEditable.addEventListener('input', hideSuggestions, { once: true });
     }
-    if (copilotScrollEl) copilotScrollEl.addEventListener('scroll', hideSuggestions, { once: true });
+
+    if (copilotScrollEl) {
+      copilotScrollEl.addEventListener('scroll', () => {
+        if (!suggestionsEl || suggestionsHiddenByTyping) return;
+        if (suggestionsOverlapContent()) {
+          suggestionsEl.classList.add('is-hidden');
+        } else {
+          suggestionsEl.classList.remove('is-hidden');
+        }
+      });
+    }
     copilotEditable.addEventListener('input', hideSuggestions, { once: true });
     if (suggestionsEl) {
       suggestionsEl.querySelectorAll('.copilot-suggestion').forEach(btn => {
