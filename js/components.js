@@ -318,9 +318,10 @@ function DialogAlert(d) {
 // ── MessageBubble ───────────────────────────────────────────
 function MessageBubble(m, showAuthor) {
   const isOut = m.dir === 'out';
+  const isNote = !!m.isNote;
   const logo = `<div class="msg-author-logo"><img src="icons/16px/ClarityLogo.svg" width="16" height="16" alt=""/></div>`;
   return `<div class="msg-wrapper ${isOut ? 'outbound' : 'inbound'}">
-    <div class="msg-bubble">
+    <div class="msg-bubble${isNote ? ' note' : ''}">
       ${showAuthor ? `<div class="msg-author">${logo}<span class="msg-author-name">Agent</span></div>` : ''}
       <div class="msg-body">${m.text}</div>
     </div>

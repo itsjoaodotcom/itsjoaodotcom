@@ -1,3 +1,42 @@
+function slideOpen(el, onDone) {
+  el.style.display = 'block';
+  el.style.overflow = 'hidden';
+  el.style.height = '0';
+  el.style.opacity = '0';
+  void el.offsetHeight; // force reflow
+  el.style.transition = 'height 0.25s ease, opacity 0.2s ease';
+  el.style.height = el.scrollHeight + 'px';
+  el.style.opacity = '1';
+  el.addEventListener('transitionend', function handler(e) {
+    if (e.propertyName !== 'height') return;
+    el.removeEventListener('transitionend', handler);
+    el.style.height = 'auto';
+    el.style.overflow = '';
+    el.style.transition = '';
+    el.style.opacity = '';
+    if (onDone) onDone();
+  });
+}
+
+function slideClose(el, onDone) {
+  el.style.height = el.scrollHeight + 'px';
+  el.style.overflow = 'hidden';
+  void el.offsetHeight; // force reflow
+  el.style.transition = 'height 0.25s ease, opacity 0.2s ease';
+  el.style.height = '0';
+  el.style.opacity = '0';
+  el.addEventListener('transitionend', function handler(e) {
+    if (e.propertyName !== 'height') return;
+    el.removeEventListener('transitionend', handler);
+    el.style.display = 'none';
+    el.style.height = '';
+    el.style.opacity = '';
+    el.style.overflow = '';
+    el.style.transition = '';
+    if (onDone) onDone();
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   // Loading state: show Switching Organization illustration for 5s
   document.body.classList.add('is-loading');
@@ -20,19 +59,22 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
   let clientReplyIndex = 0;
   let startCopilotAutoThinking = null;
+  let stopCopilotAutoThinking = null;
+  let scrollResizeObserver = null;
 
-  function appendChatMessage(dir, text) {
+  function appendChatMessage(dir, text, isNote = false) {
     const now = new Date();
     const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
     const chatScroll = document.getElementById('chat-scroll');
     const el = document.createElement('div');
-    el.innerHTML = MessageBubble({ dir, text, time }, false);
+    el.innerHTML = MessageBubble({ dir, text, time, isNote }, false);
     chatScroll.appendChild(el.firstElementChild);
     chatScroll.scrollTop = chatScroll.scrollHeight;
-    if (dir === 'in' && startCopilotAutoThinking) startCopilotAutoThinking();
+    if (dir === 'in' && startCopilotAutoThinking) setTimeout(startCopilotAutoThinking, 500);
   }
 
   function sendDialogMessage() {
+    if (composerInput.closest('.composer').classList.contains('internal-note')) return;
     const text = composerInput.textContent.trim();
     if (!text) {
       const composer = composerInput.closest('.composer');
@@ -61,7 +103,16 @@ document.addEventListener('DOMContentLoaded', () => {
     composerInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
-        sendDialogMessage();
+        const isNote = composerInput.closest('.composer').classList.contains('internal-note');
+        if (isNote) {
+          const text = composerInput.textContent.trim();
+          if (!text) return;
+          appendChatMessage('out', text, true);
+          composerInput.innerHTML = '';
+          composerInput.dispatchEvent(new Event('input'));
+        } else {
+          sendDialogMessage();
+        }
       }
     });
   }
@@ -76,6 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const sendIconHTML = copilotSendBtn.innerHTML;
     let currentStepTimer = null;
+    let streamingInterval = null;
 
     const thinkingSteps = [
       'Generating a ticket summary',
@@ -90,10 +142,89 @@ document.addEventListener('DOMContentLoaded', () => {
       "Thank you for contacting us. I've reviewed the details and I'm ready to provide you with the best solution.",
       "I understand your situation completely. Let me walk you through the steps to resolve this for you.",
     ];
+
+    const aiMessages = [
+      "Recommend the Gold Credit Card — better fraud protection and emergency blocking.",
+      "Customer has 3 open tickets this month — consider escalating to an account specialist.",
+      "Offer the Premium plan upgrade — usage patterns suggest they'd benefit from higher limits.",
+      "Check if two-factor authentication is enabled — may be relevant to their security concern.",
+    ];
+
+    const aiDetails = [
+      "The suggested response addresses the customer's request to view their virtual card by providing clear step-by-step instructions. It also includes creation steps in case the card doesn't exist yet. The confidence is high because the information is directly sourced from the knowledge base and matches the customer's specific query.",
+      "The response acknowledges the customer's frustration while providing a clear path to resolution. Confidence is high as this issue is well-documented with a proven fix. The tone is empathetic and professional, appropriate for a billing-related concern.",
+      "The suggested reply leverages the customer's account history to offer a personalised solution. Confidence is medium-high — the core information is accurate but the exact outcome may vary depending on account settings not visible in this view.",
+      "The response directly addresses the query with structured instructions sourced from the knowledge base. Confidence is high given the exact match between the customer's question and available documentation. Escalation is unlikely to be needed.",
+    ];
+
+    const aiReasonings = [
+      `<p>The customer is asking to see their virtual card. They previously asked for general help with their card, and the AI Deflection Agent asked for more details. The customer then clarified their request to specifically be about a virtual card.</p>
+<p>Here's a summary of the ticket:</p>
+<ul>
+  <li>Customer wants to see their virtual card.</li>
+  <li>Previous agent asked clarifying questions about card issues.</li>
+  <li>Customer specified virtual card access.</li>
+</ul>
+<div class="reasoning-sources">
+  <a class="reasoning-source" href="/ai-hub/knowledge-base/articles/5/18">articles/5/18</a>
+  <a class="reasoning-source" href="/ai-hub/knowledge-base/articles/5/178">articles/5/178</a>
+  <a class="reasoning-source" href="/ai-hub/knowledge-base/articles/761265115897895">articles/761265115897895</a>
+</div>
+<p>A virtual card is a digital payment card that you can use for online purchases and with Apple Pay/Google Pay. They are free to create and offer enhanced security.</p>
+<p>To view your virtual card details:</p>
+<ol>
+  <li>Go to your 'Home' screen in the app.</li>
+  <li>Tap the cards icon in the top-right corner.</li>
+  <li>Tap your virtual card, then tap 'Show details'.</li>
+  <li>Enter your passcode (you might also be asked for a one-time passcode).</li>
+</ol>`,
+      `<p>The customer is disputing a charge that appeared on their account. They believe the transaction was unauthorised and are requesting a refund. There is no prior contact on this specific charge.</p>
+<p>Here's a summary of the ticket:</p>
+<ul>
+  <li>Customer reports an unrecognised transaction of €34.99.</li>
+  <li>Transaction date: 3 days ago, merchant listed as "ONLINESVC".</li>
+  <li>Customer requests immediate refund and card freeze.</li>
+</ul>
+<div class="reasoning-sources">
+  <a class="reasoning-source" href="/ai-hub/knowledge-base/articles/2/44">articles/2/44</a>
+  <a class="reasoning-source" href="/ai-hub/knowledge-base/articles/2/51">articles/2/51</a>
+</div>
+<p>For disputed transactions, the standard process is to freeze the card immediately, open a chargeback case, and inform the customer of the timeline (typically 5–10 business days for resolution).</p>`,
+      `<p>The customer is asking about plan limits and whether upgrading would benefit them. They are on the Standard plan and have hit their monthly transfer limit twice in the last 30 days.</p>
+<p>Here's a summary of the ticket:</p>
+<ul>
+  <li>Customer on Standard plan, hitting transfer limits.</li>
+  <li>Interested in higher limits and additional features.</li>
+  <li>Has been a customer for 14 months with a good standing account.</li>
+</ul>
+<div class="reasoning-sources">
+  <a class="reasoning-source" href="/ai-hub/knowledge-base/articles/8/102">articles/8/102</a>
+  <a class="reasoning-source" href="/ai-hub/knowledge-base/articles/8/117">articles/8/117</a>
+  <a class="reasoning-source" href="/ai-hub/knowledge-base/articles/8/134">articles/8/134</a>
+</div>
+<p>The Premium plan offers 5× higher transfer limits, priority support, and free international ATM withdrawals up to €400/month. Given the customer's usage history, this would resolve their current friction points.</p>`,
+      `<p>The customer cannot log in to their account. They report that the verification code is not arriving via SMS. The account was last accessed 6 days ago without issues.</p>
+<p>Here's a summary of the ticket:</p>
+<ul>
+  <li>Customer locked out — SMS verification not being received.</li>
+  <li>Phone number on file appears to be correct.</li>
+  <li>No recent changes to account security settings.</li>
+</ul>
+<div class="reasoning-sources">
+  <a class="reasoning-source" href="/ai-hub/knowledge-base/articles/1/9">articles/1/9</a>
+  <a class="reasoning-source" href="/ai-hub/knowledge-base/articles/1/23">articles/1/23</a>
+</div>
+<p>Common causes include SMS carrier delays, number portability issues, or spam filters. The recommended resolution path is to offer an alternative verification method (email or authenticator app) and check if the number has recently been ported.</p>`,
+    ];
+
     let aiReplyIndex = 0;
 
     function buildAiBlock() {
-      const reply = aiReplies[aiReplyIndex % aiReplies.length];
+      const idx = aiReplyIndex % aiReplies.length;
+      const reply = aiReplies[idx];
+      const aiMessage = aiMessages[idx];
+      const details = aiDetails[idx];
+      const reasoning = aiReasonings[idx];
       aiReplyIndex++;
       const html = `<div class="ai-block">
         <div class="ai-reasoning" style="opacity:0">
@@ -101,6 +232,9 @@ document.addEventListener('DOMContentLoaded', () => {
             <button class="btn btn-ghost btn-sm">Reasoning <img src="icons/16px/ChevronRight.svg" width="16" height="16" alt=""/></button>
           </div>
           <div class="reasoning-message"></div>
+        </div>
+        <div class="ai-message" style="opacity:0">
+          <p>${aiMessage}</p>
         </div>
         <div class="ai-cards" style="opacity:0;transform:translateY(16px)">
           <div class="card">
@@ -111,6 +245,9 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="card-body"><p>${reply}</p></div>
             <div class="card-details-header">
               <div><button class="btn btn-ghost btn-sm">Details <img src="icons/16px/ChevronRight.svg" width="16" height="16" alt=""/></button></div>
+              <div class="card-details-body">
+                <p>${details}</p>
+              </div>
             </div>
             <div class="card-divider"></div>
             <div class="card-actions">
@@ -126,7 +263,6 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
       </div>`;
-      const reasoning = 'Based on the customer\'s message and context, generating a professional and empathetic response.';
       return { html, reply, reasoning };
     }
 
@@ -145,6 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function stopCopilotThinking() {
       clearTimeout(currentStepTimer);
       currentStepTimer = null;
+      if (scrollResizeObserver) { scrollResizeObserver.disconnect(); scrollResizeObserver = null; }
       const scroll = document.getElementById('copilot-scroll');
       const thinking = scroll.querySelector('.thinking-section');
       if (thinking) thinking.remove();
@@ -154,25 +291,70 @@ document.addEventListener('DOMContentLoaded', () => {
     function startCopilotThinking(scroll) {
       if (scroll.querySelector('.thinking-section')) return;
 
+      if (scrollResizeObserver) { scrollResizeObserver.disconnect(); scrollResizeObserver = null; }
+
+      const existingSpacer = scroll.querySelector('.copilot-ai-spacer');
+      if (existingSpacer) existingSpacer.remove();
+
+      const prevEl = scroll.lastElementChild;
+
       const thinkingEl = document.createElement('div');
       thinkingEl.className = 'thinking-section';
-      thinkingEl.innerHTML = '<div class="thinking-label"><img src="icons/16px/Thinking.svg" width="16" height="16" alt=""/>Thinking…</div><div class="thinking-steps"></div>';
-      thinkingEl.style.marginBottom = scroll.clientHeight + 'px';
+      thinkingEl.innerHTML = '<div class="thinking-label"><img src="icons/16px/Thinking.svg" width="14" height="14" alt=""/><span class="thinking-text">Thinking</span><span class="thinking-dots"><span>.</span><span>.</span><span>.</span></span></div><div class="thinking-steps"></div>';
+
+      thinkingEl.style.height = (prevEl ? Math.max(0, scroll.clientHeight - prevEl.offsetHeight - 58) : scroll.clientHeight) + 'px';
       scroll.appendChild(thinkingEl);
       setCopilotThinking(true);
+      scroll.scrollTo({ top: prevEl ? prevEl.offsetTop - 18 : 0, behavior: 'smooth' });
 
-      requestAnimationFrame(() => {
-        scroll.scrollTop = thinkingEl.offsetTop - 18;
-      });
-
-      const removeThinkingMargin = () => {
-        thinkingEl.style.marginBottom = '';
-        scroll.removeEventListener('scroll', removeThinkingMargin);
+      let onResizeFn = () => {};
+      scrollResizeObserver = new ResizeObserver(() => onResizeFn());
+      scrollResizeObserver.observe(scroll);
+      onResizeFn = () => {
+        if (scroll.contains(thinkingEl)) {
+          thinkingEl.style.height = (prevEl ? Math.max(0, scroll.clientHeight - prevEl.offsetHeight - 58) : scroll.clientHeight) + 'px';
+        }
+        scroll.scrollTo({ top: prevEl ? prevEl.offsetTop - 18 : 0, behavior: 'auto' });
       };
-      scroll.addEventListener('scroll', removeThinkingMargin);
 
       const stepsContainer = thinkingEl.querySelector('.thinking-steps');
       let stepIdx = 0;
+
+      function transformThinkingLabel() {
+        if (!scroll.contains(thinkingEl)) return;
+        const textSpan = thinkingEl.querySelector('.thinking-text');
+        const img = thinkingEl.querySelector('.thinking-label img');
+        const dots = thinkingEl.querySelector('.thinking-dots');
+        if (!textSpan) return;
+        dots.style.transition = 'opacity 0.2s';
+        dots.style.opacity = '0';
+        const newText = 'Reading KB';
+        let currentText = textSpan.textContent;
+        const deleteInterval = setInterval(() => {
+          if (!scroll.contains(thinkingEl)) { clearInterval(deleteInterval); return; }
+          if (currentText.length > 0) {
+            currentText = currentText.slice(0, -1);
+            textSpan.textContent = currentText;
+          } else {
+            clearInterval(deleteInterval);
+            img.src = 'icons/16px/Knowledge.svg';
+            img.width = 14; img.height = 14;
+            let typeIdx = 0;
+            const typeInterval = setInterval(() => {
+              if (!scroll.contains(thinkingEl)) { clearInterval(typeInterval); return; }
+              if (typeIdx < newText.length) {
+                textSpan.textContent += newText[typeIdx++];
+              } else {
+                clearInterval(typeInterval);
+                dots.style.opacity = '1';
+              }
+            }, 50);
+          }
+        }, 40);
+      }
+
+      const collectedSteps = [];
+
       function addNextStep() {
         if (!scroll.contains(thinkingEl)) return;
         if (stepIdx > 0) {
@@ -184,7 +366,9 @@ document.addEventListener('DOMContentLoaded', () => {
         stepEl.className = 'thinking-step';
         stepEl.innerHTML = `<div class="thinking-step-icon"></div><span class="thinking-step-text">${thinkingSteps[stepIdx]}</span>`;
         stepsContainer.appendChild(stepEl);
+        collectedSteps.push(thinkingSteps[stepIdx]);
         stepIdx++;
+        if (stepIdx === 3) setTimeout(transformThinkingLabel, 700);
         if (stepIdx < thinkingSteps.length) {
           currentStepTimer = setTimeout(addNextStep, 4000);
         } else {
@@ -195,37 +379,82 @@ document.addEventListener('DOMContentLoaded', () => {
             wrapper.innerHTML = html;
             const aiBlock = wrapper.firstElementChild;
             thinkingEl.replaceWith(aiBlock);
+            const aiSpacer = document.createElement('div');
+            aiSpacer.className = 'copilot-ai-spacer';
+            aiSpacer.style.flexShrink = '0';
+            function updateAiSpacer() {
+              if (!prevEl) { aiSpacer.style.height = '0'; return; }
+              aiSpacer.style.height = Math.max(0, scroll.clientHeight - prevEl.offsetHeight - aiBlock.offsetHeight - 78) + 'px';
+              updateCopilotBackToBottom();
+            }
+            updateAiSpacer();
+            scroll.appendChild(aiSpacer);
+            onResizeFn = () => {
+              if (!prevEl) { aiSpacer.style.height = '0'; return; }
+              aiSpacer.style.height = Math.max(0, scroll.clientHeight - prevEl.offsetHeight - aiBlock.offsetHeight - 78) + 'px';
+              scroll.scrollTo({ top: prevEl.offsetTop - 18, behavior: 'auto' });
+            };
             setCopilotThinking(false);
+            scroll.scrollTo({ top: prevEl ? prevEl.offsetTop - 18 : 0, behavior: 'smooth' });
 
             aiBlock.querySelectorAll('.btn-insert').forEach(btn => {
               btn.addEventListener('click', () => {
                 const img = btn.querySelector('img');
                 img.src = 'icons/16px/Check.svg';
                 setTimeout(() => { img.src = 'icons/16px/Copy.svg'; }, 4000);
+
+                const cardText = btn.closest('.card').querySelector('.card-body p').textContent;
+                const composerInput = document.querySelector('.composer-input');
+                if (composerInput) {
+                  composerInput.textContent = cardText;
+                  composerInput.dispatchEvent(new Event('input'));
+                  composerInput.focus();
+                }
               });
+            });
+
+            const detailsHeader = aiBlock.querySelector('.card-details-header');
+            const detailsBody = aiBlock.querySelector('.card-details-body');
+            const detailsBtn = detailsHeader.querySelector('button');
+            const detailsChevron = detailsBtn.querySelector('img');
+            detailsChevron.style.transition = 'transform 0.2s ease';
+            let detailsOpen = false;
+            detailsBtn.addEventListener('click', () => {
+              detailsOpen = !detailsOpen;
+              detailsOpen ? slideOpen(detailsBody, updateBackToBottom) : slideClose(detailsBody, updateBackToBottom);
+              detailsChevron.style.transform = detailsOpen ? 'rotate(90deg)' : '';
+              updateAiSpacer();
             });
 
             const reasoningEl = aiBlock.querySelector('.ai-reasoning');
             const reasoningMsg = aiBlock.querySelector('.reasoning-message');
             const aiCards = aiBlock.querySelector('.ai-cards');
 
+            reasoningMsg.innerHTML = reasoningText;
+
+            const reasoningBtn = reasoningEl.querySelector('button');
+            const chevronImg = reasoningBtn.querySelector('img');
+            chevronImg.style.transition = 'transform 0.2s ease';
+            let reasoningOpen = false;
+            reasoningBtn.addEventListener('click', () => {
+              reasoningOpen = !reasoningOpen;
+              reasoningOpen ? slideOpen(reasoningMsg, updateBackToBottom) : slideClose(reasoningMsg, updateBackToBottom);
+              chevronImg.style.transform = reasoningOpen ? 'rotate(90deg)' : '';
+              updateAiSpacer();
+            });
+
+            const aiMessage = aiBlock.querySelector('.ai-message');
+
             reasoningEl.style.transition = 'opacity 0.4s ease';
+            aiMessage.style.transition = 'opacity 0.4s ease';
             requestAnimationFrame(() => requestAnimationFrame(() => {
               reasoningEl.style.opacity = '1';
-              let i = 0;
-              function typeChar() {
-                if (i < reasoningText.length) {
-                  reasoningMsg.textContent += reasoningText[i++];
-                  scroll.scrollTop = scroll.scrollHeight;
-                  setTimeout(typeChar, 18);
-                } else {
-                  aiCards.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-                  aiCards.style.opacity = '1';
-                  aiCards.style.transform = 'translateY(0)';
-                  setTimeout(() => { scroll.scrollTop = scroll.scrollHeight; }, 500);
-                }
-              }
-              typeChar();
+              aiMessage.style.opacity = '1';
+              updateAiSpacer();
+              aiCards.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+              aiCards.style.opacity = '1';
+              aiCards.style.transform = 'translateY(0)';
+              scroll.scrollTo({ top: prevEl ? prevEl.offsetTop - 18 : 0, behavior: 'smooth' });
             }));
           }, 4000);
         }
@@ -237,6 +466,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const scroll = document.getElementById('copilot-scroll');
       startCopilotThinking(scroll);
     };
+
+    stopCopilotAutoThinking = stopCopilotThinking;
 
     function sendCopilotMessage() {
       const scroll = document.getElementById('copilot-scroll');
@@ -255,13 +486,8 @@ document.addEventListener('DOMContentLoaded', () => {
       msgEl.className = 'copilot-user-msg';
       msgEl.textContent = text;
       scroll.appendChild(msgEl);
-
-      startCopilotThinking(scroll);
-
-      requestAnimationFrame(() => {
-        const msgTop = msgEl.getBoundingClientRect().top - scroll.getBoundingClientRect().top + scroll.scrollTop;
-        scroll.scrollTop = msgTop - 18;
-      });
+      scroll.scrollTo({ top: Math.max(0, msgEl.offsetTop - 18), behavior: 'smooth' });
+      setTimeout(() => startCopilotThinking(scroll), 500);
       copilotEditable.innerHTML = '';
       isMultiline = false;
       copilotInput.classList.remove('multiline');
@@ -299,15 +525,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const backToBottom = document.querySelector('.composer-back-to-bottom');
   const backToBottomBtn = backToBottom && backToBottom.querySelector('button');
+  const composerEl = document.querySelector('.composer');
+  let chatWasAtBottom = true;
   function updateBackToBottom() {
     if (!chatScroll || !backToBottom) return;
     const atBottom = chatScroll.scrollHeight - chatScroll.scrollTop - chatScroll.clientHeight < 8;
     backToBottom.classList.toggle('is-visible', !atBottom);
+    if (atBottom && !chatWasAtBottom && composerEl) {
+      composerEl.classList.remove('is-nudge');
+      composerEl.offsetWidth;
+      composerEl.classList.add('is-nudge');
+      composerEl.addEventListener('animationend', () => composerEl.classList.remove('is-nudge'), { once: true });
+    }
+    chatWasAtBottom = atBottom;
   }
   if (chatScroll) chatScroll.addEventListener('scroll', updateBackToBottom);
   if (backToBottomBtn) backToBottomBtn.addEventListener('click', () => {
     chatScroll.scrollTo({ top: chatScroll.scrollHeight, behavior: 'smooth' });
   });
+  updateBackToBottom();
 
   const copilotBackToBottom = document.querySelector('.copilot-back-to-bottom');
   const copilotBackToBottomBtn = copilotBackToBottom && copilotBackToBottom.querySelector('button');
@@ -317,9 +553,11 @@ document.addEventListener('DOMContentLoaded', () => {
     copilotBackToBottom.classList.toggle('is-visible', !atBottom);
   }
   if (copilotScroll) copilotScroll.addEventListener('scroll', updateCopilotBackToBottom);
+  if (copilotScroll) new ResizeObserver(updateCopilotBackToBottom).observe(copilotScroll);
   if (copilotBackToBottomBtn) copilotBackToBottomBtn.addEventListener('click', () => {
     copilotScroll.scrollTo({ top: copilotScroll.scrollHeight, behavior: 'smooth' });
   });
+  updateCopilotBackToBottom();
 
   const toggle = document.querySelector('.toggle');
   const composer = document.querySelector('.composer');
@@ -403,6 +641,16 @@ document.addEventListener('DOMContentLoaded', () => {
     dialogSendBtn.addEventListener('click', sendDialogMessage);
   }
 
+  if (addNoteBtn) {
+    addNoteBtn.addEventListener('click', () => {
+      const text = composerInput.textContent.trim();
+      if (!text) return;
+      appendChatMessage('out', text, true);
+      composerInput.innerHTML = '';
+      composerInput.dispatchEvent(new Event('input'));
+    });
+  }
+
   // ── Render functions ────────────────────────────────────
   function renderDialog(c) {
     const chatScroll = document.getElementById('chat-scroll');
@@ -423,26 +671,8 @@ document.addEventListener('DOMContentLoaded', () => {
     chatScroll.scrollTop = chatScroll.scrollHeight;
 
     const copilotScroll = document.getElementById('copilot-scroll');
-    const d = copilotData[c.name];
-    if (copilotScroll && d) {
-      copilotScroll.innerHTML = CopilotContent(d);
-      copilotScroll.scrollTop = copilotScroll.scrollHeight;
-      copilotScroll.querySelectorAll('.btn-insert').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const img = btn.querySelector('img');
-          img.src = 'icons/16px/Check.svg';
-          setTimeout(() => { img.src = 'icons/16px/Copy.svg'; }, 4000);
-        });
-      });
-      copilotScroll.querySelectorAll('.card-details-header button').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const header = btn.closest('.card-details-header');
-          const isOpen = header.classList.toggle('is-open');
-          const img = btn.querySelector('img');
-          if (img) img.src = isOpen ? 'icons/16px/ChevronTop.svg' : 'icons/16px/ChevronRight.svg';
-        });
-      });
-    }
+    if (stopCopilotAutoThinking) stopCopilotAutoThinking();
+    if (copilotScroll) copilotScroll.innerHTML = '';
 
     const detailsPanel = document.getElementById('copilot-panel-details');
     const dd = detailsData[c.name];
