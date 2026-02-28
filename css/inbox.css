@@ -1568,6 +1568,56 @@ body:not(.is-loading) .content #dialog-loading {
   animation: composer-shake 0.35s ease;
 }
 
+.copilot-suggestions {
+  display: flex;
+  padding: 0 8px 8px;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  max-height: 200px;
+  opacity: 1;
+  transition: max-height 0.2s ease, opacity 0.15s ease, padding 0.2s ease;
+}
+
+.copilot-suggestions.is-hidden {
+  max-height: 0;
+  opacity: 0;
+  padding: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.copilot-suggestion > img {
+  filter: var(--icon-filter);
+}
+
+.copilot-suggestion {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  font-variant-numeric: lining-nums proportional-nums;
+  color: var(--content-tertiary);
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.1s ease;
+}
+
+.copilot-suggestion:hover {
+  background: var(--button-ghosthover);
+}
+
 
 /* ─── Details panel ─────────────────────────────────────── */
 #copilot-panel-details {

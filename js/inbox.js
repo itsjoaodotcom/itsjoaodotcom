@@ -455,6 +455,7 @@ document.addEventListener('DOMContentLoaded', () => {
               aiCards.style.opacity = '1';
               aiCards.style.transform = 'translateY(0)';
               scroll.scrollTo({ top: prevEl ? prevEl.offsetTop - 18 : 0, behavior: 'smooth' });
+              setTimeout(showSuggestions, 600);
             }));
           }, 4000);
         }
@@ -516,6 +517,40 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     copilotSendBtn.addEventListener('click', sendCopilotMessage);
+
+    // Suggestion chips
+    const suggestionsEl = document.querySelector('.copilot-suggestions');
+    const copilotScrollEl = document.getElementById('copilot-scroll');
+    function hideSuggestions() {
+      if (suggestionsEl) suggestionsEl.classList.add('is-hidden');
+    }
+    function showSuggestions() {
+      if (!suggestionsEl) return;
+      suggestionsEl.classList.remove('is-hidden');
+      if (copilotScrollEl) copilotScrollEl.addEventListener('scroll', hideSuggestions, { once: true });
+      copilotEditable.addEventListener('input', hideSuggestions, { once: true });
+    }
+    if (copilotScrollEl) copilotScrollEl.addEventListener('scroll', hideSuggestions, { once: true });
+    copilotEditable.addEventListener('input', hideSuggestions, { once: true });
+    if (suggestionsEl) {
+      suggestionsEl.querySelectorAll('.copilot-suggestion').forEach(btn => {
+        btn.addEventListener('click', () => {
+          copilotEditable.textContent = btn.textContent.trim();
+          copilotEditable.dispatchEvent(new Event('input'));
+          sendCopilotMessage();
+        });
+      });
+    }
+
+    document.querySelectorAll('.composer-right-default .btn-secondary, .composer-right-note .btn-secondary').forEach(btn => {
+      if (btn.textContent.trim() === 'Generate reply') {
+        btn.addEventListener('click', () => {
+          copilotEditable.textContent = 'Generate reply';
+          copilotEditable.dispatchEvent(new Event('input'));
+          sendCopilotMessage();
+        });
+      }
+    });
   }
 
   const chatScroll = document.querySelector('.chat-scroll');
