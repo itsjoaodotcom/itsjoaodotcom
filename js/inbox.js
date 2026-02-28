@@ -284,7 +284,62 @@ document.addEventListener('DOMContentLoaded', () => {
       if (scrollResizeObserver) { scrollResizeObserver.disconnect(); scrollResizeObserver = null; }
       const scroll = document.getElementById('copilot-scroll');
       const thinking = scroll.querySelector('.thinking-section');
-      if (thinking) thinking.remove();
+      if (!thinking) { setCopilotThinking(false); return; }
+
+      const prevEl = thinking.previousElementSibling;
+
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = `<div class="ai-block">
+        <div class="ai-reasoning">
+          <div>
+            <button class="btn btn-ghost btn-sm">Reasoning <img src="icons/16px/ChevronRight.svg" width="16" height="16" alt=""/></button>
+          </div>
+          <div class="reasoning-message"></div>
+        </div>
+        <div class="ai-message">
+          <p class="ai-skipped-label" style="color:var(--content-tertiary)">Answer skipped</p>
+        </div>
+        <div class="card-actions-left" style="padding-left:2px">
+          <button class="btn btn-ghost btn-icon"><img src="icons/16px/ThumbsUp.svg" width="16" height="16" alt=""/></button>
+          <button class="btn btn-ghost btn-icon"><img src="icons/16px/ThumbsDown.svg" width="16" height="16" alt=""/></button>
+          <button class="btn btn-ghost btn-icon ai-retry-btn"><img src="icons/16px/Retry.svg" width="16" height="16" alt=""/></button>
+        </div>
+      </div>`;
+      const skippedBlock = wrapper.firstElementChild;
+      thinking.replaceWith(skippedBlock);
+
+      const reasoningBtn = skippedBlock.querySelector('.ai-reasoning button');
+      const reasoningMsg = skippedBlock.querySelector('.reasoning-message');
+      const chevronImg = reasoningBtn.querySelector('img');
+      chevronImg.style.transition = 'transform 0.2s ease';
+      let reasoningOpen = false;
+      reasoningBtn.addEventListener('click', () => {
+        reasoningOpen = !reasoningOpen;
+        reasoningOpen ? slideOpen(reasoningMsg) : slideClose(reasoningMsg);
+        chevronImg.style.transform = reasoningOpen ? 'rotate(90deg)' : '';
+      });
+
+      skippedBlock.querySelector('.ai-retry-btn').addEventListener('click', () => {
+        const existingSpacer = scroll.querySelector('.copilot-ai-spacer');
+        if (existingSpacer) existingSpacer.remove();
+        skippedBlock.remove();
+        startCopilotThinking(scroll);
+      });
+
+      const existingSpacer = scroll.querySelector('.copilot-ai-spacer');
+      if (existingSpacer) existingSpacer.remove();
+      const aiSpacer = document.createElement('div');
+      aiSpacer.className = 'copilot-ai-spacer';
+      aiSpacer.style.flexShrink = '0';
+      const updateAiSpacer = () => {
+        if (!prevEl) { aiSpacer.style.height = '0'; return; }
+        aiSpacer.style.height = Math.max(0, scroll.clientHeight - prevEl.offsetHeight - skippedBlock.offsetHeight - 78) + 'px';
+        updateCopilotBackToBottom();
+      };
+      updateAiSpacer();
+      scroll.appendChild(aiSpacer);
+      scroll.scrollTo({ top: prevEl ? prevEl.offsetTop - 18 : 0, behavior: 'smooth' });
+
       setCopilotThinking(false);
     }
 
@@ -518,6 +573,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     copilotSendBtn.addEventListener('click', sendCopilotMessage);
 
+    window.tourSendCopilotMessage = function (text) {
+      copilotEditable.textContent = text;
+      copilotEditable.dispatchEvent(new Event('input'));
+      sendCopilotMessage();
+    };
+
     // Suggestion chips
     const suggestionsEl = document.querySelector('.copilot-suggestions');
     const copilotScrollEl = document.getElementById('copilot-scroll');
@@ -588,12 +649,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!chatScroll || !backToBottom) return;
     const atBottom = chatScroll.scrollHeight - chatScroll.scrollTop - chatScroll.clientHeight < 8;
     backToBottom.classList.toggle('is-visible', !atBottom);
-    if (atBottom && !chatWasAtBottom && composerEl) {
-      composerEl.classList.remove('is-nudge');
-      composerEl.offsetWidth;
-      composerEl.classList.add('is-nudge');
-      composerEl.addEventListener('animationend', () => composerEl.classList.remove('is-nudge'), { once: true });
-    }
     chatWasAtBottom = atBottom;
   }
   if (chatScroll) chatScroll.addEventListener('scroll', updateBackToBottom);

@@ -4,26 +4,84 @@
     {
       target: '.sidebar-nav',
       title: 'Nav-sidebar',
-      description: 'Padding +4px',
+      description: '- Padding +4px<br>- Background color Surface Secondary (#FAFAFA)<br>- Open/Collapse subtle animation<br>- When expanded, menu doesn\'t collapse others',
       position: 'right',
     },
     {
       target: '.snav-subitems',
       title: 'Subitems',
-      description: 'Gap: 1px<br>Background color: Surface Secondary (#FAFAFA)<br>Open/Collapse: subtle animation<br>When expanded, menu doesn\'t collapse others',
-      position: 'right',
-    },
-    {
-      target: '.snav-subitems',
-      title: 'Subitems',
-      description: 'Gap 1px',
+      description: '- Gap 1px',
       position: 'right',
     },
     {
       target: '.content',
       title: 'Main content',
-      description: 'Padding 6px top · right · bottom',
+      description: '- Padding 6px top · right · bottom',
       position: 'right',
+      onEnter: function () {
+        var firstItem = document.querySelector('.isb-item');
+        if (firstItem) firstItem.click();
+      },
+    },
+    {
+      target: '.chat-scroll',
+      title: 'Dialog',
+      description: '- Background color Surface Secondary (#FAFAFA)<br>- Hour color same as inbox list item<br>- Message hour only appears on hover',
+      position: 'left',
+      onEnter: function () {
+        var btn = document.querySelector('.composer-back-to-bottom');
+        if (btn) btn.classList.add('is-visible');
+        var msg = document.querySelector('.msg-wrapper.outbound');
+        if (msg) msg.classList.add('tour-show-time');
+      },
+      onLeave: function () {
+        document.querySelectorAll('.tour-show-time').forEach(function (el) {
+          el.classList.remove('tour-show-time');
+        });
+        var btn = document.querySelector('.composer-back-to-bottom');
+        if (btn) btn.classList.remove('is-visible');
+      },
+    },
+    {
+      target: '.system-alert',
+      title: 'Dialog',
+      description: '- Alert font size changed to 14px<br>- Tag font color changed to content-tertiary',
+      position: 'bottom',
+    },
+    {
+      target: '.btn-split',
+      title: 'Dialog',
+      description: '- Send button always default state<br>- Send button click when composer is empty — error animation',
+      position: 'top',
+    },
+    {
+      target: '.composer-wrap',
+      title: 'Composer scroll animation',
+      description: '- Scroll up shows subtle animation',
+      position: 'top',
+    },
+    {
+      target: '#copilot-composer',
+      title: 'Copilot',
+      description: '- Composer single line vs multiple lines<br>- Button always active + empty button error<br>- Suggestions disappear when the user scrolls<br>- Thinking with icon, Reading Knowledge Base icon and dots animation<br>- Thinking step by step with typing animation',
+      position: 'left',
+      onLeave: function () {
+        if (typeof window.tourSendCopilotMessage === 'function') {
+          window.tourSendCopilotMessage('Generate reply');
+        }
+      },
+    },
+    {
+      target: '.ai-cards',
+      title: 'Copilot',
+      description: '- Card surface secondary background color<br>- Bottom padding header 8px<br>- Details in a dropdown (removed info button)',
+      position: 'left',
+    },
+    {
+      target: '#copilot-scroll',
+      title: 'Copilot',
+      description: '- Most recent message always appears on top',
+      position: 'left',
     },
   ];
 
@@ -53,6 +111,11 @@
     active = false;
     spotlightEl?.remove(); spotlightEl = null;
     tooltipEl?.remove();   tooltipEl = null;
+    document.querySelectorAll('.tour-show-time').forEach(function (el) {
+      el.classList.remove('tour-show-time');
+    });
+    var btn = document.querySelector('.composer-back-to-bottom');
+    if (btn) btn.classList.remove('is-visible');
   }
 
   window.startTour = start;
@@ -61,6 +124,7 @@
   // ─── Render ────────────────────────────────────────────
   function render() {
     const step   = steps[currentStep];
+    if (step.onEnter) step.onEnter();
     const target = document.querySelector(step.target);
 
     if (!target) {
@@ -69,7 +133,7 @@
     }
 
     const rect    = target.getBoundingClientRect();
-    const PAD     = 4;
+    const PAD     = -6;
     const isFirst = currentStep === 0;
     const isLast  = currentStep === steps.length - 1;
 
@@ -81,29 +145,26 @@
 
     // Tooltip
     tooltipEl.innerHTML = `
-      <div class="tour-header">
-        <div class="tour-header-text">
-          <span class="tour-step-label">Step ${currentStep + 1} of ${steps.length}</span>
-          <h3 class="tour-title">${step.title}</h3>
+      <div class="tour-summary">
+        <div class="tour-summary-label">
+          <span>Change</span>
+          <span class="tour-counter">
+            <span class="tour-counter-current">${currentStep + 1}</span><span class="tour-counter-sep">/</span><span class="tour-counter-total">${steps.length}</span>
+          </span>
         </div>
-        <button class="tour-close" aria-label="Close tour">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-          </svg>
-        </button>
-      </div>
-      <p class="tour-description">${step.description}</p>
-      <div class="tour-footer">
-        <div class="tour-dots">
-          ${steps.map((_, i) => `<span class="tour-dot${i === currentStep ? ' active' : ''}"></span>`).join('')}
-        </div>
-        <div class="tour-actions">
+        <div class="tour-summary-actions">
           ${!isFirst ? '<button class="btn btn-ghost btn-sm tour-prev">Back</button>' : ''}
           ${isLast
-            ? '<button class="btn btn-accent btn-sm tour-finish">Done</button>'
-            : '<button class="btn btn-accent btn-sm tour-next">Next</button>'
+            ? '<button class="btn btn-secondary btn-sm tour-finish">Done</button>'
+            : '<button class="btn btn-secondary btn-sm tour-next">Next</button>'
           }
+          <button class="btn btn-ghost btn-icon btn-sm tour-close" aria-label="Close tour"><img src="icons/16px/Cross.svg" width="16" height="16" alt=""/></button>
         </div>
+      </div>
+      <div class="tour-divider"></div>
+      <div class="tour-body">
+        <p class="tour-title">${step.title}</p>
+        <p class="tour-description">${step.description}</p>
       </div>
     `;
 
@@ -154,11 +215,13 @@
 
   // ─── Navigation ────────────────────────────────────────
   function next() {
+    steps[currentStep]?.onLeave?.();
     if (currentStep < steps.length - 1) { currentStep++; render(); }
     else end();
   }
 
   function prev() {
+    steps[currentStep]?.onLeave?.();
     if (currentStep > 0) { currentStep--; render(); }
   }
 
