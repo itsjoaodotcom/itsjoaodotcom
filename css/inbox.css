@@ -1078,6 +1078,24 @@ body:not(.is-loading) .content #dialog-loading {
   justify-content: center;
 }
 
+.copilot-empty-state svg {
+  --illus-skeleton:     rgba(0, 0, 0, 0.08);
+  --illus-border:       rgba(0, 0, 0, 0.04);
+  --illus-card-bg:      #fafafc;
+  --illus-icon:         #87888a;
+  --illus-dark-surface: #010103;
+  --illus-light:        #ffffff;
+}
+
+html.dark .copilot-empty-state svg {
+  --illus-skeleton:     rgba(255, 255, 255, 0.08);
+  --illus-border:       rgba(255, 255, 255, 0.04);
+  --illus-card-bg:      #3b3c3d;
+  --illus-icon:         #87888a;
+  --illus-dark-surface: #fafafc;
+  --illus-light:        #262728;
+}
+
 #copilot-scroll:empty {
   flex: 0;
   padding: 0;

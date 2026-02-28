@@ -308,8 +308,7 @@ html.dark {
 .theme-switcher {
   position: fixed;
   bottom: 32px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 40px;
   z-index: 9999;
   display: flex;
   gap: 2px;
