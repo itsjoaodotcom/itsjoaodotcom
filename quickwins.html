@@ -358,6 +358,16 @@
     // Chart.js
     (() => {
       const ctx = document.getElementById('qw-chart-canvas');
+      const isDark = document.documentElement.classList.contains('dark');
+      const lineColor = isDark ? '#7B8EC8' : '#3D4F8F';
+      const tickColor = isDark ? '#87888a' : '#9CA3AF';
+      const gridColor = isDark ? 'rgba(255,255,255,0.06)' : '#E5E7EB';
+      const tooltipBg = isDark ? '#2c2d2e' : '#fff';
+      const tooltipText = isDark ? '#cccdd0' : '#010103';
+      const tooltipBorder = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
+      const surfacePrimary = isDark ? '#1d1e1f' : '#fff';
+      const fontFamily = "'SF Pro Text', -apple-system, BlinkMacSystemFont, system-ui, sans-serif";
+
       const labels = ['2025-12-02','2025-12-04','2025-12-06','2025-12-08','2025-12-10','2025-12-12','2025-12-14','2025-12-16','2025-12-18','2025-12-20','2025-12-22','2025-12-24','2025-12-26','2025-12-28','2025-12-30'];
       const data = [830, 1050, 520, 1150, 870, 900, 420, 1150, 780, 950, 360, 740, 310, 780, 500];
 
@@ -367,13 +377,13 @@
           labels,
           datasets: [{
             data,
-            borderColor: '#3D4F8F',
+            borderColor: lineColor,
             borderWidth: 2,
             tension: 0.4,
             pointRadius: 0,
             pointHoverRadius: 5,
-            pointHoverBackgroundColor: '#3D4F8F',
-            pointHoverBorderColor: '#fff',
+            pointHoverBackgroundColor: lineColor,
+            pointHoverBorderColor: surfacePrimary,
             pointHoverBorderWidth: 2,
             fill: false
           }]
@@ -388,15 +398,15 @@
           plugins: {
             legend: { display: false },
             tooltip: {
-              backgroundColor: '#fff',
-              titleColor: '#010103',
-              bodyColor: '#010103',
-              borderColor: 'rgba(0,0,0,0.08)',
+              backgroundColor: tooltipBg,
+              titleColor: tooltipText,
+              bodyColor: tooltipText,
+              borderColor: tooltipBorder,
               borderWidth: 1,
               padding: { top: 8, bottom: 8, left: 12, right: 12 },
               cornerRadius: 8,
-              titleFont: { family: "'SF Pro Text', -apple-system, BlinkMacSystemFont, system-ui, sans-serif", size: 13, weight: '500' },
-              bodyFont: { family: "'SF Pro Text', -apple-system, BlinkMacSystemFont, system-ui, sans-serif", size: 13 },
+              titleFont: { family: fontFamily, size: 13, weight: '500' },
+              bodyFont: { family: fontFamily, size: 13 },
               displayColors: false,
               callbacks: {
                 title: items => items[0].label,
@@ -408,8 +418,8 @@
             x: {
               grid: { display: false },
               ticks: {
-                color: '#9CA3AF',
-                font: { size: 11, family: "'SF Pro Text', -apple-system, BlinkMacSystemFont, system-ui, sans-serif" },
+                color: tickColor,
+                font: { size: 11, family: fontFamily },
                 maxRotation: 45,
                 minRotation: 45
               },
@@ -420,19 +430,19 @@
               max: 1200,
               ticks: {
                 stepSize: 300,
-                color: '#9CA3AF',
-                font: { size: 11, family: "'SF Pro Text', -apple-system, BlinkMacSystemFont, system-ui, sans-serif" }
+                color: tickColor,
+                font: { size: 11, family: fontFamily }
               },
               grid: {
-                color: '#E5E7EB',
+                color: gridColor,
                 lineWidth: 0.5
               },
               border: { display: false },
               title: {
                 display: true,
                 text: 'Interactions volume',
-                color: '#9CA3AF',
-                font: { size: 11, family: "'SF Pro Text', -apple-system, BlinkMacSystemFont, system-ui, sans-serif" }
+                color: tickColor,
+                font: { size: 11, family: fontFamily }
               }
             }
           }

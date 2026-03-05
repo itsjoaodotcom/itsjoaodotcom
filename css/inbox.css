@@ -2353,7 +2353,7 @@ body.qw-body textarea {
 .qw-ask-bg {
   position: absolute;
   inset: 60px -4px;
-  background: var(--surface-infosubtle, #e6ebff);
+  background: var(--surface-infosubtle);
   border-radius: 12px;
 }
 
@@ -2362,8 +2362,8 @@ body.qw-body textarea {
   align-items: center;
   width: 100%;
   position: relative;
-  background: var(--surface-primary, #fff);
-  border: 1px solid var(--content-accent, #4061d8);
+  background: var(--surface-primary);
+  border: 1px solid var(--stroke-accent);
   border-radius: 10px;
   box-shadow: 0 -2px 40px 0 rgba(0,0,0,0.1);
 }
@@ -2392,12 +2392,12 @@ body.qw-body textarea {
   font-size: 17px;
   line-height: 24px;
   letter-spacing: -0.17px;
-  color: var(--content-primary, #010103);
+  color: var(--content-primary);
   width: 100%;
 }
 
 .qw-ask-input input::placeholder {
-  color: var(--content-tertiary, #87888a);
+  color: var(--content-tertiary);
 }
 
 .qw-ask-actions {
@@ -2410,8 +2410,8 @@ body.qw-body textarea {
   align-items: center;
   padding: 6px 8px;
   border-radius: 6px;
-  border: 1px solid rgba(0,0,0,0.04);
-  background: var(--button-secondary, #fff);
+  border: 1px solid var(--stroke-primary);
+  background: var(--button-secondary);
   box-shadow: 0 3px 6px 0 rgba(0,0,0,0.04);
   cursor: pointer;
 }
@@ -2428,7 +2428,7 @@ body.qw-body textarea {
   font-family: inherit;
   font-size: 15px;
   line-height: 20px;
-  color: var(--content-secondary, #262728);
+  color: var(--content-secondary);
   white-space: nowrap;
 }
 
@@ -2438,8 +2438,8 @@ body.qw-body textarea {
   align-items: center;
   gap: 6px;
   padding: 6px 10px;
-  background: var(--surface-primary, #fff);
-  border: 1px solid rgba(0,0,0,0.04);
+  background: var(--surface-primary);
+  border: 1px solid var(--stroke-primary);
   border-radius: 8px;
   box-shadow: 0 3px 6px 0 rgba(0,0,0,0.04);
   cursor: pointer;
@@ -2447,7 +2447,7 @@ body.qw-body textarea {
   font-size: 15px;
   font-weight: 500;
   line-height: 20px;
-  color: var(--content-primary, #010103);
+  color: var(--content-primary);
 }
 
 .qw-date-btn img {
@@ -2468,7 +2468,7 @@ body.qw-body textarea {
 .qw-heading {
   font-size: 21px;
   font-weight: 500;
-  color: var(--content-primary, #000);
+  color: var(--content-primary);
   line-height: 28px;
   margin: 0 0 16px;
 }
@@ -2481,23 +2481,22 @@ body.qw-body textarea {
 
 .qw-insight-card {
   flex: 1 0 0;
-  background: var(--surface-primary, #fff);
-  border: 1px solid rgba(0,0,0,0.08);
+  background: var(--surface-primary);
+  border: 1px solid var(--stroke-secondarystrong);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   transition: background 0.15s, border-color 0.15s;
 }
 .qw-insight-card:hover {
-  background: var(--surface-primaryhover, rgba(0,0,0,0.02));
-  border-color: rgba(0,0,0,0.08);
+  background: var(--surface-primaryhover);
 }
 
 .qw-insight-label {
   padding: 12px 16px 0 16px;
   font-size: 15px;
   font-weight: 500;
-  color: var(--content-tertiary, #87888a);
+  color: var(--content-tertiary);
   line-height: 20px;
 }
 
@@ -2520,12 +2519,12 @@ body.qw-body textarea {
 }
 
 .qw-insight-badge.blue {
-  background: rgba(230,235,255,0.4);
+  background: var(--utilities-surface-bluesubtle);
 }
 
 .qw-insight-badge.orange {
-  background: rgba(255,242,230,0.4);
-  border: 1px solid #fff2e6;
+  background: var(--utilities-surface-orangesubtle);
+  border: 1px solid var(--utilities-surface-orangesubtle);
 }
 
 .qw-insight-badge img {
@@ -2537,7 +2536,7 @@ body.qw-body textarea {
 .qw-insight-number {
   font-size: 20px;
   font-weight: 600;
-  color: var(--content-primary, #010103);
+  color: var(--content-primary);
   line-height: 24px;
 }
 
@@ -2556,8 +2555,8 @@ body.qw-body textarea {
 
 .qw-topic-card {
   flex: 1 0 0;
-  background: var(--surface-primary, #fff);
-  border: 1px solid rgba(0,0,0,0.08);
+  background: var(--surface-primary);
+  border: 1px solid var(--stroke-secondarystrong);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -2582,7 +2581,7 @@ body.qw-body textarea {
 }
 
 .qw-topic-badge.blue {
-  background: rgba(230,235,255,0.4);
+  background: var(--utilities-surface-bluesubtle);
 }
 
 .qw-topic-badge img {
@@ -2594,7 +2593,7 @@ body.qw-body textarea {
 .qw-topic-title {
   font-size: 17px;
   font-weight: 500;
-  color: var(--content-secondary, #262728);
+  color: var(--content-secondary);
   line-height: 24px;
   letter-spacing: -0.34px;
   flex: 1;
@@ -2608,14 +2607,14 @@ body.qw-body textarea {
   border-radius: 6px;
   font-size: 15px;
   font-weight: 400;
-  color: var(--content-secondary, #262728);
+  color: var(--content-secondary);
   text-decoration: none;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
 .qw-topic-overview:hover {
-  background: rgba(0,0,0,0.04);
+  background: var(--surface-tint);
 }
 
 .qw-topic-overview span {
@@ -2644,7 +2643,7 @@ body.qw-body textarea {
   font-weight: 400;
   line-height: 20px;
   letter-spacing: -0.375px;
-  color: var(--content-secondary, #262728);
+  color: var(--content-secondary);
   text-decoration: none;
 }
 
@@ -2654,11 +2653,11 @@ body.qw-body textarea {
 }
 
 .qw-topic-item:hover {
-  background: rgba(0,0,0,0.04);
+  background: var(--surface-tint);
 }
 
 .qw-topic-item.highlighted {
-  background: rgba(0,0,0,0.04);
+  background: var(--surface-tint);
 }
 
 .qw-topic-item img {
@@ -2684,7 +2683,7 @@ body.qw-body textarea {
   font-size: 15px;
   font-weight: 400;
   line-height: 20px;
-  color: var(--content-tertiary, #87888a);
+  color: var(--content-tertiary);
 }
 
 .qw-topic-more span {
@@ -2692,7 +2691,7 @@ body.qw-body textarea {
 }
 
 .qw-topic-more:hover {
-  background: rgba(0,0,0,0.04);
+  background: var(--surface-tint);
 }
 
 .qw-topic-more img {
@@ -2714,8 +2713,8 @@ body.qw-body textarea {
 
 /* ── Chart section ───────────────────────────────────── */
 .qw-chart-section {
-  background: var(--surface-primary, #fff);
-  border: 1px solid rgba(0,0,0,0.08);
+  background: var(--surface-primary);
+  border: 1px solid var(--stroke-secondarystrong);
   border-radius: 10px;
   overflow: clip;
   display: flex;
@@ -2726,7 +2725,7 @@ body.qw-body textarea {
 .qw-chart-header {
   display: flex;
   align-items: flex-start;
-  border-bottom: 1px solid rgba(0,0,0,0.08);
+  border-bottom: 1px solid var(--stroke-secondarystrong);
 }
 
 .qw-chart-tabs {
@@ -2745,14 +2744,14 @@ body.qw-body textarea {
   font-weight: 400;
   line-height: 20px;
   letter-spacing: -0.375px;
-  color: var(--content-tertiary, #87888a);
+  color: var(--content-tertiary);
   cursor: pointer;
   padding: 6px 0 10px;
   position: relative;
 }
 
 .qw-chart-tab.active {
-  color: var(--content-secondary, #262728);
+  color: var(--content-secondary);
 }
 
 .qw-chart-tab.active::after {
@@ -2762,7 +2761,7 @@ body.qw-body textarea {
   right: -1px;
   bottom: -1px;
   height: 1px;
-  background: var(--content-accent, #4061d8);
+  background: var(--content-accent);
   border-radius: 2px;
 }
 
@@ -2782,14 +2781,14 @@ body.qw-body textarea {
   font-size: 15px;
   font-weight: 400;
   line-height: 20px;
-  color: var(--content-secondary, #262728);
+  color: var(--content-secondary);
   cursor: pointer;
   padding: 6px 8px;
   border-radius: 6px;
 }
 
 .qw-chart-action:hover {
-  background: rgba(0,0,0,0.04);
+  background: var(--surface-tint);
 }
 
 .qw-chart-action img {
@@ -2828,14 +2827,14 @@ body.qw-body textarea {
   font-size: 15px;
   font-weight: 400;
   line-height: 20px;
-  color: var(--content-tertiary, #87888a);
+  color: var(--content-tertiary);
   cursor: pointer;
   padding: 6px 8px;
   border-radius: 6px;
 }
 
 .qw-chart-dropdown:hover {
-  background: rgba(0,0,0,0.04);
+  background: var(--surface-tint);
 }
 
 .qw-chart-dropdown span {
@@ -2845,7 +2844,7 @@ body.qw-body textarea {
 
 .qw-chart-dropdown strong {
   font-weight: 400;
-  color: var(--content-secondary, #262728);
+  color: var(--content-secondary);
 }
 
 .qw-chart-dropdown img {
@@ -2861,8 +2860,8 @@ body.qw-body textarea {
   align-items: center;
   width: 270px;
   padding: 2px;
-  background: rgba(0,0,0,0.02);
-  border: 1px solid rgba(0,0,0,0.04);
+  background: var(--surface-tint);
+  border: 1px solid var(--stroke-primary);
   border-radius: 6px;
   margin: 16px 16px 0 0;
 }
@@ -2874,8 +2873,8 @@ body.qw-body textarea {
   left: 2px;
   width: calc((100% - 4px) / 3);
   height: calc(100% - 4px);
-  background: var(--surface-primary, #fff);
-  border: 1px solid rgba(0,0,0,0.04);
+  background: var(--surface-primary);
+  border: 1px solid var(--stroke-primary);
   border-radius: 4px;
   box-shadow: 0 3px 6px 0 rgba(0,0,0,0.04);
   transform: translateX(calc(var(--toggle-index, 0) * 100%));
@@ -2896,7 +2895,7 @@ body.qw-body textarea {
   font-size: 13px;
   font-weight: 400;
   line-height: 16px;
-  color: rgba(0,0,0,0.5);
+  color: var(--content-tertiary);
   cursor: pointer;
   position: relative;
   z-index: 1;
@@ -2908,7 +2907,7 @@ body.qw-body textarea {
 }
 
 .qw-period-btn.active {
-  color: var(--content-primary, #010103);
+  color: var(--content-primary);
 }
 
 /* Chart legend & area */
@@ -2926,14 +2925,14 @@ body.qw-body textarea {
   gap: 6px;
   font-size: 12px;
   font-weight: 400;
-  color: #595959;
+  color: var(--content-tertiary);
 }
 
 .qw-legend-line {
   display: inline-block;
   width: 20px;
   height: 0;
-  border-top: 2px solid #111118;
+  border-top: 2px solid var(--content-primary);
 }
 
 .qw-legend-item.previous .qw-legend-line {
@@ -2945,5 +2944,19 @@ body.qw-body textarea {
   width: 100%;
   height: 280px;
   padding: 0 16px 16px;
+}
+
+/* ── Dark mode icon filter override ─────────────────── */
+html.dark .qw-ask-input img,
+html.dark .qw-ask-filter-btn img,
+html.dark .qw-date-btn img,
+html.dark .qw-insight-badge img,
+html.dark .qw-topic-badge img,
+html.dark .qw-topic-overview img,
+html.dark .qw-topic-item img,
+html.dark .qw-topic-more img,
+html.dark .qw-chart-action img,
+html.dark .qw-chart-dropdown img {
+  filter: brightness(0) invert(1) brightness(0.7);
 }
 
