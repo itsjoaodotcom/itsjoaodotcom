@@ -97,7 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
     composerInput.addEventListener('input', () => {
       const isEmpty = composerInput.textContent.trim() === '';
       if (isEmpty) composerInput.innerHTML = '';
-      if (addNoteBtn) addNoteBtn.disabled = isEmpty;
     });
 
     composerInput.addEventListener('keydown', (e) => {
@@ -106,7 +105,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const isNote = composerInput.closest('.composer').classList.contains('internal-note');
         if (isNote) {
           const text = composerInput.textContent.trim();
-          if (!text) return;
+          if (!text) {
+            const composer = composerInput.closest('.composer');
+            composer.classList.remove('is-shake');
+            composer.offsetWidth;
+            composer.classList.add('is-shake');
+            return;
+          }
           appendChatMessage('out', text, true);
           composerInput.innerHTML = '';
           composerInput.dispatchEvent(new Event('input'));
@@ -756,7 +761,13 @@ document.addEventListener('DOMContentLoaded', () => {
   if (addNoteBtn) {
     addNoteBtn.addEventListener('click', () => {
       const text = composerInput.textContent.trim();
-      if (!text) return;
+      if (!text) {
+        const composer = composerInput.closest('.composer');
+        composer.classList.remove('is-shake');
+        composer.offsetWidth;
+        composer.classList.add('is-shake');
+        return;
+      }
       appendChatMessage('out', text, true);
       composerInput.innerHTML = '';
       composerInput.dispatchEvent(new Event('input'));
