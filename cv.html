@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Joao — CV</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background: #f0efed;
+      color: #1a1a1a;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── Status Bar ─────────────────────────────────── */
+    .status-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 24px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #1a1a1a;
+      background: #f0efed;
+    }
+
+    .status-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-signal {
+      display: flex;
+      align-items: flex-end;
+      gap: 1.5px;
+      height: 12px;
+    }
+
+    .status-signal span {
+      display: block;
+      width: 3px;
+      background: #1a1a1a;
+      border-radius: 1px;
+    }
+
+    .status-signal span:nth-child(1) { height: 4px; }
+    .status-signal span:nth-child(2) { height: 6px; }
+    .status-signal span:nth-child(3) { height: 9px; }
+    .status-signal span:nth-child(4) { height: 12px; }
+
+    .status-battery {
+      width: 24px;
+      height: 12px;
+      border-radius: 3px;
+      background: #3ecf8e;
+      position: relative;
+    }
+
+    .status-battery::after {
+      content: '';
+      position: absolute;
+      right: -3px;
+      top: 3px;
+      width: 2px;
+      height: 6px;
+      background: #1a1a1a;
+      border-radius: 0 1px 1px 0;
+      opacity: 0.3;
+    }
+
+    /* ── Hero ────────────────────────────────────────── */
+    .hero {
+      padding: 120px 24px 160px;
+      text-align: center;
+    }
+
+    .hero-tagline {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 400;
+      line-height: 1.25;
+      max-width: 720px;
+      margin: 0 auto;
+      color: #1a1a1a;
+    }
+
+    .hero-tagline em {
+      font-style: italic;
+      font-weight: 700;
+    }
+
+    .hero-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(72px, 15vw, 180px);
+      font-weight: 400;
+      line-height: 1;
+      margin-top: 160px;
+      color: #1a1a1a;
+    }
+
+    .hero-brand em {
+      font-style: italic;
+    }
+
+    /* ── Section shared ─────────────────────────────── */
+    .section {
+      padding: 80px 24px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 400;
+      font-style: italic;
+      margin-bottom: 48px;
+      color: #1a1a1a;
+    }
+
+    /* ── Experience ──────────────────────────────────── */
+    .experience-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .experience-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0 40px;
+      padding: 32px 0;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .experience-item:last-child {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .experience-dates {
+      font-size: 14px;
+      color: #888;
+      white-space: nowrap;
+      padding-top: 4px;
+      min-width: 100px;
+    }
+
+    .experience-dates span {
+      margin: 0 6px;
+    }
+
+    .experience-content {
+      max-width: 540px;
+    }
+
+    .experience-role {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a1a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .experience-company {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+    }
+
+    .experience-company-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .experience-description {
+      font-size: 14px;
+      line-height: 1.65;
+      color: #888;
+      margin-top: 8px;
+    }
+
+    /* ── Work ────────────────────────────────────────── */
+    .work-section {
+      padding: 80px 24px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .work-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 80px;
+      margin-bottom: 0;
+    }
+
+    .work-list {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .work-item {
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px dashed rgba(0, 0, 0, 0.12);
+      gap: 32px;
+    }
+
+    .work-item:first-child {
+      border-top: 1px dashed rgba(0, 0, 0, 0.12);
+    }
+
+    .work-year {
+      font-size: 14px;
+      color: #888;
+    }
+
+    .work-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .work-client {
+      font-size: 14px;
+      color: #888;
+      text-align: right;
+    }
+
+    /* ── About ───────────────────────────────────────── */
+    .about-section {
+      padding: 80px 24px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .about-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .about-text p {
+      font-size: 16px;
+      line-height: 1.7;
+      color: #1a1a1a;
+    }
+
+    .about-text p + p {
+      margin-top: 24px;
+    }
+
+    /* ── Footer ──────────────────────────────────────── */
+    .footer {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+      border-top: 1px dashed rgba(0, 0, 0, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer a {
+      color: #1a1a1a;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-size: 14px;
+      color: #1a1a1a;
+    }
+
+    /* ── Cursor decoration ───────────────────────────── */
+    .cursor-pen {
+      position: fixed;
+      bottom: 40px;
+      left: 40px;
+      font-size: 28px;
+      color: #1a1a1a;
+      pointer-events: none;
+      opacity: 0.7;
+      transform: rotate(-15deg);
+    }
+
+    /* ── Responsive ──────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero { padding: 80px 20px 100px; }
+      .hero-brand { margin-top: 100px; }
+
+      .experience-item {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+
+      .experience-dates {
+        padding-top: 0;
+      }
+
+      .work-header {
+        flex-direction: column;
+        gap: 32px;
+      }
+
+      .work-item {
+        grid-template-columns: 60px 1fr auto;
+        gap: 16px;
+      }
+
+      .about-layout {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .footer {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+      }
+
+      .section, .work-section, .about-section, .footer {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <div class="status-bar-left">
+      <span id="status-datetime"></span>
+    </div>
+    <div class="status-bar-right">
+      <div class="status-signal">
+        <span></span><span></span><span></span><span></span>
+      </div>
+      <div class="status-battery"></div>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1 class="hero-tagline">
+      Designer from <strong>Portugal</strong>,<br>
+      crafting products that <em>make</em><br>
+      complexity <em>feel simple</em>.
+    </h1>
+    <div class="hero-brand">itsjoao<em>dotcom</em></div>
+  </section>
+
+  <!-- Experience -->
+  <section class="section">
+    <div class="experience-list">
+
+      <div class="experience-item">
+        <div class="experience-dates">2024 <span>&middot;</span> NOW</div>
+        <div class="experience-content">
+          <div class="experience-role">Freelancer</div>
+          <p class="experience-description">Responsible for designing the platform's user experience and interface, as well as the marketing website. Developed and implemented the company's visual identity, ensuring brand consistency across all digital touchpoints.</p>
+        </div>
+      </div>
+
+      <div class="experience-item">
+        <div class="experience-dates">2021 <span>&middot;</span> 2023</div>
+        <div class="experience-content">
+          <div class="experience-role">
+            Head of Design
+            <span class="experience-company">
+              <span class="experience-company-icon" style="background: #4a6cf7;">B</span>
+              Bordisport
+            </span>
+          </div>
+          <p class="experience-description">Led the design team across all brand touchpoints, from digital experiences to physical product design. Oversaw the creation of performance sportswear collections and built the brand's e-commerce presence from the ground up.</p>
+        </div>
+      </div>
+
+      <div class="experience-item">
+        <div class="experience-dates">2020 <span>&middot;</span> 2021</div>
+        <div class="experience-content">
+          <div class="experience-role">
+            Head of Design
+            <span class="experience-company">
+              <span class="experience-company-icon" style="background: #3b82f6;">C</span>
+              Concealed
+            </span>
+          </div>
+          <p class="experience-description">Lead the design team across web apps, desktop software and corporate websites. Defined design systems and UX strategies to ensure consistency and scalability. Worked closely with the development team to streamline implementation and bridge vision with execution across platforms.</p>
+        </div>
+      </div>
+
+      <div class="experience-item">
+        <div class="experience-dates">2020 <span>&middot;</span> 2020</div>
+        <div class="experience-content">
+          <div class="experience-role">
+            Product Designer
+            <span class="experience-company">
+              <span class="experience-company-icon" style="background: #3b82f6;">W</span>
+              Weasy
+            </span>
+          </div>
+          <p class="experience-description">Designed e-commerce templates and corporate website layouts, focusing on usability, responsiveness and scalable design systems. Contributed to the evolution of the platform by aligning user needs with technical constraints and business goals.</p>
+        </div>
+      </div>
+
+      <div class="experience-item">
+        <div class="experience-dates">2017 <span>&middot;</span> 2019</div>
+        <div class="experience-content">
+          <div class="experience-role">
+            Head of Design
+            <span class="experience-company">
+              <span class="experience-company-icon" style="background: #22c55e;">S</span>
+              Spar
+            </span>
+          </div>
+          <p class="experience-description">Oversaw all design outputs to ensure alignment with brand guidelines and business objectives. Responsible for maintaining visual consistency across digital and print assets, adapting creative solutions to meet the evolving needs of the brand.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Work -->
+  <section class="work-section">
+    <div class="work-header">
+      <h2 class="section-title">/work</h2>
+      <div class="work-list">
+        <div class="work-item">
+          <span class="work-year">2025</span>
+          <span class="work-name">Website</span>
+          <span class="work-client">Clarity</span>
+        </div>
+        <div class="work-item">
+          <span class="work-year">2025</span>
+          <span class="work-name">Branding</span>
+          <span class="work-client">Clarity</span>
+        </div>
+        <div class="work-item">
+          <span class="work-year">2021</span>
+          <span class="work-name">Web App</span>
+          <span class="work-client">You-ship</span>
+        </div>
+        <div class="work-item">
+          <span class="work-year">2021</span>
+          <span class="work-name">Marketing Website</span>
+          <span class="work-client">You-ship</span>
+        </div>
+        <div class="work-item">
+          <span class="work-year">2021</span>
+          <span class="work-name">Mobile App</span>
+          <span class="work-client">You-ship</span>
+        </div>
+        <div class="work-item">
+          <span class="work-year">2020</span>
+          <span class="work-name">Desktop App</span>
+          <span class="work-client">SimMarket</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="about-section">
+    <div class="about-layout">
+      <h2 class="section-title">/about</h2>
+      <div class="about-text">
+        <p>I'm a Portuguese Designer based in Porto with over a decade of experience in digital design. Starting my career at 16, I've developed an approach that balances strategic thinking with high-quality visual execution, creating products that are both functional and aesthetically refined.</p>
+        <p>I focus on UX/UI, turning complex challenges into clear and intuitive experiences. Alongside this, I bring strong visual design skills that ensure interfaces feel engaging, consistent, and aligned with brand identity. I thrive in collaborative environments where ownership, communication, and user focus are key to achieving impactful results.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <a href="mailto:hello@itsjoao.com">hello@itsjoao.com</a>
+    <div class="footer-links">
+      <a href="#">LinkedIn</a>
+      <a href="#">Dribbble</a>
+      <a href="#">Twitter</a>
+    </div>
+  </footer>
+
+  <!-- Cursor pen decoration -->
+  <div class="cursor-pen">\</div>
+
+  <script>
+    // Update status bar date/time
+    function updateDateTime() {
+      const now = new Date();
+      const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+      const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+      const day = days[now.getDay()];
+      const date = now.getDate();
+      const month = months[now.getMonth()];
+      const hours = now.getHours();
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const period = hours >= 12 ? 'PM' : 'AM';
+      const displayHours = hours % 12 || 12;
+      document.getElementById('status-datetime').textContent =
+        `${day} ${date} ${month} \u00B7 PORTO, ${displayHours}:${minutes} ${period}`;
+    }
+    updateDateTime();
+    setInterval(updateDateTime, 60000);
+  </script>
+</body>
+</html>
