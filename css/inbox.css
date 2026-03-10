@@ -318,7 +318,7 @@ body {
   height: calc(100% - 8px);
   overflow: hidden;
   border-radius: 8px;
-  margin: 4px 4px 4px 0;
+  margin: 6px 6px 6px 0;
   border: 1px solid var(--stroke-secondarystrong);
   background: var(--surface-primary);
 }
