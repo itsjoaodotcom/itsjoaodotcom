@@ -4,7 +4,7 @@ export const metadata = { title: "Clarity – Overview" };
 
 export default function OverviewPage() {
   return (
-    <DashboardShell>
+    <DashboardShell variant="overview">
       <h1 className="voc-page-title">Overview</h1>
 
       {/* KPI cards row 1 */}

@@ -4,7 +4,7 @@ export const metadata = { title: "Clarity – Agent QA" };
 
 export default function AgentQAPage() {
   return (
-    <DashboardShell>
+    <DashboardShell variant="agent-qa">
       <div className="qa-header">
         <h1 className="voc-page-title">Agent QA</h1>
         <div className="qa-header-actions">
