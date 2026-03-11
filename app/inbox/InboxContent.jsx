@@ -385,7 +385,7 @@ function AiBlock({ aiReply, aiMessage, aiDetails, aiReasoning, onInsert }) {
               </button>
             </div>
             {detailsOpen && (
-              <div className="card-details-body" ref={detailsRef}>
+              <div className="card-details-body" ref={detailsRef} style={{ display: "block" }}>
                 <p>{aiDetails}</p>
               </div>
             )}
