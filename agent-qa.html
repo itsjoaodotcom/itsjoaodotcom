@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clarity – Agent QA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/button.css" />
+  <link rel="stylesheet" href="css/tag.css" />
+  <link rel="stylesheet" href="css/inbox.css" />
+  <link rel="stylesheet" href="css/agent-qa.css" />
+</head>
+<body>
+  <div class="frame-root voc-layout">
+
+    <!-- ── Topbar (full width) ──────────────────────────── -->
+    <header class="voc-topbar">
+      <div class="voc-topbar-search">
+        <img src="icons/16px/Search.svg" width="16" height="16" alt="" />
+        <input type="text" placeholder="Search conversations, agents..." />
+        <span class="voc-topbar-kbd">⌘K</span>
+      </div>
+      <div class="voc-topbar-user">
+        <div class="voc-topbar-avatar">G</div>
+        <span class="voc-topbar-username">George White</span>
+      </div>
+    </header>
+
+    <!-- ── Body: sidebar + main ─────────────────────────── -->
+    <div class="voc-body">
+
+    <!-- ── Left Nav Sidebar ──────────────────────────────── -->
+    <nav class="sidebar-nav">
+
+      <div class="snav-header">
+        <button class="snav-workspace-btn">
+          <div class="snav-workspace-avatar">
+            <img src="images/Revolut_Logo.png" width="20" height="20" alt="Revolut" />
+          </div>
+          <span class="snav-workspace-name">Revolut</span>
+        </button>
+        <button class="btn btn-ghost btn-icon" id="collapse-sidebar-btn" title="Collapse sidebar">
+          <img src="icons/16px/SidebarLeft.svg" width="16" height="16" alt="Collapse sidebar"/>
+        </button>
+      </div>
+
+      <div class="snav-links">
+        <div class="snav-item">
+          <div class="snav-link">
+            <div class="snav-icon">
+              <img src="icons/16px/Inbox.svg" width="16" height="16" alt="Inbox" style="filter: brightness(0) invert(0.53);" />
+            </div>
+            <span class="snav-label">Inbox</span>
+            <div class="snav-chevron">
+              <img src="icons/16px/ChevronRight.svg" width="16" height="16" alt=""/>
+            </div>
+          </div>
+        </div>
+
+        <div class="snav-item">
+          <div class="snav-link">
+            <div class="snav-icon">
+              <img src="icons/16px/ActiveUser.svg" width="16" height="16" alt="Contacts" style="filter: brightness(0) invert(0.53);" />
+            </div>
+            <span class="snav-label">Contacts</span>
+            <div class="snav-chevron">
+              <img src="icons/16px/ChevronRight.svg" width="16" height="16" alt=""/>
+            </div>
+          </div>
+        </div>
+
+        <div class="snav-item">
+          <div class="snav-link">
+            <div class="snav-icon">
+              <img src="icons/16px/AI.svg" width="16" height="16" alt="AI Assistant" style="filter: brightness(0) invert(0.53);" />
+            </div>
+            <span class="snav-label">AI Assistant</span>
+          </div>
+        </div>
+
+        <div class="snav-item">
+          <div class="snav-link">
+            <div class="snav-icon">
+              <img src="icons/16px/Micro.svg" width="16" height="16" alt="Voice Assist" style="filter: brightness(0) invert(0.53);" />
+            </div>
+            <span class="snav-label">Voice Assist</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="snav-divider"></div>
+
+      <div class="snav-links mid">
+        <div class="snav-item">
+          <div class="snav-link">
+            <div class="snav-icon">
+              <img src="icons/16px/AIHub.svg" width="16" height="16" alt="AI Hub" style="filter: brightness(0) invert(0.53);" />
+            </div>
+            <span class="snav-label">AI Hub</span>
+            <div class="snav-chevron">
+              <img src="icons/16px/ChevronRight.svg" width="16" height="16" alt=""/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="snav-divider"></div>
+
+      <div class="snav-links mid">
+        <div class="snav-item">
+          <div class="snav-link">
+            <div class="snav-icon">
+              <img src="icons/16px/ChartBars.svg" width="16" height="16" alt="Analytics" style="filter: brightness(0) invert(0.53);" />
+            </div>
+            <span class="snav-label">Analytics</span>
+            <div class="snav-chevron">
+              <img src="icons/16px/ChevronRight.svg" width="16" height="16" alt=""/>
+            </div>
+          </div>
+        </div>
+
+        <div class="snav-subitems">
+          <div class="snav-subitem">
+            <div class="snav-tree"></div>
+            <div class="snav-sublink">
+              <div class="snav-icon">
+                <img src="icons/16px/Grid2.svg" width="16" height="16" alt="Overview" style="filter: brightness(0) invert(0.53);" />
+              </div>
+              <span class="snav-label">Overview</span>
+            </div>
+          </div>
+
+          <div class="snav-subitem active">
+            <div class="snav-tree"></div>
+            <div class="snav-sublink">
+              <div class="snav-icon">
+                <img src="icons/16px/Verified.svg" width="16" height="16" alt="Agent QA" style="filter: brightness(0) invert(0.53);" />
+              </div>
+              <span class="snav-label">Agent QA</span>
+            </div>
+          </div>
+
+          <div class="snav-subitem">
+            <div class="snav-tree"></div>
+            <div class="snav-sublink">
+              <div class="snav-icon">
+                <img src="icons/16px/Users.svg" width="16" height="16" alt="Team Performance" style="filter: brightness(0) invert(0.53);" />
+              </div>
+              <span class="snav-label">Team Performance</span>
+            </div>
+          </div>
+
+          <div class="snav-subitem">
+            <div class="snav-tree"></div>
+            <div class="snav-sublink">
+              <div class="snav-icon">
+                <img src="icons/16px/Inbox.svg" width="16" height="16" alt="Conversations" style="filter: brightness(0) invert(0.53);" />
+              </div>
+              <span class="snav-label">Conversations</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="snav-divider"></div>
+
+      <div class="snav-links grow">
+        <div class="snav-item">
+          <div class="snav-link">
+            <div class="snav-icon">
+              <img src="icons/16px/Toggle.svg" width="16" height="16" alt="Settings"/>
+            </div>
+            <span class="snav-label">Settings</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="snav-footer">
+        <button class="snav-user-btn">
+          <div class="snav-user-avatar">G<div class="snav-online-dot"></div></div>
+          <span class="snav-user-name">George White</span>
+        </button>
+      </div>
+
+    </nav>
+
+    <!-- ── Main content ───────────────────────────────────── -->
+    <main class="voc-main">
+
+      <div class="qa-header">
+        <h1 class="voc-page-title">Agent QA</h1>
+        <div class="qa-header-actions">
+          <div class="qa-date-filter">
+            <img src="icons/16px/Calendar.svg" width="16" height="16" alt="" />
+            <span>Last 30 days</span>
+            <img src="icons/16px/ChevronBottom.svg" width="16" height="16" alt="" />
+          </div>
+          <button class="btn btn-accent">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            New review
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI cards -->
+      <div class="voc-kpi-grid">
+        <div class="voc-kpi-card">
+          <div class="voc-kpi-header">
+            <img src="icons/16px/Verified.svg" width="16" height="16" alt="" />
+            <span class="voc-kpi-label">Avg. QA Score</span>
+            <span class="voc-kpi-badge">3.2% ↗</span>
+          </div>
+          <div class="voc-kpi-value">87<span class="qa-kpi-unit">/100</span></div>
+          <div class="voc-kpi-subtitle">Across 248 reviews</div>
+        </div>
+        <div class="voc-kpi-card">
+          <div class="voc-kpi-header">
+            <img src="icons/16px/Emoji.svg" width="16" height="16" alt="" />
+            <span class="voc-kpi-label">CSAT Score</span>
+            <span class="voc-kpi-badge">1.8% ↗</span>
+          </div>
+          <div class="voc-kpi-value">4.6<span class="qa-kpi-unit">/5</span></div>
+          <div class="voc-kpi-subtitle">From 1,204 responses</div>
+        </div>
+        <div class="voc-kpi-card">
+          <div class="voc-kpi-header">
+            <img src="icons/16px/Check.svg" width="16" height="16" alt="" />
+            <span class="voc-kpi-label">Compliance Rate</span>
+            <span class="voc-kpi-badge">0.5% ↘</span>
+          </div>
+          <div class="voc-kpi-value">94<span class="qa-kpi-unit">%</span></div>
+          <div class="voc-kpi-subtitle">Policy adherence</div>
+        </div>
+        <div class="voc-kpi-card">
+          <div class="voc-kpi-header">
+            <img src="icons/16px/Clock.svg" width="16" height="16" alt="" />
+            <span class="voc-kpi-label">Avg. Handle Time</span>
+            <span class="voc-kpi-badge">8% ↗</span>
+          </div>
+          <div class="voc-kpi-value">4:32</div>
+          <div class="voc-kpi-subtitle">Minutes per conversation</div>
+        </div>
+      </div>
+
+      <!-- Dashboard row: Score breakdown + Agent ranking -->
+      <div class="voc-dashboard-grid">
+
+        <!-- QA Score Breakdown -->
+        <div class="voc-section-card">
+          <div class="voc-section-header">
+            <h2 class="voc-section-title">QA Score Breakdown</h2>
+          </div>
+          <div class="qa-score-breakdown">
+            <div class="qa-score-item">
+              <div class="qa-score-item-header">
+                <span class="qa-score-item-label">Communication</span>
+                <span class="qa-score-item-value">92%</span>
+              </div>
+              <div class="qa-score-bar-track">
+                <div class="qa-score-bar-fill" style="width:92%"></div>
+              </div>
+            </div>
+            <div class="qa-score-item">
+              <div class="qa-score-item-header">
+                <span class="qa-score-item-label">Product Knowledge</span>
+                <span class="qa-score-item-value">88%</span>
+              </div>
+              <div class="qa-score-bar-track">
+                <div class="qa-score-bar-fill" style="width:88%"></div>
+              </div>
+            </div>
+            <div class="qa-score-item">
+              <div class="qa-score-item-header">
+                <span class="qa-score-item-label">Problem Resolution</span>
+                <span class="qa-score-item-value">85%</span>
+              </div>
+              <div class="qa-score-bar-track">
+                <div class="qa-score-bar-fill" style="width:85%"></div>
+              </div>
+            </div>
+            <div class="qa-score-item">
+              <div class="qa-score-item-header">
+                <span class="qa-score-item-label">Empathy &amp; Tone</span>
+                <span class="qa-score-item-value">90%</span>
+              </div>
+              <div class="qa-score-bar-track">
+                <div class="qa-score-bar-fill" style="width:90%"></div>
+              </div>
+            </div>
+            <div class="qa-score-item">
+              <div class="qa-score-item-header">
+                <span class="qa-score-item-label">Compliance</span>
+                <span class="qa-score-item-value">94%</span>
+              </div>
+              <div class="qa-score-bar-track">
+                <div class="qa-score-bar-fill" style="width:94%"></div>
+              </div>
+            </div>
+            <div class="qa-score-item">
+              <div class="qa-score-item-header">
+                <span class="qa-score-item-label">Documentation</span>
+                <span class="qa-score-item-value">78%</span>
+              </div>
+              <div class="qa-score-bar-track">
+                <div class="qa-score-bar-fill warning" style="width:78%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Agent Ranking -->
+        <div class="voc-section-card">
+          <div class="voc-section-header">
+            <h2 class="voc-section-title">Agent Ranking</h2>
+            <a class="voc-section-link" href="#">View all agents</a>
+          </div>
+          <div class="qa-agent-ranking">
+            <div class="qa-agent-row">
+              <span class="qa-agent-rank">1</span>
+              <div class="qa-agent-avatar" style="background:#3B82F6">SR</div>
+              <div class="qa-agent-info">
+                <span class="qa-agent-name">Sarah Reyes</span>
+                <span class="qa-agent-reviews">42 reviews</span>
+              </div>
+              <div class="qa-agent-score high">96</div>
+            </div>
+            <div class="qa-agent-row">
+              <span class="qa-agent-rank">2</span>
+              <div class="qa-agent-avatar" style="background:#8B5CF6">MK</div>
+              <div class="qa-agent-info">
+                <span class="qa-agent-name">Michael Kim</span>
+                <span class="qa-agent-reviews">38 reviews</span>
+              </div>
+              <div class="qa-agent-score high">93</div>
+            </div>
+            <div class="qa-agent-row">
+              <span class="qa-agent-rank">3</span>
+              <div class="qa-agent-avatar" style="background:#2BC4AD">EJ</div>
+              <div class="qa-agent-info">
+                <span class="qa-agent-name">Emily Johnson</span>
+                <span class="qa-agent-reviews">45 reviews</span>
+              </div>
+              <div class="qa-agent-score high">91</div>
+            </div>
+            <div class="qa-agent-row">
+              <span class="qa-agent-rank">4</span>
+              <div class="qa-agent-avatar" style="background:#F97316">DP</div>
+              <div class="qa-agent-info">
+                <span class="qa-agent-name">David Park</span>
+                <span class="qa-agent-reviews">36 reviews</span>
+              </div>
+              <div class="qa-agent-score mid">84</div>
+            </div>
+            <div class="qa-agent-row">
+              <span class="qa-agent-rank">5</span>
+              <div class="qa-agent-avatar" style="background:#EF4444">AL</div>
+              <div class="qa-agent-info">
+                <span class="qa-agent-name">Ana Lopez</span>
+                <span class="qa-agent-reviews">31 reviews</span>
+              </div>
+              <div class="qa-agent-score mid">79</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Recent Reviews Table -->
+      <div class="voc-section-card qa-reviews-card">
+        <div class="voc-section-header">
+          <h2 class="voc-section-title">Recent Reviews</h2>
+          <div class="qa-reviews-filters">
+            <button class="btn btn-secondary btn-sm">
+              <img src="icons/16px/Sort.svg" width="16" height="16" alt="" />
+              Sort
+            </button>
+            <button class="btn btn-secondary btn-sm">
+              <img src="icons/16px/Search.svg" width="16" height="16" alt="" />
+              Filter
+            </button>
+          </div>
+        </div>
+        <table class="qa-table">
+          <thead>
+            <tr>
+              <th>Conversation</th>
+              <th>Agent</th>
+              <th>Category</th>
+              <th>QA Score</th>
+              <th>CSAT</th>
+              <th>Reviewed</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="qa-conversation-cell">
+                  <span class="qa-conv-id">#4821</span>
+                  <span class="qa-conv-subject">Payment failed on checkout</span>
+                </div>
+              </td>
+              <td>
+                <div class="qa-agent-cell">
+                  <div class="qa-agent-avatar-sm" style="background:#3B82F6">SR</div>
+                  <span>Sarah Reyes</span>
+                </div>
+              </td>
+              <td><span class="tag tag-blue tag-sm"><span class="tag-dot"></span><span class="tag-label">Billing</span></span></td>
+              <td><span class="qa-score-badge high">95</span></td>
+              <td><span class="qa-csat-stars">5.0</span></td>
+              <td><span class="qa-date">Mar 10</span></td>
+              <td><span class="tag tag-filled tag-green tag-sm"><span class="tag-dot"></span><span class="tag-label">Passed</span></span></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="qa-conversation-cell">
+                  <span class="qa-conv-id">#4819</span>
+                  <span class="qa-conv-subject">Account locked after login</span>
+                </div>
+              </td>
+              <td>
+                <div class="qa-agent-cell">
+                  <div class="qa-agent-avatar-sm" style="background:#8B5CF6">MK</div>
+                  <span>Michael Kim</span>
+                </div>
+              </td>
+              <td><span class="tag tag-purple tag-sm"><span class="tag-dot"></span><span class="tag-label">Security</span></span></td>
+              <td><span class="qa-score-badge high">91</span></td>
+              <td><span class="qa-csat-stars">4.0</span></td>
+              <td><span class="qa-date">Mar 10</span></td>
+              <td><span class="tag tag-filled tag-green tag-sm"><span class="tag-dot"></span><span class="tag-label">Passed</span></span></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="qa-conversation-cell">
+                  <span class="qa-conv-id">#4815</span>
+                  <span class="qa-conv-subject">Refund request for subscription</span>
+                </div>
+              </td>
+              <td>
+                <div class="qa-agent-cell">
+                  <div class="qa-agent-avatar-sm" style="background:#F97316">DP</div>
+                  <span>David Park</span>
+                </div>
+              </td>
+              <td><span class="tag tag-orange tag-sm"><span class="tag-dot"></span><span class="tag-label">Refunds</span></span></td>
+              <td><span class="qa-score-badge mid">76</span></td>
+              <td><span class="qa-csat-stars">3.0</span></td>
+              <td><span class="qa-date">Mar 9</span></td>
+              <td><span class="tag tag-filled tag-orange tag-sm"><span class="tag-dot"></span><span class="tag-label">Needs Review</span></span></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="qa-conversation-cell">
+                  <span class="qa-conv-id">#4812</span>
+                  <span class="qa-conv-subject">Can't transfer to savings</span>
+                </div>
+              </td>
+              <td>
+                <div class="qa-agent-cell">
+                  <div class="qa-agent-avatar-sm" style="background:#2BC4AD">EJ</div>
+                  <span>Emily Johnson</span>
+                </div>
+              </td>
+              <td><span class="tag tag-cyan tag-sm"><span class="tag-dot"></span><span class="tag-label">Transfers</span></span></td>
+              <td><span class="qa-score-badge high">89</span></td>
+              <td><span class="qa-csat-stars">5.0</span></td>
+              <td><span class="qa-date">Mar 9</span></td>
+              <td><span class="tag tag-filled tag-green tag-sm"><span class="tag-dot"></span><span class="tag-label">Passed</span></span></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="qa-conversation-cell">
+                  <span class="qa-conv-id">#4808</span>
+                  <span class="qa-conv-subject">Abusive language from customer</span>
+                </div>
+              </td>
+              <td>
+                <div class="qa-agent-cell">
+                  <div class="qa-agent-avatar-sm" style="background:#EF4444">AL</div>
+                  <span>Ana Lopez</span>
+                </div>
+              </td>
+              <td><span class="tag tag-red tag-sm"><span class="tag-dot"></span><span class="tag-label">Escalation</span></span></td>
+              <td><span class="qa-score-badge low">62</span></td>
+              <td><span class="qa-csat-stars">2.0</span></td>
+              <td><span class="qa-date">Mar 8</span></td>
+              <td><span class="tag tag-filled tag-red tag-sm"><span class="tag-dot"></span><span class="tag-label">Failed</span></span></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="qa-conversation-cell">
+                  <span class="qa-conv-id">#4805</span>
+                  <span class="qa-conv-subject">Card delivery delay inquiry</span>
+                </div>
+              </td>
+              <td>
+                <div class="qa-agent-cell">
+                  <div class="qa-agent-avatar-sm" style="background:#3B82F6">SR</div>
+                  <span>Sarah Reyes</span>
+                </div>
+              </td>
+              <td><span class="tag tag-green tag-sm"><span class="tag-dot"></span><span class="tag-label">Shipping</span></span></td>
+              <td><span class="qa-score-badge high">97</span></td>
+              <td><span class="qa-csat-stars">5.0</span></td>
+              <td><span class="qa-date">Mar 8</span></td>
+              <td><span class="tag tag-filled tag-green tag-sm"><span class="tag-dot"></span><span class="tag-label">Passed</span></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </main>
+
+    </div><!-- /voc-body -->
+  </div><!-- /frame-root -->
+
+  <script src="js/theme.js"></script>
+</body>
+</html>
