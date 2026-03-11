@@ -1069,6 +1069,10 @@ body:not(.is-loading) .content #dialog-loading {
   flex-direction: column;
   gap: 20px;
   padding: 18px 12px 20px;
+  scrollbar-width: none;          /* Firefox */
+}
+.copilot-scroll::-webkit-scrollbar {
+  display: none;                  /* Chrome / Safari / Edge */
 }
 
 .copilot-empty-state {

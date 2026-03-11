@@ -317,7 +317,7 @@ function TagPills({ tags }) {
 }
 
 /* ─── AiBlock (Copilot suggested reply card) ─── */
-function AiBlock({ aiReply, aiMessage, aiDetails, aiReasoning, onInsert }) {
+function AiBlock({ aiReply, aiMessage, aiDetails, aiReasoning, onInsert, onRegenerate }) {
   const [reasoningOpen, setReasoningOpen] = useState(false);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [insertIcon, setInsertIcon] = useState("Copy");
@@ -374,7 +374,7 @@ function AiBlock({ aiReply, aiMessage, aiDetails, aiReasoning, onInsert }) {
             </div>
           </div>
           <div className="card-body"><p dangerouslySetInnerHTML={{ __html: aiReply }} /></div>
-          <div className="card-details-header">
+          <div className={`card-details-header${detailsOpen ? " is-open" : ""}`}>
             <div>
               <button className="btn btn-ghost btn-sm" onClick={() => setDetailsOpen(!detailsOpen)}>
                 Details
@@ -395,7 +395,7 @@ function AiBlock({ aiReply, aiMessage, aiDetails, aiReasoning, onInsert }) {
             <div className="card-actions-left">
               <button className="btn btn-ghost btn-icon"><img src="/icons/16px/ThumbsUp.svg" width={16} height={16} alt="" /></button>
               <button className="btn btn-ghost btn-icon"><img src="/icons/16px/ThumbsDown.svg" width={16} height={16} alt="" /></button>
-              <button className="btn btn-ghost btn-icon"><img src="/icons/16px/Retry.svg" width={16} height={16} alt="" /></button>
+              <button className="btn btn-ghost btn-icon" onClick={onRegenerate}><img src="/icons/16px/Retry.svg" width={16} height={16} alt="" /></button>
             </div>
             <div className="card-actions-right">
               <button className="btn btn-inverse btn-insert" onClick={handleInsert}>
@@ -464,15 +464,36 @@ function ThinkingSection({ steps, readingKB, scrollContainerRef }) {
     };
 
     updateHeight();
-    scroll.scrollTo({ top: prevEl ? prevEl.offsetTop - 18 : 0, behavior: "smooth" });
 
+    // Ultra-fast animated scroll — message appears at bottom, viewport
+    // compensates almost imperceptibly (~180ms ease-out) so the user message
+    // ends up near the top without a visible jump or a slow push.
+    const target = prevEl ? prevEl.offsetTop - 18 : 0;
+    const start = scroll.scrollTop;
+    const dist = target - start;
+    if (Math.abs(dist) > 1) {
+      const dur = 180;
+      const t0 = performance.now();
+      const ease = (t) => 1 - Math.pow(1 - t, 3); // ease-out cubic
+      const tick = (now) => {
+        const p = Math.min((now - t0) / dur, 1);
+        scroll.scrollTop = start + dist * ease(p);
+        if (p < 1) rafId = requestAnimationFrame(tick);
+      };
+      var rafId = requestAnimationFrame(tick);
+    }
+
+    let resizeTimer;
     const observer = new ResizeObserver(() => {
       updateHeight();
-      scroll.scrollTo({ top: prevEl ? prevEl.offsetTop - 18 : 0, behavior: "auto" });
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        scroll.scrollTop = prevEl ? prevEl.offsetTop - 18 : 0;
+      }, 50);
     });
     observer.observe(scroll);
 
-    return () => observer.disconnect();
+    return () => { observer.disconnect(); clearTimeout(resizeTimer); cancelAnimationFrame(rafId); };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* "Reading KB" character-by-character typing animation */
@@ -780,18 +801,63 @@ export default function InboxContent({ currentView = "assigned", onViewChange })
   const thinkingTimerRef = useRef(null);
   const startCopilotThinkingRef = useRef(null);
 
+  /* ─── Conversation history cache ─── */
+  const historyCache = useRef({}); // { [convName]: { chatMessages, copilotItems, copilotThinking, suggestionsHidden } }
+  const viewConvCache = useRef({}); // { [view]: selectedConvName }
+  const selectedConvRef = useRef(null); // mirrors selectedConv for use in async callbacks
+  const thinkingConvRef = useRef(null); // which conversation has an active thinking process
+
   /* ─── Derived ─── */
   const items = allConversations.filter((c) => c.views.includes(currentView));
 
-  /* ─── Reset on view change from sidebar ─── */
+  // Keep selectedConvRef in sync
+  useEffect(() => { selectedConvRef.current = selectedConv; }, [selectedConv]);
+
+  /* ─── Save current conversation to cache ─── */
+  const saveCurrentConv = useCallback(() => {
+    if (!selectedConv) return;
+    const isThinkingForThis = thinkingConvRef.current === selectedConv.name;
+    historyCache.current[selectedConv.name] = {
+      chatMessages,
+      copilotItems: isThinkingForThis ? copilotItems : copilotItems.filter((item) => item.type !== "thinking"),
+      copilotThinking: isThinkingForThis,
+      suggestionsHidden: copilotItems.length > 0,
+    };
+  }, [selectedConv, chatMessages, copilotItems]);
+
+  /* ─── Restore or reset for a conversation ─── */
+  const restoreOrResetConv = useCallback((conv) => {
+    const cached = conv ? historyCache.current[conv.name] : null;
+    if (cached) {
+      setChatMessages(cached.chatMessages);
+      setCopilotItems(cached.copilotItems);
+      setCopilotThinking(cached.copilotThinking || false);
+      setSuggestionsHidden(cached.suggestionsHidden);
+    } else {
+      const msgs = conv ? (conversations[conv.name] || []) : [];
+      setChatMessages(msgs);
+      setCopilotItems([]);
+      setCopilotThinking(false);
+      setSuggestionsHidden(false);
+    }
+  }, []);
+
+  /* ─── Handle view change — restore previous conversation for this view ─── */
   useEffect(() => {
-    setSelectedConv(null);
-    setChatMessages([]);
-    clearTimeout(thinkingTimerRef.current);
-    setCopilotThinking(false);
-    setCopilotItems([]);
-    setSuggestionsHidden(false);
-  }, [currentView]);
+    // Don't cancel thinking timer — it may be running for a background conversation
+    const prevConvName = viewConvCache.current[currentView];
+    const prevConv = prevConvName ? allConversations.find((c) => c.name === prevConvName && c.views.includes(currentView)) : null;
+    if (prevConv) {
+      setSelectedConv(prevConv);
+      restoreOrResetConv(prevConv);
+    } else {
+      setSelectedConv(null);
+      setChatMessages([]);
+      setCopilotItems([]);
+      setCopilotThinking(false);
+      setSuggestionsHidden(false);
+    }
+  }, [currentView]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* ─── Loading effect ─── */
   useEffect(() => {
@@ -799,7 +865,7 @@ export default function InboxContent({ currentView = "assigned", onViewChange })
     const timer = setTimeout(() => {
       document.body.classList.remove("is-loading");
       setIsLoading(false);
-    }, 5000);
+    }, 2000);
     return () => {
       clearTimeout(timer);
       document.body.classList.remove("is-loading");
@@ -882,16 +948,28 @@ export default function InboxContent({ currentView = "assigned", onViewChange })
     el.classList.add("is-shake");
   };
 
+  /* ─── Helper: update copilot items for a conversation (active → state, background → cache) ─── */
+  const updateConvCopilotItems = useCallback((convName, updater) => {
+    if (selectedConvRef.current?.name === convName) {
+      setCopilotItems(updater);
+    } else {
+      const cached = historyCache.current[convName];
+      if (cached) cached.copilotItems = updater(cached.copilotItems);
+    }
+  }, []);
+
   /* ─── Copilot thinking flow ─── */
   const startCopilotThinkingFlow = useCallback(() => {
     if (copilotThinking) return;
+    const convName = selectedConv?.name;
+    if (!convName) return;
+    thinkingConvRef.current = convName;
     setCopilotThinking(true);
     setSuggestionsHidden(true);
-
-    // Immediately show thinking section with no steps
+    // Ensure thinking item exists (may already be added by sendCopilotMessage)
     setCopilotItems((prev) => {
-      const filtered = prev.filter((item) => item.type !== "thinking");
-      return [...filtered, { type: "thinking", steps: [], readingKB: false }];
+      if (prev.some((item) => item.type === "thinking")) return prev;
+      return [...prev, { type: "thinking", steps: [], readingKB: false }];
     });
 
     let stepIdx = 0;
@@ -899,9 +977,10 @@ export default function InboxContent({ currentView = "assigned", onViewChange })
 
     const addStep = () => {
       steps.push(thinkingSteps[stepIdx]);
-      setCopilotItems((prev) => {
+      const thinkingItem = { type: "thinking", steps: [...steps], readingKB: steps.length >= 3 };
+      updateConvCopilotItems(convName, (prev) => {
         const filtered = prev.filter((item) => item.type !== "thinking");
-        return [...filtered, { type: "thinking", steps: [...steps], readingKB: steps.length >= 3 }];
+        return [...filtered, thinkingItem];
       });
       stepIdx++;
       if (stepIdx < thinkingSteps.length) {
@@ -910,26 +989,34 @@ export default function InboxContent({ currentView = "assigned", onViewChange })
         thinkingTimerRef.current = setTimeout(() => {
           const idx = aiReplyIndexRef.current % aiReplies.length;
           aiReplyIndexRef.current++;
-          setCopilotItems((prev) => {
+          const aiItem = {
+            type: "ai",
+            aiReply: aiReplies[idx],
+            aiMessage: aiMessages[idx],
+            aiDetails: aiDetails[idx],
+            aiReasoning: aiReasonings[idx],
+          };
+          updateConvCopilotItems(convName, (prev) => {
             const filtered = prev.filter((item) => item.type !== "thinking");
-            return [
-              ...filtered,
-              {
-                type: "ai",
-                aiReply: aiReplies[idx],
-                aiMessage: aiMessages[idx],
-                aiDetails: aiDetails[idx],
-                aiReasoning: aiReasonings[idx],
-              },
-            ];
+            return [...filtered, aiItem];
           });
-          setCopilotThinking(false);
-          setSuggestionsHidden(false);
+          thinkingConvRef.current = null;
+          // If still on this conversation, update state; otherwise update cache
+          if (selectedConvRef.current?.name === convName) {
+            setCopilotThinking(false);
+            setSuggestionsHidden(false);
+          } else {
+            const cached = historyCache.current[convName];
+            if (cached) {
+              cached.copilotThinking = false;
+              cached.suggestionsHidden = false;
+            }
+          }
         }, 4000);
       }
     };
     thinkingTimerRef.current = setTimeout(addStep, 4000);
-  }, [copilotThinking]);
+  }, [copilotThinking, selectedConv, updateConvCopilotItems]);
 
   // Keep ref in sync so appendChatMessage can call it without stale closures
   startCopilotThinkingRef.current = startCopilotThinkingFlow;
@@ -937,6 +1024,7 @@ export default function InboxContent({ currentView = "assigned", onViewChange })
   /* ─── Stop copilot thinking ─── */
   const stopCopilotThinking = useCallback(() => {
     clearTimeout(thinkingTimerRef.current);
+    thinkingConvRef.current = null;
     setCopilotItems((prev) => {
       const filtered = prev.filter((item) => item.type !== "thinking");
       return [...filtered, { type: "skipped" }];
@@ -959,10 +1047,17 @@ export default function InboxContent({ currentView = "assigned", onViewChange })
       shakeElement(copilotInput);
       return;
     }
-    setCopilotItems((prev) => [...prev, { type: "user", text }]);
     el.innerHTML = "";
     setCopilotMultiline(false);
-    setTimeout(() => startCopilotThinkingFlow(), 500);
+    // Add user message + thinking in one update so they render together
+    setCopilotItems((prev) => [
+      ...prev,
+      { type: "user", text },
+      { type: "thinking", steps: [], readingKB: false },
+    ]);
+    setSuggestionsHidden(true);
+    // Start the thinking step progression
+    startCopilotThinkingFlow();
   }, [copilotThinking, stopCopilotThinking, startCopilotThinkingFlow]);
 
   /* ─── Insert reply into composer ─── */
@@ -976,25 +1071,24 @@ export default function InboxContent({ currentView = "assigned", onViewChange })
 
   /* ─── Select conversation ─── */
   const selectConversation = useCallback((conv) => {
+    saveCurrentConv();
+    viewConvCache.current[currentView] = conv.name;
     setSelectedConv(conv);
-    clearTimeout(thinkingTimerRef.current);
-    setCopilotThinking(false);
-    setCopilotItems([]);
-    setSuggestionsHidden(false);
-
-    const msgs = conversations[conv.name] || [];
-    setChatMessages(msgs);
-  }, []);
+    // Only cancel thinking timer if it does NOT belong to a background conversation
+    if (!thinkingConvRef.current || thinkingConvRef.current === conv.name) {
+      // Switching to the conversation that owns the timer — keep it running
+    } else {
+      // Timer belongs to another conversation — it will update cache directly, don't cancel
+    }
+    restoreOrResetConv(conv);
+  }, [saveCurrentConv, restoreOrResetConv, currentView]);
 
   /* ─── Switch view ─── */
   const switchView = useCallback((view) => {
+    saveCurrentConv();
+    if (selectedConv) viewConvCache.current[currentView] = selectedConv.name;
     if (onViewChange) onViewChange(view);
-    setSelectedConv(null);
-    setChatMessages([]);
-    clearTimeout(thinkingTimerRef.current);
-    setCopilotThinking(false);
-    setCopilotItems([]);
-  }, [onViewChange]);
+  }, [onViewChange, saveCurrentConv, selectedConv, currentView]);
 
   /* ─── Tab switch ─── */
   const switchTab = useCallback((tab) => {
@@ -1115,7 +1209,9 @@ export default function InboxContent({ currentView = "assigned", onViewChange })
     const el = copilotScrollRef.current;
     if (!el || copilotItems.length === 0) return;
     const lastItem = copilotItems[copilotItems.length - 1];
-    if (lastItem.type === "user" || lastItem.type === "ai" || lastItem.type === "skipped") {
+    // "user" / "thinking" types: ThinkingSection handles scroll positioning on mount
+    // "ai" / "skipped" type: scroll to last user message near top
+    if (lastItem.type === "ai" || lastItem.type === "skipped") {
       requestAnimationFrame(() => {
         const userEls = el.querySelectorAll(".copilot-user-msg");
         const lastUserEl = userEls[userEls.length - 1];
@@ -1348,6 +1444,10 @@ export default function InboxContent({ currentView = "assigned", onViewChange })
                     aiDetails={item.aiDetails}
                     aiReasoning={item.aiReasoning}
                     onInsert={handleInsertReply}
+                    onRegenerate={() => {
+                      setCopilotItems((prev) => prev.filter((_, idx) => idx !== i));
+                      startCopilotThinkingFlow();
+                    }}
                   />
                 );
               }
