@@ -1,105 +1,20 @@
 import DashboardShell from "../../components/DashboardShell";
 
-export const metadata = { title: "Clarity – Agent QA" };
+export const metadata = { title: "Clarity – Scoring Agents" };
 
-export default function AgentQAPage() {
-  return (
-    <DashboardShell variant="agent-qa">
-      <div className="qa-header">
-        <h1 className="voc-page-title">Agent QA</h1>
-        <div className="qa-header-actions">
-          <div className="qa-date-filter">
-            <img src="/icons/16px/Calendar.svg" width={16} height={16} alt="" />
-            <span>Last 30 days</span>
-            <img src="/icons/16px/ChevronBottom.svg" width={16} height={16} alt="" />
-          </div>
-          <button className="btn btn-accent">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M8 3v10M3 8h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
-            New review
-          </button>
-        </div>
-      </div>
+const iconFilter = { filter: "brightness(0) invert(0.53)" };
 
-      {/* KPI cards */}
-      <div className="voc-kpi-grid">
-        <KpiCard icon="Verified" label="Avg. QA Score" badge="3.2% ↗" value="87" unit="/100" subtitle="Across 248 reviews" />
-        <KpiCard icon="Emoji" label="CSAT Score" badge="1.8% ↗" value="4.6" unit="/5" subtitle="From 1,204 responses" />
-        <KpiCard icon="Check" label="Compliance Rate" badge="0.5% ↘" value="94" unit="%" subtitle="Policy adherence" />
-        <KpiCard icon="Clock" label="Avg. Handle Time" badge="8% ↗" value="4:32" subtitle="Minutes per conversation" />
-      </div>
-
-      {/* Dashboard row */}
-      <div className="voc-dashboard-grid">
-        <ScoreBreakdown />
-        <AgentRanking />
-      </div>
-
-      {/* Reviews table */}
-      <ReviewsTable />
-    </DashboardShell>
-  );
-}
-
-function KpiCard({ icon, label, badge, value, unit, subtitle }) {
-  return (
-    <div className="voc-kpi-card">
-      <div className="voc-kpi-header">
-        <img src={`/icons/16px/${icon}.svg`} width={16} height={16} alt="" />
-        <span className="voc-kpi-label">{label}</span>
-        <span className="voc-kpi-badge">{badge}</span>
-      </div>
-      <div className="voc-kpi-value">
-        {value}
-        {unit && <span className="qa-kpi-unit">{unit}</span>}
-      </div>
-      <div className="voc-kpi-subtitle">{subtitle}</div>
-    </div>
-  );
-}
-
-const scoreCategories = [
-  { label: "Communication", value: 92 },
-  { label: "Product Knowledge", value: 88 },
-  { label: "Problem Resolution", value: 85 },
-  { label: "Empathy & Tone", value: 90 },
-  { label: "Compliance", value: 94 },
-  { label: "Documentation", value: 78, warning: true },
-];
-
-function ScoreBreakdown() {
-  return (
-    <div className="voc-section-card">
-      <div className="voc-section-header">
-        <h2 className="voc-section-title">QA Score Breakdown</h2>
-      </div>
-      <div className="qa-score-breakdown">
-        {scoreCategories.map((cat) => (
-          <div className="qa-score-item" key={cat.label}>
-            <div className="qa-score-item-header">
-              <span className="qa-score-item-label">{cat.label}</span>
-              <span className="qa-score-item-value">{cat.value}%</span>
-            </div>
-            <div className="qa-score-bar-track">
-              <div
-                className={`qa-score-bar-fill${cat.warning ? " warning" : ""}`}
-                style={{ width: `${cat.value}%` }}
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-const agents = [
-  { rank: 1, initials: "SR", name: "Sarah Reyes", reviews: 42, score: 96, color: "#3B82F6" },
-  { rank: 2, initials: "MK", name: "Michael Kim", reviews: 38, score: 93, color: "#8B5CF6" },
-  { rank: 3, initials: "EJ", name: "Emily Johnson", reviews: 45, score: 91, color: "#2BC4AD" },
-  { rank: 4, initials: "DP", name: "David Park", reviews: 36, score: 84, color: "#F97316" },
-  { rank: 5, initials: "AL", name: "Ana Lopez", reviews: 31, score: 79, color: "#EF4444" },
+const scoringAgents = [
+  { name: "Chat Quality Monitor", description: "Evaluates live chat interactions for tone, accuracy, and resolution", channel: "LiveChat", channelLabel: "Live Chat", teams: ["Support", "Sales"], score: 94, evaluations: 1247, trend: 3.2, trendUp: true, status: "Active" },
+  { name: "Call Center QA Analyst", description: "Reviews phone call recordings against compliance standards", channel: "AnswerCall", channelLabel: "Phone", teams: ["Support"], score: 87, evaluations: 892, trend: -1.5, trendUp: false, status: "Active" },
+  { name: "Email Response Scorer", description: "Scores email support responses for clarity and completeness", channel: "Email", channelLabel: "Email", teams: ["Support", "Billing"], score: 91, evaluations: 634, trend: 2.8, trendUp: true, status: "Active" },
+  { name: "Escalation Handler Reviewer", description: "Assesses escalation handling procedures and outcomes", channel: "LiveChat", channelLabel: "Live Chat", teams: ["Escalation"], score: 78, evaluations: 156, trend: -4.1, trendUp: false, status: "Active" },
+  { name: "Social Media Agent Scorer", description: "Monitors social media response quality and brand voice", channel: "Globe", channelLabel: "Social", teams: ["Marketing", "Support"], score: 89, evaluations: 423, trend: 5.6, trendUp: true, status: "Active" },
+  { name: "Onboarding QA Agent", description: "Evaluates new customer onboarding interaction quality", channel: "LiveChat", channelLabel: "Live Chat", teams: ["Onboarding", "Success"], score: 92, evaluations: 312, trend: 1.2, trendUp: true, status: "Draft" },
+  { name: "Refund Process Auditor", description: "Reviews refund request handling for policy compliance", channel: "Email", channelLabel: "Email", teams: ["Billing"], score: 85, evaluations: 278, trend: -0.8, trendUp: false, status: "Active" },
+  { name: "VIP Client QA Specialist", description: "Dedicated scoring for high-value client interactions", channel: "AnswerCall", channelLabel: "Phone", teams: ["VIP", "Support"], score: 96, evaluations: 189, trend: 2.1, trendUp: true, status: "Active" },
+  { name: "Technical Support Scorer", description: "Evaluates technical troubleshooting accuracy and efficiency", channel: "LiveChat", channelLabel: "Live Chat", teams: ["Technical"], score: 83, evaluations: 567, trend: -2.3, trendUp: false, status: "Draft" },
+  { name: "Multilingual QA Agent", description: "Scores interactions across multiple languages for consistency", channel: "Globe", channelLabel: "Social", teams: ["International", "Support"], score: 88, evaluations: 345, trend: 4.7, trendUp: true, status: "Active" },
 ];
 
 function scoreTier(score) {
@@ -108,101 +23,107 @@ function scoreTier(score) {
   return "low";
 }
 
-function AgentRanking() {
+export default function AgentQAPage() {
   return (
-    <div className="voc-section-card">
-      <div className="voc-section-header">
-        <h2 className="voc-section-title">Agent Ranking</h2>
-        <a className="voc-section-link" href="#">View all agents</a>
+    <DashboardShell variant="agent-qa">
+      {/* Breadcrumb */}
+      <div className="qa-breadcrumb">
+        <span className="qa-breadcrumb-title">Scoring agents</span>
       </div>
-      <div className="qa-agent-ranking">
-        {agents.map((a) => (
-          <div className="qa-agent-row" key={a.rank}>
-            <span className="qa-agent-rank">{a.rank}</span>
-            <div className="qa-agent-avatar" style={{ background: a.color }}>{a.initials}</div>
-            <div className="qa-agent-info">
-              <span className="qa-agent-name">{a.name}</span>
-              <span className="qa-agent-reviews">{a.reviews} reviews</span>
-            </div>
-            <div className={`qa-agent-score ${scoreTier(a.score)}`}>{a.score}</div>
+
+      {/* Toolbar: search + filter + add button */}
+      <div className="qa-toolbar">
+        <div className="qa-toolbar-left">
+          <div className="qa-search-input">
+            <img src="/icons/16px/Search.svg" width={16} height={16} alt="" style={iconFilter} />
+            <span className="qa-search-placeholder">Search configured agents...</span>
           </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-const reviews = [
-  { id: "#4821", subject: "Payment failed on checkout", agent: "Sarah Reyes", initials: "SR", color: "#3B82F6", category: "Billing", catColor: "blue", score: 95, csat: "5.0", date: "Mar 10", status: "Passed", statusColor: "green" },
-  { id: "#4819", subject: "Account locked after login", agent: "Michael Kim", initials: "MK", color: "#8B5CF6", category: "Security", catColor: "purple", score: 91, csat: "4.0", date: "Mar 10", status: "Passed", statusColor: "green" },
-  { id: "#4815", subject: "Refund request for subscription", agent: "David Park", initials: "DP", color: "#F97316", category: "Refunds", catColor: "orange", score: 76, csat: "3.0", date: "Mar 9", status: "Needs Review", statusColor: "orange" },
-  { id: "#4812", subject: "Can't transfer to savings", agent: "Emily Johnson", initials: "EJ", color: "#2BC4AD", category: "Transfers", catColor: "cyan", score: 89, csat: "5.0", date: "Mar 9", status: "Passed", statusColor: "green" },
-  { id: "#4808", subject: "Abusive language from customer", agent: "Ana Lopez", initials: "AL", color: "#EF4444", category: "Escalation", catColor: "red", score: 62, csat: "2.0", date: "Mar 8", status: "Failed", statusColor: "red" },
-  { id: "#4805", subject: "Card delivery delay inquiry", agent: "Sarah Reyes", initials: "SR", color: "#3B82F6", category: "Shipping", catColor: "green", score: 97, csat: "5.0", date: "Mar 8", status: "Passed", statusColor: "green" },
-];
-
-function ReviewsTable() {
-  return (
-    <div className="voc-section-card qa-reviews-card">
-      <div className="voc-section-header">
-        <h2 className="voc-section-title">Recent Reviews</h2>
-        <div className="qa-reviews-filters">
-          <button className="btn btn-secondary btn-sm">
-            <img src="/icons/16px/Sort.svg" width={16} height={16} alt="" />
-            Sort
-          </button>
-          <button className="btn btn-secondary btn-sm">
-            <img src="/icons/16px/Search.svg" width={16} height={16} alt="" />
-            Filter
+          <button className="btn btn-ghost btn-icon">
+            <img src="/icons/16px/Filter.svg" width={16} height={16} alt="" style={iconFilter} />
           </button>
         </div>
+        <button className="btn btn-accent">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8 3v10M3 8h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+          Add QA Agent
+        </button>
       </div>
-      <table className="qa-table">
-        <thead>
-          <tr>
-            <th>Conversation</th>
-            <th>Agent</th>
-            <th>Category</th>
-            <th>QA Score</th>
-            <th>CSAT</th>
-            <th>Reviewed</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {reviews.map((r) => (
-            <tr key={r.id}>
-              <td>
-                <div className="qa-conversation-cell">
-                  <span className="qa-conv-id">{r.id}</span>
-                  <span className="qa-conv-subject">{r.subject}</span>
-                </div>
-              </td>
-              <td>
-                <div className="qa-agent-cell">
-                  <div className="qa-agent-avatar-sm" style={{ background: r.color }}>{r.initials}</div>
-                  <span>{r.agent}</span>
-                </div>
-              </td>
-              <td>
-                <span className={`tag tag-${r.catColor} tag-sm`}>
-                  <span className="tag-dot"></span>
-                  <span className="tag-label">{r.category}</span>
-                </span>
-              </td>
-              <td><span className={`qa-score-badge ${scoreTier(r.score)}`}>{r.score}</span></td>
-              <td><span className="qa-csat-stars">{r.csat}</span></td>
-              <td><span className="qa-date">{r.date}</span></td>
-              <td>
-                <span className={`tag tag-filled tag-${r.statusColor} tag-sm`}>
-                  <span className="tag-dot"></span>
-                  <span className="tag-label">{r.status}</span>
-                </span>
-              </td>
+
+      {/* Agents table */}
+      <div className="qa-agents-table-wrap">
+        <table className="qa-table">
+          <thead>
+            <tr>
+              <th className="col-name">Name</th>
+              <th className="col-channel">Channel</th>
+              <th className="col-teams">Teams</th>
+              <th className="col-score">Score</th>
+              <th className="col-evals">Evaluations</th>
+              <th className="col-trend">Trend</th>
+              <th className="col-status">Status</th>
+              <th className="col-actions"></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {scoringAgents.map((agent) => (
+              <tr key={agent.name}>
+                <td>
+                  <div className="qa-name-cell">
+                    <span className="qa-name-primary">{agent.name}</span>
+                    <span className="qa-name-desc">{agent.description}</span>
+                  </div>
+                </td>
+                <td>
+                  <div className="qa-channel-cell">
+                    <img src={`/icons/16px/${agent.channel}.svg`} width={16} height={16} alt="" style={iconFilter} />
+                    <span>{agent.channelLabel}</span>
+                  </div>
+                </td>
+                <td>
+                  <div className="qa-teams-cell">
+                    <span className="tag tag-neutral tag-sm">
+                      <span className="tag-label">{agent.teams[0]}</span>
+                    </span>
+                    {agent.teams.length > 1 && (
+                      <span className="tag tag-neutral tag-sm">
+                        <span className="tag-label">+{agent.teams.length - 1}</span>
+                      </span>
+                    )}
+                  </div>
+                </td>
+                <td>
+                  <span className={`qa-score-value ${scoreTier(agent.score)}`}>{agent.score}%</span>
+                </td>
+                <td>
+                  <span className="qa-evals-value">{agent.evaluations.toLocaleString()}</span>
+                </td>
+                <td>
+                  <span className={`qa-trend-value ${agent.trendUp ? "up" : "down"}`}>
+                    {agent.trendUp ? "↑" : "↓"} {Math.abs(agent.trend)}%
+                  </span>
+                </td>
+                <td>
+                  <span className={`tag tag-filled tag-sm ${agent.status === "Active" ? "tag-green" : "tag-neutral"}`}>
+                    <span className="tag-dot"></span>
+                    <span className="tag-label">{agent.status}</span>
+                  </span>
+                </td>
+                <td>
+                  <div className="qa-actions-cell">
+                    <button className="btn btn-ghost btn-icon btn-sm">
+                      <img src="/icons/16px/Edit.svg" width={16} height={16} alt="Edit" style={iconFilter} />
+                    </button>
+                    <button className="btn btn-ghost btn-icon btn-sm">
+                      <img src="/icons/16px/Trash.svg" width={16} height={16} alt="Delete" style={iconFilter} />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </DashboardShell>
   );
 }

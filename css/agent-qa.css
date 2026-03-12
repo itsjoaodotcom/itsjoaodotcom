@@ -1,198 +1,64 @@
-/* ── Agent QA Page ─────────────────────────────────── */
+/* ── Agent QA – Scoring Agents ─────────────────────── */
 
-/* Header with title + actions */
-.qa-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 4px;
-}
-
-.qa-header .voc-page-title {
+/* Breadcrumb bar */
+.qa-breadcrumb {
+  padding: 12px 0 12px 0;
+  border-bottom: 1px solid var(--border-primary);
   margin-bottom: 0;
 }
 
-.qa-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.qa-breadcrumb-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--content-primary);
 }
 
-.qa-date-filter {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border: 1px solid var(--border-primary);
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--content-secondary);
-  cursor: pointer;
-  background: var(--bg-primary);
-  font-family: var(--font-family);
-}
-
-.qa-date-filter img {
-  filter: brightness(0) invert(0.53);
-  opacity: 0.7;
-}
-
-.qa-date-filter:hover {
-  background: var(--bg-secondary);
-}
-
-/* KPI unit suffix */
-.qa-kpi-unit {
-  font-size: 18px;
-  font-weight: 500;
-  color: var(--content-tertiary);
-}
-
-/* ── QA Score Breakdown ──────────────────────────────── */
-
-.qa-score-breakdown {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.qa-score-item-header {
+/* Toolbar: search + filter + add */
+.qa-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 6px;
+  padding: 10px 0;
+  gap: 8px;
 }
 
-.qa-score-item-label {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--content-secondary);
-}
-
-.qa-score-item-value {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--content-primary);
-}
-
-.qa-score-bar-track {
-  height: 6px;
-  border-radius: 3px;
-  background: var(--bg-tertiary);
-  overflow: hidden;
-}
-
-.qa-score-bar-fill {
-  height: 100%;
-  border-radius: 3px;
-  background: #3B82F6;
-  transition: width 0.4s ease;
-}
-
-.qa-score-bar-fill.warning {
-  background: #F97316;
-}
-
-/* ── Agent Ranking ──────────────────────────────────── */
-
-.qa-agent-ranking {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.qa-agent-row {
+.qa-toolbar-left {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
-  border-radius: 6px;
-  transition: background 0.15s;
-}
-
-.qa-agent-row:hover {
-  background: var(--bg-secondary);
-}
-
-.qa-agent-rank {
-  width: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--content-tertiary);
-  text-align: center;
-}
-
-.qa-agent-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: 600;
-  color: #fff;
-  flex-shrink: 0;
-}
-
-.qa-agent-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  min-width: 0;
-}
-
-.qa-agent-name {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--content-primary);
-}
-
-.qa-agent-reviews {
-  font-size: 12px;
-  color: var(--content-tertiary);
-}
-
-.qa-agent-score {
-  width: 36px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  flex-shrink: 0;
-}
-
-.qa-agent-score.high {
-  background: rgba(43, 196, 173, 0.12);
-  color: #2BC4AD;
-}
-
-.qa-agent-score.mid {
-  background: rgba(249, 115, 22, 0.12);
-  color: #F97316;
-}
-
-.qa-agent-score.low {
-  background: rgba(239, 68, 68, 0.12);
-  color: #EF4444;
-}
-
-/* ── Reviews Table ──────────────────────────────────── */
-
-.qa-reviews-card {
-  margin-top: 0;
-}
-
-.qa-reviews-filters {
-  display: flex;
   gap: 6px;
 }
 
+.qa-search-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  background: var(--bg-primary);
+  min-width: 260px;
+  cursor: text;
+}
+
+.qa-search-placeholder {
+  font-size: 13px;
+  color: var(--content-tertiary);
+  font-family: var(--font-family);
+}
+
+.qa-search-input:hover {
+  border-color: var(--border-secondary);
+}
+
+/* Table wrapper */
+.qa-agents-table-wrap {
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg-primary);
+}
+
+/* Table */
 .qa-table {
   width: 100%;
   border-collapse: collapse;
@@ -206,8 +72,10 @@
   color: var(--content-tertiary);
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  padding: 8px 12px;
+  padding: 10px 16px;
   border-bottom: 1px solid var(--border-primary);
+  background: var(--bg-secondary);
+  white-space: nowrap;
 }
 
 .qa-table tbody tr {
@@ -219,7 +87,7 @@
 }
 
 .qa-table tbody td {
-  padding: 10px 12px;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--border-primary);
   font-size: 13px;
   color: var(--content-secondary);
@@ -230,123 +98,104 @@
   border-bottom: none;
 }
 
-/* Conversation cell */
-.qa-conversation-cell {
+/* Column widths */
+.col-name { min-width: 240px; }
+.col-channel { width: 140px; }
+.col-teams { width: 160px; }
+.col-score { width: 100px; }
+.col-evals { width: 110px; }
+.col-trend { width: 100px; }
+.col-status { width: 100px; }
+.col-actions { width: 80px; }
+
+/* Name cell */
+.qa-name-cell {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.qa-conv-id {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--content-tertiary);
-}
-
-.qa-conv-subject {
+.qa-name-primary {
   font-size: 13px;
   font-weight: 500;
   color: var(--content-primary);
+}
+
+.qa-name-desc {
+  font-size: 12px;
+  color: var(--content-tertiary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 240px;
+  max-width: 320px;
 }
 
-/* Agent cell */
-.qa-agent-cell {
+/* Channel cell */
+.qa-channel-cell {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--content-secondary);
 }
 
-.qa-agent-avatar-sm {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
+/* Teams cell */
+.qa-teams-cell {
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 9px;
-  font-weight: 600;
-  color: #fff;
-  flex-shrink: 0;
+  gap: 4px;
 }
 
-/* Score badge */
-.qa-score-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 32px;
-  height: 22px;
-  padding: 0 6px;
-  border-radius: 4px;
-  font-size: 12px;
+/* Score value */
+.qa-score-value {
+  font-size: 13px;
   font-weight: 600;
 }
 
-.qa-score-badge.high {
-  background: rgba(43, 196, 173, 0.12);
+.qa-score-value.high {
   color: #2BC4AD;
 }
 
-.qa-score-badge.mid {
-  background: rgba(249, 115, 22, 0.12);
+.qa-score-value.mid {
   color: #F97316;
 }
 
-.qa-score-badge.low {
-  background: rgba(239, 68, 68, 0.12);
+.qa-score-value.low {
   color: #EF4444;
 }
 
-/* CSAT */
-.qa-csat-stars {
+/* Evaluations */
+.qa-evals-value {
+  font-size: 13px;
+  color: var(--content-secondary);
+}
+
+/* Trend */
+.qa-trend-value {
   font-size: 13px;
   font-weight: 500;
-  color: var(--content-primary);
 }
 
-/* Date */
-.qa-date {
-  font-size: 12px;
-  color: var(--content-tertiary);
-  white-space: nowrap;
+.qa-trend-value.up {
+  color: #2BC4AD;
 }
 
-/* ── 4-column KPI grid override ──────────────────────── */
-
-.qa-header + .voc-kpi-grid {
-  grid-template-columns: repeat(4, 1fr);
+.qa-trend-value.down {
+  color: #EF4444;
 }
 
-/* ── Dark mode adjustments ───────────────────────────── */
-
-html.dark .qa-date-filter {
-  border-color: var(--border-primary);
+/* Actions cell */
+.qa-actions-cell {
+  display: flex;
+  align-items: center;
+  gap: 2px;
 }
 
-html.dark .qa-agent-score.high {
-  background: rgba(43, 196, 173, 0.16);
+.qa-actions-cell .btn {
+  opacity: 0;
+  transition: opacity 0.15s;
 }
 
-html.dark .qa-agent-score.mid {
-  background: rgba(249, 115, 22, 0.16);
-}
-
-html.dark .qa-agent-score.low {
-  background: rgba(239, 68, 68, 0.16);
-}
-
-html.dark .qa-score-badge.high {
-  background: rgba(43, 196, 173, 0.16);
-}
-
-html.dark .qa-score-badge.mid {
-  background: rgba(249, 115, 22, 0.16);
-}
-
-html.dark .qa-score-badge.low {
-  background: rgba(239, 68, 68, 0.16);
+.qa-table tbody tr:hover .qa-actions-cell .btn {
+  opacity: 1;
 }
