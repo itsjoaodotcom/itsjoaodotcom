@@ -110,12 +110,13 @@ function NavGroup({ icon, label, defaultExpanded = false, children }) {
 /* ─── Inbox subitems (with view switching) ─── */
 function InboxSubitems({ activeView, onViewChange }) {
   const items = [
-    { icon: "User", label: "Assigned to me", badge: 4 },
-    { icon: "At", label: "Mentions", badge: 3 },
-    { icon: "Unassigned", label: "Unassigned", badge: 3 },
-    { icon: "Snooze", label: "Snoozed", badge: 2 },
-    { icon: "CheckCircle", label: "Closed", badge: 3 },
-    { icon: "All", label: "All", badge: 15 },
+    { icon: "User", label: "Assigned to me", badge: 6 },
+    { icon: "At", label: "Mentions" },
+    { icon: "Unassigned", label: "Unassigned", badge: 36 },
+    { icon: "Snooze", label: "Snoozed", badge: 3 },
+    { icon: "CheckCircle", label: "Closed", badge: 138 },
+    { icon: "Users", label: "Teams inboxes", badge: 138 },
+    { icon: "Inbox", label: "All", badge: 34 },
   ];
 
   return items.map((item) => {
@@ -156,6 +157,17 @@ function AiHubSubitems() {
 /*  Sidebar variants                                          */
 /* ═══════════════════════════════════════════════════════════ */
 
+function AgentsQaSubitems() {
+  return (
+    <>
+      <SnavSubitem icon="Verified" label="Scoring Agents" badge={6} />
+      <SnavSubitem icon="ChartBars" label="Analytics" />
+      <SnavSubitem icon="Workflows" label="Automation Agent" />
+      <SnavSubitem icon="Grid" label="Integrations" />
+    </>
+  );
+}
+
 function SidebarInbox({ collapsed, onCollapse, activeView, onViewChange }) {
   return (
     <nav className={`sidebar-nav${collapsed ? " collapsed" : ""}`}>
@@ -165,9 +177,14 @@ function SidebarInbox({ collapsed, onCollapse, activeView, onViewChange }) {
         <NavGroup icon="Inbox" label="Inbox" defaultExpanded>
           <InboxSubitems activeView={activeView} onViewChange={onViewChange} />
         </NavGroup>
-        <NavGroup icon="ActiveUser" label="Contacts">
+        <NavGroup icon="Users" label="Contacts">
           <ContactsSubitems />
         </NavGroup>
+      </div>
+
+      <div className="snav-divider"></div>
+
+      <div className="snav-links mid">
         <SnavItem icon="AI" label="AI Assistant" />
         <SnavItem icon="Micro" label="Voice Assist" />
       </div>
@@ -179,6 +196,22 @@ function SidebarInbox({ collapsed, onCollapse, activeView, onViewChange }) {
           <AiHubSubitems />
         </NavGroup>
       </div>
+
+      <div className="snav-divider"></div>
+
+      <div className="snav-links mid">
+        <NavGroup icon="One part" label="Agents QA">
+          <AgentsQaSubitems />
+        </NavGroup>
+      </div>
+
+      <div className="snav-divider"></div>
+
+      <div className="snav-links grow">
+        <SnavItem icon="Toggle" label="Settings" />
+      </div>
+
+      <SidebarFooter />
     </nav>
   );
 }
