@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useShell } from "../../../components/ShellContext";
+import Tag from "../../../components/Tag";
 
 /* ─── Data imports ─── */
 import {
@@ -11,6 +13,20 @@ import {
   VIEW_LABELS,
   CH,
 } from "./inboxData";
+
+/* ─── Hex color → Tag color mapping ─── */
+const HEX_TAG_MAP = {
+  "#22c55e": "green",
+  "#87888a": "grey",
+  "#4061d8": "blue",
+  "#7c3aed": "purple",
+  "#ef4444": "red",
+  "#f59e0b": "orange",
+  "#f97316": "orange",
+};
+function hexToTagColor(hex) {
+  return HEX_TAG_MAP[hex?.toLowerCase()] || "grey";
+}
 
 /* ─── Priority SVG icons for DialogAlert ─── */
 const PRIORITY_ICONS = {
@@ -87,7 +103,7 @@ function DialogAlertComponent({ d }) {
       return (
         <div className="da">
           <span>Ticket is not assigned yet</span>
-          <button className="btn btn-secondary">Assign to me</button>
+          <button className="btn btn-secondary"><span className="btn-label">Assign to me</span></button>
         </div>
       );
     case "assign-to":
@@ -124,14 +140,7 @@ function DialogAlertComponent({ d }) {
       return (
         <div className="da">
           <span>Ticket status changed to</span>
-          <span className="tag tag-sm">
-            <span className="tag-dot">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <rect x="2.5" y="2.5" width="7" height="7" rx="3.5" fill={d.color} />
-              </svg>
-            </span>
-            <span className="tag-label">{d.status}</span>
-          </span>
+          <Tag size="sm" color={hexToTagColor(d.color)} label={d.status} />
         </div>
       );
     case "priority":
@@ -148,9 +157,7 @@ function DialogAlertComponent({ d }) {
       return (
         <div className="da">
           <span>Received</span>
-          <span className="tag tag-sm">
-            <span className="tag-label">{d.score}/{d.total}</span>
-          </span>
+          <Tag size="sm" color="grey" label={`${d.score}/${d.total}`} iconLeft={false} />
           <span>feedback points</span>
         </div>
       );
@@ -158,7 +165,7 @@ function DialogAlertComponent({ d }) {
       return (
         <div className="da">
           <span>{d.text || "A new version of the AI agent is available"}</span>
-          <button className="btn btn-accent">Start new chat</button>
+          <button className="btn btn-accent"><span className="btn-label">Start new chat</span></button>
         </div>
       );
     default:
@@ -257,7 +264,7 @@ function DetailSection({ title, defaultOpen, children }) {
     <div className={`det-section${!open ? " det-collapsed" : ""}`}>
       <div className="det-section-header">
         <button className="btn btn-ghost btn-sm" onClick={() => setOpen(!open)}>
-          <span>{title}</span>
+          <span className="btn-label">{title}</span>
           <img
             src={`/icons/16px/${open ? "ChevronBottom" : "ChevronRight"}.svg`}
             width={16} height={16} alt=""
@@ -307,10 +314,7 @@ function TagPills({ tags }) {
   return (
     <div className="ds-value ds-value-tags">
       {tags.map((tag, i) => (
-        <div className="tag-pill" key={i}>
-          <span className="tag-dot" style={{ background: tag.color }}></span>
-          {tag.label}
-        </div>
+        <Tag key={i} size="sm" color={hexToTagColor(tag.color)} label={tag.label} />
       ))}
     </div>
   );
@@ -340,7 +344,7 @@ function AiBlock({ aiReply, aiMessage, aiDetails, aiReasoning, onInsert, onRegen
       <div className="ai-reasoning" style={{ opacity: visible ? 1 : 0, transition: "opacity 0.4s ease" }}>
         <div>
           <button className="btn btn-ghost btn-sm" onClick={() => setReasoningOpen(!reasoningOpen)}>
-            Reasoning
+            <span className="btn-label">Reasoning</span>
             <img
               src="/icons/16px/ChevronRight.svg" width={16} height={16} alt=""
               style={{ transition: "transform 0.2s ease", transform: reasoningOpen ? "rotate(90deg)" : "" }}
@@ -377,7 +381,7 @@ function AiBlock({ aiReply, aiMessage, aiDetails, aiReasoning, onInsert, onRegen
           <div className={`card-details-header${detailsOpen ? " is-open" : ""}`}>
             <div>
               <button className="btn btn-ghost btn-sm" onClick={() => setDetailsOpen(!detailsOpen)}>
-                Details
+                <span className="btn-label">Details</span>
                 <img
                   src="/icons/16px/ChevronRight.svg" width={16} height={16} alt=""
                   style={{ transition: "transform 0.2s ease", transform: detailsOpen ? "rotate(90deg)" : "" }}
@@ -399,7 +403,7 @@ function AiBlock({ aiReply, aiMessage, aiDetails, aiReasoning, onInsert, onRegen
             </div>
             <div className="card-actions-right">
               <button className="btn btn-inverse btn-insert" onClick={handleInsert}>
-                <img src={`/icons/16px/${insertIcon}.svg`} width={16} height={16} alt="" /> Insert
+                <img src={`/icons/16px/${insertIcon}.svg`} width={16} height={16} alt="" /> <span className="btn-label">Insert</span>
               </button>
             </div>
           </div>
@@ -417,7 +421,7 @@ function SkippedBlock({ onRetry }) {
       <div className="ai-reasoning">
         <div>
           <button className="btn btn-ghost btn-sm" onClick={() => setReasoningOpen(!reasoningOpen)}>
-            Reasoning
+            <span className="btn-label">Reasoning</span>
             <img
               src="/icons/16px/ChevronRight.svg" width={16} height={16} alt=""
               style={{ transition: "transform 0.2s ease", transform: reasoningOpen ? "rotate(90deg)" : "" }}
@@ -766,8 +770,9 @@ function CopilotEmptySvg() {
 /* ═══════════════════════════════════════════════════════════ */
 
 export default function InboxContent({ currentView = "assigned", onViewChange }) {
+  const { hasLoadedRef } = useShell();
   /* ─── Core state ─── */
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(!hasLoadedRef.current);
   const [selectedConv, setSelectedConv] = useState(null);
   const [chatMessages, setChatMessages] = useState([]);
   const [isNoteMode, setIsNoteMode] = useState(false);
@@ -859,18 +864,20 @@ export default function InboxContent({ currentView = "assigned", onViewChange })
     }
   }, [currentView]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  /* ─── Loading effect ─── */
+  /* ─── Loading effect (only on first visit) ─── */
   useEffect(() => {
+    if (hasLoadedRef.current) return;
     document.body.classList.add("is-loading");
     const timer = setTimeout(() => {
       document.body.classList.remove("is-loading");
       setIsLoading(false);
+      hasLoadedRef.current = true;
     }, 2000);
     return () => {
       clearTimeout(timer);
       document.body.classList.remove("is-loading");
     };
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* ─── Scroll chat to bottom when messages change ─── */
   useEffect(() => {
@@ -1379,10 +1386,10 @@ export default function InboxContent({ currentView = "assigned", onViewChange })
                 <div className="composer-right-default" style={{ display: isNoteMode ? "none" : "flex", gap: "4px", alignItems: "center" }}>
                   <button className="btn btn-secondary" onClick={handleGenerateReply} disabled={copilotThinking}>
                     <img src="/icons/16px/AI.svg" width={16} height={16} alt="" />
-                    Generate reply
+                    <span className="btn-label">Generate reply</span>
                   </button>
                   <div className="btn-split">
-                    <button className="btn btn-accent" onClick={sendDialogMessage}>Send</button>
+                    <button className="btn btn-accent" onClick={sendDialogMessage}><span className="btn-label">Send</span></button>
                     <button className="btn btn-accent btn-icon">
                       <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M4.5 6.5l3.5 3.5 3.5-3.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
@@ -1391,7 +1398,7 @@ export default function InboxContent({ currentView = "assigned", onViewChange })
                   </div>
                 </div>
                 <div className="composer-right-note" style={{ display: isNoteMode ? "flex" : "none", gap: "4px", alignItems: "center" }}>
-                  <button className="btn btn-secondary" onClick={sendNote}>Add note</button>
+                  <button className="btn btn-secondary" onClick={sendNote}><span className="btn-label">Add note</span></button>
                 </div>
               </div>
             </div>

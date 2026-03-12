@@ -21,10 +21,10 @@
 .tag {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 6px;
+  padding: 2px 6px;
   border-radius: 999px;
-  border: 1px solid var(--stroke-primary);
+  border: none;
+  box-shadow: inset 0 0 0 1px var(--stroke-primary);
   font-family: var(--font-family);
   font-size: 14px;
   font-weight: 400;
@@ -46,6 +46,8 @@
 .tag-dot {
   width: 12px;
   height: 12px;
+  min-width: 12px;
+  min-height: 12px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -53,15 +55,15 @@
 }
 
 .tag-dot svg {
-  width: 12px;
-  height: 12px;
+  width: 7px;
+  height: 7px;
   flex-shrink: 0;
 }
 
 /* ─── Size: Small ───────────────────────────────────────── */
 
 .tag.tag-sm {
-  padding: 2px 6px;
+  padding: 2px 4px;
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 0;
@@ -80,22 +82,22 @@
 
 /* ─── Style: Filled ─────────────────────────────────────── */
 
-.tag-filled.tag-blue   { background: rgba(230, 235, 255, 0.4); border-color: var(--blue-01);   }
-.tag-filled.tag-red    { background: rgba(255, 230, 230, 0.4); border-color: var(--red-01);    }
-.tag-filled.tag-green  { background: rgba(230, 247, 239, 0.4); border-color: var(--green-01);  }
-.tag-filled.tag-orange { background: rgba(255, 242, 230, 0.4); border-color: var(--orange-01); }
-.tag-filled.tag-purple { background: rgba(230, 232, 250, 0.4); border-color: var(--purple-01); }
-.tag-filled.tag-cyan   { background: rgba(224, 248, 251, 0.4); border-color: var(--cyan-01);   }
-.tag-filled.tag-brown  { background: rgba(249, 240, 238, 0.4); border-color: var(--brown-01);  }
-.tag-filled.tag-grey   { background: var(--grey-01);           border-color: var(--stroke-primary); }
+.tag-filled.tag-blue   { background: rgba(230, 235, 255, 0.4); box-shadow: inset 0 0 0 1px var(--blue-01);   }
+.tag-filled.tag-red    { background: rgba(255, 230, 230, 0.4); box-shadow: inset 0 0 0 1px var(--red-01);    }
+.tag-filled.tag-green  { background: rgba(230, 247, 239, 0.4); box-shadow: inset 0 0 0 1px var(--green-01);  }
+.tag-filled.tag-orange { background: rgba(255, 242, 230, 0.4); box-shadow: inset 0 0 0 1px var(--orange-01); }
+.tag-filled.tag-purple { background: rgba(230, 232, 250, 0.4); box-shadow: inset 0 0 0 1px var(--purple-01); }
+.tag-filled.tag-cyan   { background: rgba(224, 248, 251, 0.4); box-shadow: inset 0 0 0 1px var(--cyan-01);   }
+.tag-filled.tag-brown  { background: rgba(249, 240, 238, 0.4); box-shadow: inset 0 0 0 1px var(--brown-01);  }
+.tag-filled.tag-grey   { background: var(--grey-01);           box-shadow: inset 0 0 0 1px var(--stroke-primary); }
 
 /* ─── Dark mode: Filled ─────────────────────────────────── */
 
-html.dark .tag-filled.tag-blue   { background: rgba(28,  46,  102, 0.4); border-color: var(--blue-08);   }
-html.dark .tag-filled.tag-red    { background: rgba(130, 43,  44,  0.4); border-color: var(--red-08);    }
-html.dark .tag-filled.tag-green  { background: rgba(42,  107, 74,  0.4); border-color: var(--green-08);  }
-html.dark .tag-filled.tag-orange { background: rgba(137, 70,  31,  0.4); border-color: var(--orange-08); }
-html.dark .tag-filled.tag-purple { background: rgba(34,  39,  102, 0.4); border-color: var(--purple-08); }
-html.dark .tag-filled.tag-cyan   { background: rgba(17,  89,  109, 0.4); border-color: var(--cyan-08);   }
-html.dark .tag-filled.tag-brown  { background: rgba(107, 84,  82,  0.4); border-color: var(--brown-08);  }
-html.dark .tag-filled.tag-grey   { background: var(--grey-09);           border-color: var(--stroke-primary); }
+html.dark .tag-filled.tag-blue   { background: rgba(28,  46,  102, 0.4); box-shadow: inset 0 0 0 1px var(--blue-08);   }
+html.dark .tag-filled.tag-red    { background: rgba(130, 43,  44,  0.4); box-shadow: inset 0 0 0 1px var(--red-08);    }
+html.dark .tag-filled.tag-green  { background: rgba(42,  107, 74,  0.4); box-shadow: inset 0 0 0 1px var(--green-08);  }
+html.dark .tag-filled.tag-orange { background: rgba(137, 70,  31,  0.4); box-shadow: inset 0 0 0 1px var(--orange-08); }
+html.dark .tag-filled.tag-purple { background: rgba(34,  39,  102, 0.4); box-shadow: inset 0 0 0 1px var(--purple-08); }
+html.dark .tag-filled.tag-cyan   { background: rgba(17,  89,  109, 0.4); box-shadow: inset 0 0 0 1px var(--cyan-08);   }
+html.dark .tag-filled.tag-brown  { background: rgba(107, 84,  82,  0.4); box-shadow: inset 0 0 0 1px var(--brown-08);  }
+html.dark .tag-filled.tag-grey   { background: var(--grey-09);           box-shadow: inset 0 0 0 1px var(--stroke-primary); }

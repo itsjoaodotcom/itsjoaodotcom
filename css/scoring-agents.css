@@ -1,9 +1,23 @@
-/* ── Scoring Agents Page ───────────────────────────── */
+/* ── Scoring Agents ────────────────────────────────── */
+
+.sa-content {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 12px);
+  overflow: hidden;
+  border-radius: 8px;
+  margin: 6px 6px 6px 0;
+  border: 1px solid var(--stroke-secondarystrong);
+  background: var(--surface-primary);
+}
 
 /* Breadcrumb */
 .sa-breadcrumb {
   padding: 12px 20px;
   border-bottom: 1px solid var(--stroke-primary);
+  flex-shrink: 0;
 }
 
 .sa-breadcrumb-title {
@@ -20,112 +34,148 @@
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--stroke-primary);
+  flex-shrink: 0;
 }
 
-.sa-toolbar-left {
+.sa-toolbar-search {
   display: flex;
   align-items: center;
   gap: 6px;
   flex: 1;
   padding: 12px 20px;
+  position: relative;
 }
 
-.sa-search-placeholder {
+.sa-toolbar-search:focus-within::after {
+  content: '';
+  position: absolute;
+  inset: 3px 0 3px 7px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--surface-accent) 60%, transparent);
+  pointer-events: none;
+}
+
+.sa-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: none;
   font-size: 14px;
-  color: var(--content-quartenary);
+  color: var(--content-primary);
   font-family: var(--font-family);
   line-height: 20px;
   letter-spacing: -0.28px;
+  caret-color: var(--content-accent);
 }
 
-.sa-toolbar-right {
+.sa-search-input::placeholder {
+  color: var(--content-quartenary);
+}
+
+.sa-toolbar-actions {
   display: flex;
   align-items: center;
   gap: 6px;
   padding: 10px;
 }
 
-/* Table wrapper */
+/* Table */
 .sa-table-wrap {
   flex: 1;
-  overflow: auto;
+  overflow-y: auto;
 }
 
-/* Table */
-.sa-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: var(--font-family);
-}
-
-.sa-table thead th {
-  text-align: left;
-  padding: 6px 10px;
+/* Header row */
+.sa-table-header {
+  display: flex;
   border-bottom: 1px solid var(--stroke-primary);
-  white-space: nowrap;
-  vertical-align: middle;
+  position: sticky;
+  top: 0;
+  background: var(--surface-primary);
+  z-index: 1;
 }
 
-.sa-th-btn {
-  display: inline-flex;
+.sa-th {
+  padding: 6px 10px;
+  display: flex;
   align-items: center;
-  gap: 0;
-  padding: 6px 4px;
-  border-radius: 6px;
+}
+
+.sa-th .btn {
+  color: var(--content-tertiary);
+}
+
+.sa-th-label {
+  font-family: var(--font-family);
   font-size: 12px;
   font-weight: 400;
   line-height: 16px;
   color: var(--content-tertiary);
-  cursor: pointer;
+  padding: 0 6px;
 }
 
-.sa-th-btn:hover {
-  background: var(--bg-secondary);
-}
-
-.sa-th-btn img {
-  opacity: 0.5;
-}
-
-.sa-table tbody tr {
+/* Data row */
+.sa-row {
+  display: flex;
+  border-bottom: 1px solid var(--stroke-primary);
   transition: background 0.15s;
 }
 
-.sa-table tbody tr:hover {
-  background: var(--bg-secondary);
-}
-
-.sa-table tbody td {
-  padding: 14px 20px;
-  border-bottom: 1px solid var(--stroke-primary);
-  font-size: 14px;
-  line-height: 20px;
-  letter-spacing: -0.28px;
-  color: var(--content-primary);
-  vertical-align: middle;
-}
-
-.sa-table tbody tr:last-child td {
+.sa-row:last-child {
   border-bottom: none;
 }
 
-/* Column widths */
-.sa-col-name { min-width: 200px; }
-.sa-col-channel { width: 180px; }
-.sa-col-teams { width: 180px; }
-.sa-col-num { width: 120px; }
-.sa-col-status { width: 120px; }
-.sa-col-actions { width: 100px; }
+.sa-row:hover {
+  background: var(--surface-secondary);
+}
 
-/* Name cell */
-.sa-cell-name {
+/* Cell */
+.sa-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 20px;
+  min-width: 0;
+}
+
+.sa-cell-text {
   font-size: 14px;
   font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.28px;
   color: var(--content-primary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  display: block;
+}
+
+.sa-cell-primary {
+  color: var(--content-primary);
+}
+
+.sa-cell-tertiary {
+  color: var(--content-tertiary);
+}
+
+/* Column sizes */
+.sa-col-name {
+  flex: 1;
+  min-width: 200px;
+}
+
+.sa-col-fixed-180 {
+  width: 180px;
+  flex-shrink: 0;
+}
+
+.sa-col-fixed-120 {
+  width: 120px;
+  flex-shrink: 0;
+}
+
+.sa-col-fixed-100 {
+  width: 100px;
+  flex-shrink: 0;
 }
 
 /* Channel cell */
@@ -133,8 +183,6 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 14px;
-  color: var(--content-primary);
 }
 
 /* Teams cell */
@@ -142,39 +190,27 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 14px;
-  color: var(--content-primary);
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  min-width: 0;
 }
 
-/* Evaluations */
-.sa-evals {
-  color: var(--content-tertiary);
-}
-
-/* Trend */
+/* Trend cell */
 .sa-trend {
   display: flex;
   align-items: center;
   gap: 2px;
   font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -0.28px;
 }
 
-/* Actions */
-.sa-actions {
-  display: flex;
-  align-items: center;
+/* Actions cell */
+.sa-cell-actions {
   justify-content: flex-end;
   gap: 4px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
-.sa-actions .btn {
-  opacity: 0;
-  transition: opacity 0.15s;
-}
-
-.sa-table tbody tr:hover .sa-actions .btn {
+.sa-cell-actions .btn {
   opacity: 1;
 }

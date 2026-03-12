@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 const iconFilter = { filter: "brightness(0) invert(0.53)" };
 
@@ -56,11 +56,8 @@ function SnavSubitem({ icon, label, href, badge, active, onClick }) {
 
   const handleClick = (e) => {
     e.stopPropagation();
-    if (onClick) {
-      onClick();
-    } else if (href && href !== "#") {
-      router.push(href);
-    }
+    if (onClick) onClick();
+    if (href && href !== "#") router.push(href);
   };
 
   return (
@@ -86,8 +83,10 @@ function SnavSubitem({ icon, label, href, badge, active, onClick }) {
 }
 
 /* ─── Collapsible nav group ─── */
-function NavGroup({ icon, label, defaultExpanded = false, children }) {
-  const [expanded, setExpanded] = useState(defaultExpanded);
+function NavGroup({ icon, label, defaultExpanded = false, hrefs = [], children }) {
+  const pathname = usePathname();
+  const matchesRoute = hrefs.some((h) => pathname.startsWith(h));
+  const [expanded, setExpanded] = useState(defaultExpanded || matchesRoute);
 
   return (
     <>
@@ -109,6 +108,9 @@ function NavGroup({ icon, label, defaultExpanded = false, children }) {
 
 /* ─── Inbox subitems (with view switching) ─── */
 function InboxSubitems({ activeView, onViewChange }) {
+  const pathname = usePathname();
+  const isInbox = pathname === "/inbox";
+
   const items = [
     { icon: "User", label: "Assigned to me", badge: 6 },
     { icon: "At", label: "Mentions" },
@@ -127,7 +129,8 @@ function InboxSubitems({ activeView, onViewChange }) {
         icon={item.icon}
         label={item.label}
         badge={item.badge}
-        active={activeView === view}
+        href="/inbox"
+        active={isInbox && activeView === view}
         onClick={onViewChange ? () => onViewChange(view) : undefined}
       />
     );
@@ -137,8 +140,19 @@ function InboxSubitems({ activeView, onViewChange }) {
 function ContactsSubitems() {
   return (
     <>
-      <SnavSubitem icon="All" label="All" />
-      <SnavSubitem icon="ActiveUser" label="Active" />
+      <SnavSubitem icon="Users" label="All" />
+      <SnavSubitem icon="Users" label="Active" />
+    </>
+  );
+}
+
+function AgentsQaSubitems() {
+  const pathname = usePathname();
+
+  return (
+    <>
+      <SnavSubitem icon="Verified" label="Scoring Agents" badge={6} href="/scoring-agents" active={pathname === "/scoring-agents"} />
+      <SnavSubitem icon="ChartBars" label="Analytics" />
     </>
   );
 }
@@ -164,7 +178,7 @@ function SidebarInbox({ collapsed, onCollapse, activeView, onViewChange }) {
       <SidebarHeader onCollapse={onCollapse} />
 
       <div className="snav-links">
-        <NavGroup icon="Inbox" label="Inbox" defaultExpanded>
+        <NavGroup icon="Inbox" label="Inbox" defaultExpanded hrefs={["/inbox"]}>
           <InboxSubitems activeView={activeView} onViewChange={onViewChange} />
         </NavGroup>
         <NavGroup icon="Users" label="Contacts">
@@ -184,6 +198,14 @@ function SidebarInbox({ collapsed, onCollapse, activeView, onViewChange }) {
       <div className="snav-links mid">
         <NavGroup icon="AIHub" label="AI Hub">
           <AiHubSubitems />
+        </NavGroup>
+      </div>
+
+      <div className="snav-divider"></div>
+
+      <div className="snav-links mid">
+        <NavGroup icon="One part" label="Agents QA" hrefs={["/scoring-agents"]}>
+          <AgentsQaSubitems />
         </NavGroup>
       </div>
 
@@ -226,7 +248,7 @@ function SidebarOverview({ collapsed, onCollapse }) {
       <div className="snav-divider"></div>
 
       <div className="snav-links mid">
-        <NavGroup icon="ChartBars" label="Analytics" defaultExpanded>
+        <NavGroup icon="ChartBars" label="Analytics" defaultExpanded hrefs={["/overview"]}>
           <SnavSubitem icon="Grid2" label="Overview" href="/overview" />
           <SnavSubitem icon="AI" label="AI Insights" />
           <SnavSubitem icon="Users" label="Team Performance" />

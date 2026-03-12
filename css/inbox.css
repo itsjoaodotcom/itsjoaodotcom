@@ -315,7 +315,7 @@ body {
   position: relative;
   flex: 1;
   display: flex;
-  height: calc(100% - 8px);
+  height: calc(100% - 12px);
   overflow: hidden;
   border-radius: 8px;
   margin: 6px 6px 6px 0;
@@ -360,9 +360,6 @@ body {
 /* Loading state: show loading, hide empty + hide sidebar badges */
 body.is-loading .content #dialog-empty {
   display: none;
-}
-body.is-loading .snav-badge-wrap {
-  visibility: hidden;
 }
 
 /* Not loading: hide loading panel */
