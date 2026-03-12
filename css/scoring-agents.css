@@ -1,0 +1,180 @@
+/* ── Scoring Agents Page ───────────────────────────── */
+
+/* Breadcrumb */
+.sa-breadcrumb {
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--stroke-primary);
+}
+
+.sa-breadcrumb-title {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-primary);
+}
+
+/* Toolbar */
+.sa-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--stroke-primary);
+}
+
+.sa-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  padding: 12px 20px;
+}
+
+.sa-search-placeholder {
+  font-size: 14px;
+  color: var(--content-quartenary);
+  font-family: var(--font-family);
+  line-height: 20px;
+  letter-spacing: -0.28px;
+}
+
+.sa-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px;
+}
+
+/* Table wrapper */
+.sa-table-wrap {
+  flex: 1;
+  overflow: auto;
+}
+
+/* Table */
+.sa-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-family);
+}
+
+.sa-table thead th {
+  text-align: left;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--stroke-primary);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.sa-th-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  padding: 6px 4px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--content-tertiary);
+  cursor: pointer;
+}
+
+.sa-th-btn:hover {
+  background: var(--bg-secondary);
+}
+
+.sa-th-btn img {
+  opacity: 0.5;
+}
+
+.sa-table tbody tr {
+  transition: background 0.15s;
+}
+
+.sa-table tbody tr:hover {
+  background: var(--bg-secondary);
+}
+
+.sa-table tbody td {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--stroke-primary);
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-primary);
+  vertical-align: middle;
+}
+
+.sa-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Column widths */
+.sa-col-name { min-width: 200px; }
+.sa-col-channel { width: 180px; }
+.sa-col-teams { width: 180px; }
+.sa-col-num { width: 120px; }
+.sa-col-status { width: 120px; }
+.sa-col-actions { width: 100px; }
+
+/* Name cell */
+.sa-cell-name {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--content-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+}
+
+/* Channel cell */
+.sa-channel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--content-primary);
+}
+
+/* Teams cell */
+.sa-teams {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--content-primary);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Evaluations */
+.sa-evals {
+  color: var(--content-tertiary);
+}
+
+/* Trend */
+.sa-trend {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 14px;
+}
+
+/* Actions */
+.sa-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.sa-actions .btn {
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.sa-table tbody tr:hover .sa-actions .btn {
+  opacity: 1;
+}

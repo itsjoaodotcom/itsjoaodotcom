@@ -157,16 +157,6 @@ function AiHubSubitems() {
 /*  Sidebar variants                                          */
 /* ═══════════════════════════════════════════════════════════ */
 
-function AgentsQaSubitems() {
-  return (
-    <>
-      <SnavSubitem icon="Verified" label="Scoring Agents" badge={6} />
-      <SnavSubitem icon="ChartBars" label="Analytics" />
-      <SnavSubitem icon="Workflows" label="Automation Agent" />
-      <SnavSubitem icon="Grid" label="Integrations" />
-    </>
-  );
-}
 
 function SidebarInbox({ collapsed, onCollapse, activeView, onViewChange }) {
   return (
@@ -199,14 +189,6 @@ function SidebarInbox({ collapsed, onCollapse, activeView, onViewChange }) {
 
       <div className="snav-divider"></div>
 
-      <div className="snav-links mid">
-        <NavGroup icon="One part" label="Agents QA">
-          <AgentsQaSubitems />
-        </NavGroup>
-      </div>
-
-      <div className="snav-divider"></div>
-
       <div className="snav-links grow">
         <SnavItem icon="Toggle" label="Settings" />
       </div>
@@ -216,45 +198,6 @@ function SidebarInbox({ collapsed, onCollapse, activeView, onViewChange }) {
   );
 }
 
-function SidebarAgentQa({ collapsed, onCollapse }) {
-  return (
-    <nav className={`sidebar-nav${collapsed ? " collapsed" : ""}`}>
-      <SidebarHeader onCollapse={onCollapse} />
-
-      <div className="snav-links">
-        <NavGroup icon="Inbox" label="Inbox" />
-        <NavGroup icon="ActiveUser" label="Contacts" />
-        <SnavItem icon="AI" label="AI Assistant" />
-        <SnavItem icon="Micro" label="Voice Assist" />
-      </div>
-
-      <div className="snav-divider"></div>
-
-      <div className="snav-links mid">
-        <NavGroup icon="AIHub" label="AI Hub" />
-      </div>
-
-      <div className="snav-divider"></div>
-
-      <div className="snav-links mid">
-        <NavGroup icon="ChartBars" label="Analytics" defaultExpanded>
-          <SnavSubitem icon="Grid2" label="Overview" href="/overview" />
-          <SnavSubitem icon="Verified" label="Agent QA" href="/agent-qa" active />
-          <SnavSubitem icon="Users" label="Team Performance" />
-          <SnavSubitem icon="Inbox" label="Conversations" />
-        </NavGroup>
-      </div>
-
-      <div className="snav-divider"></div>
-
-      <div className="snav-links grow">
-        <SnavItem icon="Toggle" label="Settings" />
-      </div>
-
-      <SidebarFooter />
-    </nav>
-  );
-}
 
 function SidebarOverview({ collapsed, onCollapse }) {
   return (
@@ -354,8 +297,6 @@ export default function Sidebar({ variant = "overview", activeView, onViewChange
           onViewChange={onViewChange}
         />
       );
-    case "agent-qa":
-      return <SidebarAgentQa collapsed={collapsed} onCollapse={toggleCollapse} />;
     case "overview":
     default:
       return <SidebarOverview collapsed={collapsed} onCollapse={toggleCollapse} />;
