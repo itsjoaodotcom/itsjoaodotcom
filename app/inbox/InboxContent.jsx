@@ -1377,7 +1377,7 @@ export default function InboxContent({ currentView = "assigned", onViewChange })
               </div>
               <div className="composer-right">
                 <div className="composer-right-default" style={{ display: isNoteMode ? "none" : "flex", gap: "4px", alignItems: "center" }}>
-                  <button className="btn btn-secondary" onClick={handleGenerateReply}>
+                  <button className="btn btn-secondary" onClick={handleGenerateReply} disabled={copilotThinking}>
                     <img src="/icons/16px/AI.svg" width={16} height={16} alt="" />
                     Generate reply
                   </button>
