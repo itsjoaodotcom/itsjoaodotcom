@@ -151,7 +151,7 @@ function AgentsQaSubitems() {
 
   return (
     <>
-      <SnavSubitem icon="Verified" label="Scoring Agents" badge={6} href="/scoring-agents" active={pathname === "/scoring-agents"} />
+      <SnavSubitem icon="Verified" label="Scoring Agents" badge={6} href="/scoring-agents" active={pathname.startsWith("/scoring-agents")} />
       <SnavSubitem icon="ChartBars" label="Analytics" />
     </>
   );

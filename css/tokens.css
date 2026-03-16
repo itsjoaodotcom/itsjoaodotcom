@@ -148,6 +148,13 @@
   --utilities-content-onsoft-cyan:   #11596d;
   --utilities-surface-pinksubtle:    #f9f0ee;
   --utilities-content-onsoft-pink:   #6b5452;
+  --utilities-content-content-green: #47ad7a;
+  --utilities-content-content-red:   #d14c4d;
+  --utilities-content-content-orange:#d17f3a;
+
+  /* Transparent surface/content */
+  --surface-secondarytransparent:    rgba(250, 250, 250, 0.6);
+  --content-tertiarytransparent:     rgba(0, 0, 0, 0.5);
 
   /* Button */
   --button-accent:             var(--blue-05);
@@ -246,6 +253,12 @@ html.dark {
     --utilities-content-onsoft-cyan:   var(--cyan-02);
     --utilities-surface-pinksubtle:    var(--brown-08);
     --utilities-content-onsoft-pink:   var(--brown-02);
+    --utilities-content-content-green: #47ad7a;
+    --utilities-content-content-red:   #d14c4d;
+    --utilities-content-content-orange:#d17f3a;
+
+    --surface-secondarytransparent:    rgba(30, 30, 30, 0.6);
+    --content-tertiarytransparent:     rgba(255, 255, 255, 0.5);
 
     /* Button */
     --button-accent:             var(--blue-06);

@@ -76,10 +76,81 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 10px;
+  padding: 8px 20px 8px 8px;
 }
 
-/* Table */
+/* ── Metrics ── */
+.sa-metrics {
+  display: flex;
+  gap: 12px;
+  padding: 20px;
+  flex-shrink: 0;
+}
+
+.sa-metric-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  background: var(--surface-secondary);
+  border: 1px solid var(--stroke-primary);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.sa-metric-card:hover {
+  background: var(--surface-secondary);
+}
+
+.sa-metric-card.sa-metric-active {
+  border-color: var(--stroke-accent);
+}
+
+.sa-metric-card.sa-metric-danger {
+  background: rgba(255, 230, 230, 0.4);
+  border-color: #ffe6e6;
+  border-radius: 6px;
+}
+
+.sa-metric-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px;
+}
+
+.sa-metric-label {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-tertiary);
+}
+
+.sa-metric-value-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 10px 12px;
+}
+
+.sa-metric-value {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: -0.4px;
+  color: var(--content-primary);
+}
+
+.sa-metric-trend {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 12px;
+  line-height: 16px;
+  padding-bottom: 2px;
+}
+
+/* ── Table ── */
 .sa-table-wrap {
   flex: 1;
   overflow-y: auto;
@@ -88,6 +159,7 @@
 /* Header row */
 .sa-table-header {
   display: flex;
+  border-top: 1px solid var(--stroke-primary);
   border-bottom: 1px solid var(--stroke-primary);
   position: sticky;
   top: 0;
@@ -111,7 +183,7 @@
   font-weight: 400;
   line-height: 16px;
   color: var(--content-tertiary);
-  padding: 0 6px;
+  padding: 6px 10px;
 }
 
 /* Data row */
@@ -151,10 +223,6 @@
 
 .sa-cell-primary {
   color: var(--content-primary);
-}
-
-.sa-cell-tertiary {
-  color: var(--content-tertiary);
 }
 
 /* Column sizes */
@@ -213,4 +281,667 @@
 
 .sa-cell-actions .btn {
   opacity: 1;
+}
+
+/* ══════════════════════════════════════════════════════
+   Agent Detail Page (sad- prefix)
+   ══════════════════════════════════════════════════════ */
+
+/* Breadcrumb with link */
+.sad-breadcrumb-link {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-primary);
+  text-decoration: none;
+}
+
+.sad-breadcrumb-current {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-tertiary);
+}
+
+.sa-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Tabs bar */
+.sad-tabs-bar {
+  display: flex;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--stroke-primary);
+  flex-shrink: 0;
+}
+
+.sad-tabs {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  padding: 8px 20px 0 20px;
+}
+
+.sad-tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0 12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-tertiarytransparent);
+}
+
+.sad-tab-active {
+  color: var(--content-primary);
+}
+
+.sad-tab-indicator {
+  position: absolute;
+  bottom: 0;
+  left: -1px;
+  right: -1px;
+  height: 1px;
+  background: var(--stroke-accent);
+  border-radius: 2px;
+}
+
+.sad-tabs-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  flex-shrink: 0;
+}
+
+/* Scrollable content area */
+.sad-scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Metric subtitle */
+.sad-metric-subtitle {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--content-tertiary);
+  padding-bottom: 2px;
+}
+
+/* Charts section */
+.sad-charts {
+  display: flex;
+  gap: 12px;
+  padding: 0 20px 20px;
+  flex-shrink: 0;
+}
+
+.sad-chart-card {
+  flex: 1;
+  border-radius: 8px;
+  background: var(--surface-secondary);
+  border: 1px solid var(--stroke-primary);
+}
+
+.sad-chart-fixed {
+  flex: none;
+  width: 558px;
+}
+
+.sad-chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-primary);
+}
+
+.sad-chart-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px;
+}
+
+.sad-chart-subtitle {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--content-tertiary);
+  padding: 12px 11px;
+}
+
+.sad-chart-content-wrap {
+  padding: 0 2px 2px;
+}
+
+.sad-chart-container {
+  background: var(--surface-primary);
+  border: 1px solid var(--stroke-primary);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.sad-chart-content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Bar breakdown items (Criterion Pass Rates & Score Distribution) */
+.sad-bar-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+}
+
+.sad-bar-label-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sad-bar-label {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sad-bar-ratio {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-tertiary);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.sad-bar-pct {
+  width: 40px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  text-align: right;
+}
+
+.sad-bar-track {
+  height: 6px;
+  border-radius: 8px;
+  background: var(--charts-neutralsubtle, #e2e3e6);
+  overflow: hidden;
+  display: flex;
+  gap: 2px;
+}
+
+.sad-bar-fill {
+  height: 6px;
+  border-radius: 8px;
+}
+
+/* Score Distribution */
+.sad-dist-fill {
+  background: var(--content-secondary);
+}
+
+.sad-dist-count {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-tertiary);
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Recent Evaluations section */
+.sad-recent-evals {
+  display: flex;
+  flex-direction: column;
+  margin: 0 20px 20px;
+  border-radius: 8px;
+  background: var(--surface-secondary);
+  border: 1px solid var(--stroke-primary);
+}
+
+.sad-recent-evals-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 8px 10px 12px;
+}
+
+.sad-recent-evals-title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-primary);
+}
+
+.sad-recent-evals-header .btn-icon {
+  margin-right: 0;
+}
+
+/* Detail table */
+.sad-table-wrap {
+  flex-shrink: 0;
+}
+
+.sad-chart-container .sa-table-header {
+  border-top: none;
+}
+
+.sad-col-id {
+  width: 102px;
+  flex-shrink: 0;
+}
+
+.sad-col-flex {
+  flex: 1;
+  min-width: 0;
+}
+
+.sad-col-148 {
+  width: 148px;
+  flex-shrink: 0;
+}
+
+.sad-col-140 {
+  width: 140px;
+  flex-shrink: 0;
+}
+
+/* ── Criteria Definitions ── */
+.sa-criteria {
+  display: flex;
+  flex-direction: column;
+  border-radius: 6px;
+  background: var(--surface-primary);
+  border: 1px solid var(--stroke-secondarystrong);
+  margin: 0 20px 20px;
+}
+
+.sa-criteria-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sa-criteria-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+}
+
+.sa-criteria-title-text {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-primary);
+}
+
+.sa-criteria-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: var(--surface-tint);
+  box-shadow: inset 0 0 0 1px var(--stroke-primary);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 12px;
+  color: var(--content-tertiary);
+}
+
+.sa-criteria-header .btn-icon {
+  margin: 6px;
+}
+
+.sa-criteria-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.sa-criteria-thead {
+  display: flex;
+  border-top: 1px solid var(--stroke-secondarystrong);
+  border-bottom: 1px solid var(--stroke-primary);
+}
+
+.sa-criteria-th {
+  padding: 6px 10px;
+}
+
+.sa-criteria-th .sa-th-label {
+  padding: 6px 4px;
+}
+
+.sa-criteria-row {
+  display: flex;
+  border-bottom: 1px solid var(--stroke-primary);
+}
+
+.sa-criteria-row:last-child {
+  border-bottom: none;
+}
+
+.sa-criteria-cell {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+}
+
+.sa-criteria-col-name {
+  flex: 1;
+}
+
+.sa-criteria-col-strategy {
+  width: 232px;
+  padding: 12px 20px;
+}
+
+.sa-criteria-col-weight {
+  width: 148px;
+}
+
+.sa-criteria-col-def {
+  width: 558px;
+}
+
+.sa-criteria-col-def .sa-cell-text {
+  white-space: normal;
+  line-height: 20px;
+}
+
+/* Clickable eval rows */
+.sad-row-clickable {
+  cursor: pointer;
+}
+
+/* ══════════════════════════════════════════════════════
+   Evaluation Detail Modal (sad-modal- prefix)
+   ══════════════════════════════════════════════════════ */
+
+.sad-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.sad-modal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 840px;
+  max-height: 640px;
+  border-radius: 10px;
+  background: var(--surface-secondary);
+  box-shadow: 0px -2px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.sad-modal::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 8px;
+  background: var(--surface-primary);
+  border: 1px solid var(--stroke-primary);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Ensure children are above the pseudo-element */
+.sad-modal > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Inner wrapper to provide the white inset background */
+.sad-modal-header,
+.sad-modal-description,
+.sad-modal-table-wrap,
+.sad-modal-footer {
+  background: var(--surface-primary);
+}
+
+/* Header */
+.sad-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 16px;
+  margin: 2px 2px 0;
+  border-radius: 8px 8px 0 0;
+}
+
+.sad-modal-header-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.sad-modal-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 6px;
+  background: var(--utilities-surface-surface-greensubtle);
+  color: var(--utilities-content-onsoft-green);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 42px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.sad-modal-header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sad-modal-title {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-primary);
+}
+
+.sad-modal-subtitle-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sad-modal-contact {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-tertiary);
+}
+
+.sad-modal-close {
+  padding: 4px;
+  border-radius: 5px;
+  flex-shrink: 0;
+}
+
+/* Description */
+.sad-modal-description {
+  padding: 10px 16px;
+  margin: 0 2px;
+}
+
+.sad-modal-description-text {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-tertiary);
+  max-width: 700px;
+  margin: 0;
+}
+
+/* Criteria Table */
+.sad-modal-table-wrap {
+  flex: 1;
+  overflow-y: auto;
+  margin: 0 2px;
+}
+
+.sad-modal-table-header {
+  display: flex;
+  border-top: 1px solid var(--stroke-primary);
+  border-bottom: 1px solid var(--stroke-primary);
+  position: sticky;
+  top: 0;
+  background: var(--surface-primary);
+  z-index: 1;
+}
+
+.sad-modal-th {
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+}
+
+.sad-modal-th:first-child {
+  padding-left: 8px;
+}
+
+.sad-modal-col-criterion {
+  flex: 1;
+}
+
+.sad-modal-col-category {
+  width: 240px;
+  flex-shrink: 0;
+}
+
+.sad-modal-col-result {
+  width: 240px;
+  flex-shrink: 0;
+}
+
+.sad-modal-row-group {
+  border-bottom: 1px solid var(--stroke-primary);
+}
+
+.sad-modal-row-group:last-child {
+  border-bottom: none;
+}
+
+.sad-modal-row-fail {
+  background: var(--utilities-surface-surface-redminimal);
+}
+
+.sad-modal-row {
+  display: flex;
+}
+
+.sad-modal-cell {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+}
+
+.sad-modal-col-criterion.sad-modal-cell {
+  padding-left: 18px;
+}
+
+/* Reasoning expandable */
+.sad-modal-reasoning-wrap {
+  padding: 0 18px 12px;
+}
+
+.sad-modal-reasoning-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--content-tertiary);
+}
+
+.sad-modal-reasoning-content {
+  margin-top: 8px;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--surface-secondary);
+  border: 1px solid var(--stroke-primary);
+}
+
+.sad-modal-reasoning-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-primary);
+  margin-bottom: 4px;
+}
+
+.sad-modal-reasoning-text {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-primary);
+}
+
+/* Footer */
+.sad-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 12px;
+  border-top: 1px solid var(--stroke-primary);
+  margin: 0 2px 2px;
+  border-radius: 0 0 8px 8px;
+}
+
+.sad-modal-footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }

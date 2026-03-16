@@ -1,0 +1,201 @@
+/* ── Agent QA – Scoring Agents ─────────────────────── */
+
+/* Breadcrumb bar */
+.qa-breadcrumb {
+  padding: 12px 0 12px 0;
+  border-bottom: 1px solid var(--border-primary);
+  margin-bottom: 0;
+}
+
+.qa-breadcrumb-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--content-primary);
+}
+
+/* Toolbar: search + filter + add */
+.qa-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  gap: 8px;
+}
+
+.qa-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.qa-search-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  background: var(--bg-primary);
+  min-width: 260px;
+  cursor: text;
+}
+
+.qa-search-placeholder {
+  font-size: 13px;
+  color: var(--content-tertiary);
+  font-family: var(--font-family);
+}
+
+.qa-search-input:hover {
+  border-color: var(--border-secondary);
+}
+
+/* Table wrapper */
+.qa-agents-table-wrap {
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg-primary);
+}
+
+/* Table */
+.qa-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-family);
+}
+
+.qa-table thead th {
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--content-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border-primary);
+  background: var(--bg-secondary);
+  white-space: nowrap;
+}
+
+.qa-table tbody tr {
+  transition: background 0.15s;
+}
+
+.qa-table tbody tr:hover {
+  background: var(--bg-secondary);
+}
+
+.qa-table tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-primary);
+  font-size: 13px;
+  color: var(--content-secondary);
+  vertical-align: middle;
+}
+
+.qa-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Column widths */
+.col-name { min-width: 240px; }
+.col-channel { width: 140px; }
+.col-teams { width: 160px; }
+.col-score { width: 100px; }
+.col-evals { width: 110px; }
+.col-trend { width: 100px; }
+.col-status { width: 100px; }
+.col-actions { width: 80px; }
+
+/* Name cell */
+.qa-name-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.qa-name-primary {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--content-primary);
+}
+
+.qa-name-desc {
+  font-size: 12px;
+  color: var(--content-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 320px;
+}
+
+/* Channel cell */
+.qa-channel-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--content-secondary);
+}
+
+/* Teams cell */
+.qa-teams-cell {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Score value */
+.qa-score-value {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.qa-score-value.high {
+  color: #2BC4AD;
+}
+
+.qa-score-value.mid {
+  color: #F97316;
+}
+
+.qa-score-value.low {
+  color: #EF4444;
+}
+
+/* Evaluations */
+.qa-evals-value {
+  font-size: 13px;
+  color: var(--content-secondary);
+}
+
+/* Trend */
+.qa-trend-value {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.qa-trend-value.up {
+  color: #2BC4AD;
+}
+
+.qa-trend-value.down {
+  color: #EF4444;
+}
+
+/* Actions cell */
+.qa-actions-cell {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.qa-actions-cell .btn {
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.qa-table tbody tr:hover .qa-actions-cell .btn {
+  opacity: 1;
+}
