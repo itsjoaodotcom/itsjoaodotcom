@@ -211,7 +211,9 @@ function SidebarInbox({ collapsed, onCollapse, activeView, onViewChange }) {
 
       <div className="snav-divider"></div>
 
-      <div className="snav-links grow">
+      <div className="snav-divider"></div>
+
+<div className="snav-links grow">
         <SnavItem icon="Toggle" label="Settings" />
       </div>
 

@@ -1,10 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Tag from "../../../../components/Tag";
 
 const iconFilter = { filter: "brightness(0) invert(0.53)" };
+
+const channelColor = { social: "blue", email: "orange", chat: "cyan", call: "green" };
+
+const sampleConversation = [
+  { side: "customer", text: "I'd like to speak with a human agent." },
+  { side: "agent", isAI: true, author: "AI Agent", text: "What would you like to do?" },
+  { side: "customer", text: "I'm having an issue with my account." },
+  { side: "agent", isAI: true, author: "AI Agent", text: "Thank you for your patience. Let me look into this for you." },
+  { side: "customer", text: "No, thank you!" },
+  { side: "agent", author: "Emma Rodriguez", text: "I understand your concern. Let me pull up your account details." },
+  { side: "customer", text: "My service isn't working properly." },
+  { side: "agent", author: "Emma Rodriguez", text: "I've escalated this to our specialist team. You should hear back within 24 hours." },
+];
 
 const AGENTS = {
   "chat-quality-monitor": "Chat Quality Monitor",
@@ -50,10 +63,10 @@ const evaluations = [
     description: "Customer contacted support regarding a account inquiry. They were transferred to Ahmed Mansour who handled the interaction via social. The conversation included 4 evaluated criteria points.",
     criteria: [
       { criterion: "Response Time", category: "Communication", result: "Pass", reasoning: "Agent responded within the first 30 seconds of the customer initiating the chat, well within the 60-second SLA threshold. The greeting was prompt and professional." },
-      { criterion: "Empathy Display", category: "Process", result: "Pass" },
-      { criterion: "Escalation Handling", category: "Compliance", result: "Pass" },
-      { criterion: "Issue Resolution", category: "Compliance", result: "Fail" },
-      { criterion: "Empathy & Active Listening", category: "behavioral", result: "Pass" },
+      { criterion: "Empathy Display", category: "Process", result: "Pass", reasoning: "Agent acknowledged the customer's frustration and used empathetic language throughout the conversation, reflecting active listening and care." },
+      { criterion: "Escalation Handling", category: "Compliance", result: "Pass", reasoning: "When the issue exceeded the agent's scope, escalation was initiated correctly and the customer was informed of next steps in a timely manner." },
+      { criterion: "Issue Resolution", category: "Compliance", result: "Fail", reasoning: "The agent failed to confirm that the issue was fully resolved before closing the conversation. No follow-up action was scheduled." },
+      { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", reasoning: "Agent mirrored the customer's concerns and asked clarifying questions to ensure full understanding before providing a solution." },
     ],
   },
   {
@@ -61,11 +74,11 @@ const evaluations = [
     contactName: "Carlos Rivera", title: "Billing Dispute Resolution", channelTag: "social",
     description: "Customer contacted support regarding a billing discrepancy. The agent handled the interaction professionally and resolved the issue within the session.",
     criteria: [
-      { criterion: "Response Time", category: "Communication", result: "Pass" },
-      { criterion: "Empathy Display", category: "Process", result: "Pass" },
-      { criterion: "Escalation Handling", category: "Compliance", result: "Pass" },
-      { criterion: "Issue Resolution", category: "Compliance", result: "Pass" },
-      { criterion: "Empathy & Active Listening", category: "behavioral", result: "Pass" },
+      { criterion: "Response Time", category: "Communication", result: "Pass", reasoning: "Agent picked up the call within the expected SLA window and immediately identified the customer in the system." },
+      { criterion: "Empathy Display", category: "Process", result: "Pass", reasoning: "The agent validated the customer's concern about the billing error and expressed genuine understanding before beginning resolution steps." },
+      { criterion: "Escalation Handling", category: "Compliance", result: "Pass", reasoning: "No escalation was required; the agent resolved the billing dispute within their authority level without unnecessary transfers." },
+      { criterion: "Issue Resolution", category: "Compliance", result: "Pass", reasoning: "The billing discrepancy was identified, corrected, and confirmed with the customer before ending the call. A confirmation email was sent." },
+      { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", reasoning: "Agent listened without interrupting, reflected back the customer's concern accurately, and provided a clear resolution path." },
     ],
   },
   {
@@ -73,11 +86,11 @@ const evaluations = [
     contactName: "Fatima Al-Rashid", title: "Product Return & Refund Request", channelTag: "email",
     description: "Customer requested a return and refund for a defective product. The agent guided the customer through the process and confirmed the refund timeline.",
     criteria: [
-      { criterion: "Response Time", category: "Communication", result: "Pass" },
-      { criterion: "Empathy Display", category: "Process", result: "Pass" },
-      { criterion: "Escalation Handling", category: "Compliance", result: "Pass" },
-      { criterion: "Issue Resolution", category: "Compliance", result: "Pass" },
-      { criterion: "Empathy & Active Listening", category: "behavioral", result: "Pass" },
+      { criterion: "Response Time", category: "Communication", result: "Pass", reasoning: "Email response was sent within 2 hours of receipt, meeting the advanced support SLA of 4 hours for product return requests." },
+      { criterion: "Empathy Display", category: "Process", result: "Pass", reasoning: "The agent expressed regret for the defective product experience and offered a direct apology before outlining the resolution." },
+      { criterion: "Escalation Handling", category: "Compliance", result: "Pass", reasoning: "The return was processed at the agent's level without requiring escalation. Correct internal procedures were followed." },
+      { criterion: "Issue Resolution", category: "Compliance", result: "Pass", reasoning: "Refund was initiated and the customer received a confirmation with the expected credit timeline of 5–7 business days." },
+      { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", reasoning: "Agent demonstrated thorough understanding of the customer's situation and tailored the response to address all specific concerns raised." },
     ],
   },
   {
@@ -85,11 +98,11 @@ const evaluations = [
     contactName: "Liam O'Connor", title: "Service Outage Complaint", channelTag: "chat",
     description: "Customer reported a service outage affecting their account. The agent acknowledged the issue and escalated to the technical team but failed to follow up within the promised timeframe.",
     criteria: [
-      { criterion: "Response Time", category: "Communication", result: "Pass" },
-      { criterion: "Empathy Display", category: "Process", result: "Pass" },
-      { criterion: "Escalation Handling", category: "Compliance", result: "Fail" },
-      { criterion: "Issue Resolution", category: "Compliance", result: "Pass" },
-      { criterion: "Empathy & Active Listening", category: "behavioral", result: "Pass" },
+      { criterion: "Response Time", category: "Communication", result: "Pass", reasoning: "Initial response was sent within 45 minutes of the outage report, complying with the critical issue SLA of 1 hour." },
+      { criterion: "Empathy Display", category: "Process", result: "Pass", reasoning: "The agent acknowledged the business impact of the outage and communicated urgency in their language and tone appropriately." },
+      { criterion: "Escalation Handling", category: "Compliance", result: "Fail", reasoning: "Escalation was initiated but the agent failed to document the case correctly, resulting in the technical team receiving incomplete information." },
+      { criterion: "Issue Resolution", category: "Compliance", result: "Pass", reasoning: "Although follow-up was delayed, the outage was eventually resolved and the customer received an explanation of the root cause." },
+      { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", reasoning: "Agent listened attentively to all impacted areas described by the customer and communicated clearly that the issue was being escalated with priority." },
     ],
   },
   {
@@ -97,11 +110,11 @@ const evaluations = [
     contactName: "Sarah Chen", title: "Subscription Upgrade Inquiry", channelTag: "call",
     description: "Customer called to inquire about upgrading their subscription plan. The agent provided clear information about the available options and pricing.",
     criteria: [
-      { criterion: "Response Time", category: "Communication", result: "Pass" },
-      { criterion: "Empathy Display", category: "Process", result: "Pass" },
-      { criterion: "Escalation Handling", category: "Compliance", result: "Pass" },
-      { criterion: "Issue Resolution", category: "Compliance", result: "Pass" },
-      { criterion: "Empathy & Active Listening", category: "behavioral", result: "Pass" },
+      { criterion: "Response Time", category: "Communication", result: "Pass", reasoning: "Call was answered on the second ring and the agent was prepared with the customer's account information before the conversation began." },
+      { criterion: "Empathy Display", category: "Process", result: "Pass", reasoning: "The agent matched the customer's enthusiasm about upgrading and used positive reinforcement when discussing plan benefits." },
+      { criterion: "Escalation Handling", category: "Compliance", result: "Pass", reasoning: "No escalation was needed. All upgrade-related questions were answered within the agent's knowledge and authority." },
+      { criterion: "Issue Resolution", category: "Compliance", result: "Pass", reasoning: "The upgrade was completed during the call, the customer confirmed satisfaction, and a confirmation email was dispatched immediately." },
+      { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", reasoning: "Agent identified the customer's primary motivation for upgrading (storage needs) and guided the conversation to the most relevant plan." },
     ],
   },
   {
@@ -109,11 +122,11 @@ const evaluations = [
     contactName: "David Park", title: "Password Reset Assistance", channelTag: "chat",
     description: "Customer needed help resetting their account password. The agent walked the customer through the reset process and verified the account was accessible.",
     criteria: [
-      { criterion: "Response Time", category: "Communication", result: "Pass" },
-      { criterion: "Empathy Display", category: "Process", result: "Pass" },
-      { criterion: "Escalation Handling", category: "Compliance", result: "Pass" },
-      { criterion: "Issue Resolution", category: "Compliance", result: "Pass" },
-      { criterion: "Empathy & Active Listening", category: "behavioral", result: "Pass" },
+      { criterion: "Response Time", category: "Communication", result: "Pass", reasoning: "Agent responded to the chat within 20 seconds and immediately confirmed they could assist with the password reset." },
+      { criterion: "Empathy Display", category: "Process", result: "Pass", reasoning: "The agent reassured the customer that account access would be restored quickly, reducing anxiety about the locked account." },
+      { criterion: "Escalation Handling", category: "Compliance", result: "Pass", reasoning: "The issue was resolved entirely within the chat session. No escalation was required or initiated." },
+      { criterion: "Issue Resolution", category: "Compliance", result: "Pass", reasoning: "Password reset was completed step-by-step with the customer confirming successful login before the session was closed." },
+      { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", reasoning: "Agent adapted the instructions to the customer's technical level, confirming understanding at each step before proceeding." },
     ],
   },
   {
@@ -121,11 +134,11 @@ const evaluations = [
     contactName: "Anna Kowalski", title: "Delivery Delay Investigation", channelTag: "email",
     description: "Customer reported a delayed delivery. The agent investigated and found a logistics issue but failed to provide a resolution or compensation within the interaction.",
     criteria: [
-      { criterion: "Response Time", category: "Communication", result: "Fail" },
-      { criterion: "Empathy Display", category: "Process", result: "Pass" },
-      { criterion: "Escalation Handling", category: "Compliance", result: "Fail" },
-      { criterion: "Issue Resolution", category: "Compliance", result: "Pass" },
-      { criterion: "Empathy & Active Listening", category: "behavioral", result: "Pass" },
+      { criterion: "Response Time", category: "Communication", result: "Fail", reasoning: "The initial response exceeded the 4-hour SLA by 2 hours. No automated acknowledgement was sent to manage customer expectations during the delay." },
+      { criterion: "Empathy Display", category: "Process", result: "Pass", reasoning: "The agent expressed understanding of the inconvenience caused by the delay and acknowledged the impact on the customer's plans." },
+      { criterion: "Escalation Handling", category: "Compliance", result: "Fail", reasoning: "The logistics issue required escalation to the fulfilment team, but no escalation was created. The case was closed without resolution." },
+      { criterion: "Issue Resolution", category: "Compliance", result: "Pass", reasoning: "While full resolution was not achieved in this session, the agent provided accurate status information and an estimated delivery date." },
+      { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", reasoning: "The agent acknowledged the full scope of the issue as described by the customer and did not dismiss any of the raised concerns." },
     ],
   },
 ];
@@ -137,7 +150,17 @@ export default function AgentDetailContent({ slug }) {
   const [activeTab, setActiveTab] = useState("Evaluations");
   const [criteriaOpen, setCriteriaOpen] = useState(true);
   const [selectedEval, setSelectedEval] = useState(null);
-  const [expandedReasoning, setExpandedReasoning] = useState({});
+  const [expandedReasoning, setExpandedReasoning] = useState(null);
+  const [activeModalTab, setActiveModalTab] = useState("Evaluation results");
+  const [resultFilter, setResultFilter] = useState(null); // null | "Pass" | "Fail"
+  const chatBottomRef = useRef(null);
+
+  useEffect(() => {
+    if (activeModalTab === "Conversation history" && chatBottomRef.current) {
+      chatBottomRef.current.scrollIntoView();
+    }
+  }, [activeModalTab, selectedEval]);
+
   const agentName = AGENTS[slug] || slug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
 
   return (
@@ -254,10 +277,14 @@ export default function AgentDetailContent({ slug }) {
         {/* Recent Evaluations */}
         <div className="sad-recent-evals">
           <div className="sad-recent-evals-header">
-            <span className="sad-recent-evals-title">Recent Evaluations</span>
-            <button className="btn btn-ghost btn-icon" onClick={() => setCriteriaOpen((o) => !o)}>
-              <img src={`/icons/16px/${criteriaOpen ? "ChevronTop" : "ChevronBottom"}.svg`} width={16} height={16} alt="" style={iconFilter} />
-            </button>
+            <div className="sad-recent-evals-header-left">
+              <span className="sad-recent-evals-title">Recent Evaluations</span>
+            </div>
+            <div className="sad-recent-evals-header-right">
+              <button className="btn btn-ghost btn-icon" onClick={() => setCriteriaOpen((o) => !o)}>
+                <img src={`/icons/16px/${criteriaOpen ? "ChevronTop" : "ChevronBottom"}.svg`} width={16} height={16} alt="" style={iconFilter} />
+              </button>
+            </div>
           </div>
           {criteriaOpen && (
             <div className="sad-chart-content-wrap">
@@ -273,7 +300,7 @@ export default function AgentDetailContent({ slug }) {
                 </div>
 
                 {evaluations.map((e) => (
-                  <div className="sa-row sad-row-clickable" key={e.id} onClick={() => { setSelectedEval(e); setExpandedReasoning({}); }}>
+                  <div className="sa-row sad-row-clickable" key={e.id} onClick={() => { setSelectedEval(e); setExpandedReasoning(null); setActiveModalTab("Evaluation results"); setResultFilter(null); }}>
                     <div className="sa-cell sad-col-id">
                       <span className="sa-cell-text" style={{ color: "var(--content-tertiary)" }}>{e.id}</span>
                     </div>
@@ -316,6 +343,7 @@ export default function AgentDetailContent({ slug }) {
       {/* Evaluation Detail Modal */}
       {selectedEval && (
         <div className="sad-modal-overlay" onClick={() => setSelectedEval(null)}>
+          <div className="sad-modal-stroke">
           <div className="sad-modal" onClick={(ev) => ev.stopPropagation()}>
             {/* Header */}
             <div className="sad-modal-header">
@@ -325,83 +353,159 @@ export default function AgentDetailContent({ slug }) {
                   <span className="sad-modal-title">{selectedEval.title}</span>
                   <div className="sad-modal-subtitle-row">
                     <span className="sad-modal-contact">{selectedEval.contactName}</span>
-                    <Tag color="grey" label={selectedEval.channelTag} size="sm" />
+                    <Tag color="grey" label={selectedEval.channelTag} size="sm" iconLeft={false} />
                   </div>
                 </div>
               </div>
-              <button className="btn btn-secondary sad-modal-close" onClick={() => setSelectedEval(null)}>
-                <img src="/icons/16px/Cross.svg" width={16} height={16} alt="Close" style={iconFilter} />
-              </button>
+              <div className="sad-modal-header-right">
+                <button className="btn btn-secondary btn-sm btn-icon" onClick={() => setSelectedEval(null)}>
+                  <img src="/icons/16px/Cross.svg" width={16} height={16} alt="Close" style={iconFilter} />
+                </button>
+              </div>
             </div>
 
             {/* Description */}
             <div className="sad-modal-description">
-              <p className="sad-modal-description-text">{selectedEval.description}</p>
+              <div className="sad-modal-description-box">
+                <p className="sad-modal-description-text">{selectedEval.description}</p>
+              </div>
             </div>
 
-            {/* Criteria Table */}
-            <div className="sad-modal-table-wrap">
-              <div className="sad-modal-table-header">
-                <div className="sad-modal-th sad-modal-col-criterion"><span className="sa-th-label">Criterion</span></div>
-                <div className="sad-modal-th sad-modal-col-category"><span className="sa-th-label">Category</span></div>
-                <div className="sad-modal-th sad-modal-col-result"><span className="sa-th-label">Result</span></div>
-              </div>
-              {selectedEval.criteria.map((c, i) => (
-                <div key={i} className={`sad-modal-row-group${c.result === "Fail" ? " sad-modal-row-fail" : ""}`}>
-                  <div className="sad-modal-row">
-                    <div className="sad-modal-cell sad-modal-col-criterion">
-                      <span className="sa-cell-text">{c.criterion}</span>
-                    </div>
-                    <div className="sad-modal-cell sad-modal-col-category">
-                      <Tag color="grey" label={c.category} size="sm" />
-                    </div>
-                    <div className="sad-modal-cell sad-modal-col-result">
-                      <Tag
-                        color={c.result === "Pass" ? "green" : "red"}
-                        label={c.result}
-                        size="sm"
-                        style="filled"
+            {/* Tabs */}
+            <div className="sad-modal-tabs">
+              <button
+                className={`sad-modal-tab${activeModalTab === "Evaluation results" ? " sad-modal-tab-active" : ""}`}
+                onClick={() => setActiveModalTab("Evaluation results")}
+              >
+                <span>Evaluation results</span>
+                {activeModalTab === "Evaluation results" && <div className="sad-modal-tab-indicator" />}
+              </button>
+              <button
+                className={`sad-modal-tab${activeModalTab === "Conversation history" ? " sad-modal-tab-active" : ""}`}
+                onClick={() => setActiveModalTab("Conversation history")}
+              >
+                <span>Conversation history</span>
+                <span className="sad-modal-tab-badge">{selectedEval.criteria.length}</span>
+                {activeModalTab === "Conversation history" && <div className="sad-modal-tab-indicator" />}
+              </button>
+            </div>
+
+            {/* Tab content */}
+            {activeModalTab === "Evaluation results" ? (
+              <div className="sad-modal-table-wrap">
+                <div className="sad-modal-table-header">
+                  <div className="sad-modal-th sad-modal-col-criterion"><span className="sa-th-label">Criterion</span></div>
+                  <div className="sad-modal-th sad-modal-col-category"><span className="sa-th-label">Category</span></div>
+                  <div className="sad-modal-th sad-modal-col-result">
+                    <button
+                      className={`sad-modal-th-btn${resultFilter ? " sad-modal-th-btn-active" : ""}`}
+                      onClick={() => setResultFilter(f => f === null ? "Pass" : f === "Pass" ? "Fail" : null)}
+                    >
+                      <span className="sa-th-label">Result</span>
+                      <img
+                        src={`/icons/16px/${resultFilter === "Fail" ? "ArrowTop" : "ArrowBottom"}.svg`}
+                        width={16} height={16} alt=""
+                        style={resultFilter ? undefined : iconFilter}
                       />
-                    </div>
+                    </button>
                   </div>
-                  {c.reasoning && (
-                    <div className="sad-modal-reasoning-wrap">
-                      <button
-                        className="sad-modal-reasoning-toggle"
-                        onClick={() => setExpandedReasoning((prev) => ({ ...prev, [i]: !prev[i] }))}
-                      >
-                        <span>Reasoning</span>
-                        <img
-                          src={`/icons/16px/${expandedReasoning[i] ? "ChevronBottom" : "ChevronRight"}.svg`}
-                          width={12}
-                          height={12}
-                          alt=""
-                          style={iconFilter}
-                        />
-                      </button>
-                      {expandedReasoning[i] && (
-                        <div className="sad-modal-reasoning-content">
-                          <span className="sad-modal-reasoning-label">Agent</span>
-                          <span className="sad-modal-reasoning-text">{c.reasoning}</span>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                  <div className="sad-modal-th sad-modal-col-chevron" />
                 </div>
-              ))}
-            </div>
-
-            {/* Footer */}
-            <div className="sad-modal-footer">
-              <div className="sad-modal-footer-actions">
-                <button className="btn btn-secondary" onClick={() => setSelectedEval(null)}>
-                  <span className="btn-label">Cancel</span>
-                </button>
-                <button className="btn btn-accent">
-                  <span className="btn-label">Save & Review</span>
-                </button>
+                {selectedEval.criteria
+                  .filter(c => !resultFilter || c.result === resultFilter)
+                  .map((c, i) => (
+                  <div key={i} className={`sad-modal-row-group${expandedReasoning === i ? " sad-modal-row-expanded" : ""}`}>
+                    <div
+                      className="sad-modal-row"
+                      onClick={() => setExpandedReasoning((prev) => prev === i ? null : i)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <div className="sad-modal-cell sad-modal-col-criterion">
+                        <span className="sa-cell-text">{c.criterion}</span>
+                      </div>
+                      <div className="sad-modal-cell sad-modal-col-category">
+                        <Tag color="grey" label={c.category} size="sm" />
+                      </div>
+                      <div className="sad-modal-cell sad-modal-col-result">
+                        <Tag
+                          color={c.result === "Pass" ? "green" : "red"}
+                          label={c.result}
+                          size="sm"
+                          style="filled"
+                        />
+                      </div>
+                      <div className="sad-modal-cell sad-modal-col-chevron">
+                        <button
+                          className="btn btn-ghost btn-icon"
+                          onClick={(ev) => { ev.stopPropagation(); setExpandedReasoning((prev) => prev === i ? null : i); }}
+                        >
+                          <img
+                            src={`/icons/16px/${expandedReasoning === i ? "ChevronTop" : "ChevronBottom"}.svg`}
+                            width={16}
+                            height={16}
+                            alt=""
+                            style={iconFilter}
+                          />
+                        </button>
+                      </div>
+                    </div>
+                    {c.reasoning && expandedReasoning === i && (
+                      <div className="sad-modal-reasoning-wrap">
+                        <div className="sad-modal-connection-item">
+                          <div className="sad-modal-connection-note">
+                            <img src="/icons/16px/Info.svg" width={16} height={16} alt="" style={iconFilter} />
+                            <span className="sad-modal-connection-note-text">Agent followed the expected protocol correctly.</span>
+                          </div>
+                          <div className="sad-modal-connection-divider" />
+                          <div className="sad-modal-connection-content">
+                            <div className="sad-modal-connection-author">
+                              <img src="/avatars/Avatar 2.png" className="sad-modal-connection-avatar" width={16} height={16} alt="" />
+                              <span className="sad-modal-connection-author-name">{selectedEval.contactName}</span>
+                            </div>
+                            <p className="sad-modal-connection-message">{c.reasoning}</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
-            </div>
+            ) : (
+              <div className="sad-modal-chat-wrap">
+                {(selectedEval.conversation || sampleConversation).map((msg, i) => {
+                  if (msg.side === "customer") {
+                    return (
+                      <div key={i} className="sad-modal-chat-row sad-modal-chat-row-customer">
+                        <div className="sad-modal-chat-bubble sad-modal-chat-bubble-customer">
+                          <p className="sad-modal-chat-text">{msg.text}</p>
+                        </div>
+                        {msg.time && <span className="sad-modal-chat-time">{msg.time}</span>}
+                      </div>
+                    );
+                  }
+                  return (
+                    <div key={i} className="sad-modal-chat-row sad-modal-chat-row-agent">
+                      <div className="sad-modal-chat-bubble sad-modal-chat-bubble-agent">
+                        <div className="sad-modal-chat-author">
+                          <img
+                            src={msg.isAI ? "/images/Revolut_Logo.png" : "/avatars/Avatar 01.png"}
+                            className={`sad-modal-chat-avatar${msg.isAI ? "" : " sad-modal-chat-avatar-human"}`}
+                            width={16}
+                            height={16}
+                            alt=""
+                          />
+                          <span className="sad-modal-chat-author-name">{msg.author}</span>
+                        </div>
+                        <p className="sad-modal-chat-text sad-modal-chat-text-agent">{msg.text}</p>
+                      </div>
+                      {msg.time && <span className="sad-modal-chat-time sad-modal-chat-time-agent">{msg.time}</span>}
+                    </div>
+                  );
+                })}
+                <div ref={chatBottomRef} />
+              </div>
+            )}
+          </div>
           </div>
         </div>
       )}
