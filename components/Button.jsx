@@ -1,7 +1,9 @@
 export default function Button({
-  variant = "accent",   // accent | inverse | secondary | ghost | destructive | ghost-destructive
-  size = "default",     // default | sm | micro
+  variant = "accent",
+  size = "default",
   label = "Button",
+  iconLeft = true,
+  iconRight = false,
   iconOnly = false,
   disabled = false,
   loading = false,
@@ -17,11 +19,9 @@ export default function Button({
 
   return (
     <button className={cls} disabled={disabled || loading}>
-      {iconOnly ? (
-        <img src="/icons/16px/Plus.svg" alt="" style={{ filter: "inherit" }} />
-      ) : (
-        <span className="btn-label">{label}</span>
-      )}
+      {(iconOnly || iconLeft) && <img src="/icons/16px/Plus.svg" alt="" />}
+      {!iconOnly && <span className="btn-label">{label}</span>}
+      {!iconOnly && iconRight && <img src="/icons/16px/Plus.svg" alt="" />}
     </button>
   );
 }

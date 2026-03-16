@@ -5,12 +5,20 @@ export default function PopoverItem({
   item = {},
   drag = false,
   checkbox = false,
+  selected = false,
+  active = false,
+  badge = null,
+  chevron = false,
+  radio = false,
+  radioSelected = false,
   onClick,
+  onHover,
 }) {
   return (
     <button
-      className={`popover-item${content === "text" ? " popover-item-text" : ""}`}
+      className={`popover-item${content === "text" ? " popover-item-text" : ""}${selected ? " popover-item-selected" : ""}${active ? " popover-item-active" : ""}`}
       onClick={onClick}
+      onMouseEnter={onHover}
     >
       {drag && (
         <img src="/icons/16px/Drag.svg" alt="" className="popover-item-icon popover-drag-handle" />
@@ -18,11 +26,22 @@ export default function PopoverItem({
       {content === "users" && (
         <img src={item.avatar} alt="" className="popover-item-avatar" />
       )}
-      {content === "text" && (
-        <img src={item.icon || "/icons/16px/Plus.svg"} alt="" className="popover-item-icon" />
+      {content === "text" && item.icon && (
+        <img src={item.icon} alt="" className="popover-item-icon" />
       )}
       <span className="popover-item-label">{item.label}</span>
-      {checkbox && <span className="popover-item-checkbox" />}
+      {badge != null && (
+        <span className="popover-item-badge">{badge}</span>
+      )}
+      {chevron && (
+        <img src="/icons/16px/ChevronRight.svg" alt="" className="popover-item-icon" />
+      )}
+      {radio && (
+        <span className={`popover-radio${radioSelected ? " popover-radio--on" : ""}`} />
+      )}
+      {(checkbox || selected) && (
+        <span className={`popover-item-checkbox${selected ? " popover-item-checkbox--checked" : ""}`} />
+      )}
     </button>
   );
 }

@@ -5,13 +5,16 @@ import PopoverItem from "./PopoverItem";
 export default function Popover({
   content = "users",     // "users" | "text"
   placeholder = "Search...",
+  subheader = null,      // string — small category label instead of search input (sub-level view)
   sections = [],
   drag = false,
   checkbox = false,
+  selectedLabels = [],
   bottomActions = false,
   scrollLoader = false,
   onSearch,
   onItemClick,
+  onItemHover,
 }) {
   const defaultBottomActions = [
     { icon: "/icons/16px/Retry.svg", label: "Reset filters" },
@@ -24,14 +27,20 @@ export default function Popover({
 
   return (
     <div className="popover">
-      <div className="popover-header">
-        <input
-          className="popover-input"
-          type="text"
-          placeholder={placeholder}
-          onChange={(e) => onSearch && onSearch(e.target.value)}
-        />
-      </div>
+      {subheader ? (
+        <div className="popover-subheader">
+          <span className="popover-subheader-label">{subheader}</span>
+        </div>
+      ) : (
+        <div className="popover-header">
+          <input
+            className="popover-input"
+            type="text"
+            placeholder={placeholder}
+            onChange={(e) => onSearch && onSearch(e.target.value)}
+          />
+        </div>
+      )}
 
       <div className="popover-body">
         {sections.map((items, sectionIndex) => (
@@ -45,7 +54,14 @@ export default function Popover({
                   item={item}
                   drag={drag}
                   checkbox={checkbox}
+                  selected={selectedLabels.includes(item.label)}
+                  active={!!item.active}
+                  badge={item.badge ?? null}
+                  chevron={!!item.chevron}
+                  radio={!!item.radio}
+                  radioSelected={!!item.radioSelected}
                   onClick={() => onItemClick && onItemClick(item, sectionIndex, itemIndex)}
+                  onHover={() => onItemHover && onItemHover(item, sectionIndex, itemIndex)}
                 />
               ))}
             </div>

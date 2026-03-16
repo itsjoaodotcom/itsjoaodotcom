@@ -67,7 +67,7 @@ export default function ComponentViewer({ params }) {
   const Component = entry.component;
   const activeProps = entry.computeProps
     ? entry.computeProps(entry.defaultProps, controlValues)
-    : entry.defaultProps;
+    : { ...entry.defaultProps, ...controlValues };
 
   const controls = entry.controls ?? [];
 

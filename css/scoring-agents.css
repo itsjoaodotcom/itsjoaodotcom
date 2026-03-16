@@ -105,7 +105,9 @@
 }
 
 .sa-metric-card.sa-metric-active {
-  border-color: var(--stroke-accent);
+  outline: 1px solid rgba(64, 97, 216, 0.6);
+  outline-offset: 3px;
+  border-radius: 8px;
 }
 
 .sa-metric-card.sa-metric-danger {

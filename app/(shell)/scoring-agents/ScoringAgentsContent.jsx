@@ -1,8 +1,127 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Tag from "../../../components/Tag";
+import Popover from "../../../components/Popover";
+
+const FILTER_CATEGORIES = [
+  {
+    key: "channels",
+    label: "Channels",
+    items: ["All", "Call", "Chat", "Email", "Social"],
+  },
+  {
+    key: "teams",
+    label: "Teams",
+    items: ["All", "Chat", "Call center", "Advanced support", "Social media"],
+  },
+  {
+    key: "agents",
+    label: "Agents",
+    items: ["All", "Active", "Draft"],
+  },
+];
+
+function FiltersButton({ filterSelections, onSelect, onReset }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState(null);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    function onMouseDown(e) {
+      if (!ref.current?.contains(e.target)) {
+        setIsOpen(false);
+        setActiveCategory(null);
+      }
+    }
+    document.addEventListener("mousedown", onMouseDown);
+    return () => document.removeEventListener("mousedown", onMouseDown);
+  }, [isOpen]);
+
+  const hasFilters = FILTER_CATEGORIES.some(
+    (cat) => filterSelections[cat.key] && filterSelections[cat.key] !== "All"
+  );
+
+  const activeCat = FILTER_CATEGORIES.find((c) => c.key === activeCategory);
+
+  return (
+    <div ref={ref} style={{ position: "relative" }}>
+      <button className="btn btn-secondary" onClick={() => { setIsOpen((v) => !v); setActiveCategory(null); }}>
+        <img src="/icons/16px/Filter.svg" width={16} height={16} alt="" style={iconFilter} />
+        <span className="btn-label">Filters</span>
+      </button>
+      {isOpen && (
+        <div style={{ position: "absolute", top: "calc(100% + 4px)", right: 0, zIndex: 100 }}>
+          <Popover
+            content="text"
+            placeholder="Find filter..."
+            sections={[
+              FILTER_CATEGORIES.map((cat) => ({
+                label: cat.label,
+                chevron: true,
+                active: activeCategory === cat.key,
+                badge: filterSelections[cat.key] ? 1 : null,
+              })),
+            ]}
+            bottomActions={hasFilters}
+            onItemHover={(item) => {
+              const cat = FILTER_CATEGORIES.find((c) => c.label === item.label);
+              if (cat) setActiveCategory(cat.key);
+            }}
+            onItemClick={(_, sectionIndex) => {
+              if (sectionIndex === -1) { onReset(); return; }
+            }}
+          />
+        </div>
+      )}
+      {isOpen && activeCat && (
+        <div style={{ position: "absolute", top: "calc(100% + 4px)", right: "244px", zIndex: 100 }}>
+          <Popover
+            content="text"
+            subheader={activeCat.label}
+            sections={[
+              activeCat.items.map((label) => ({
+                label,
+                radio: true,
+                radioSelected: filterSelections[activeCategory] === label || (label === "All" && !filterSelections[activeCategory]),
+              })),
+            ]}
+            bottomActions={!!filterSelections[activeCategory]}
+            onItemClick={(item, sectionIndex) => {
+              if (sectionIndex === -1) { onSelect(activeCategory, null); return; }
+              onSelect(activeCategory, item.label === "All" ? null : item.label);
+            }}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function PopoverAnchor({ children, popoverProps, isOpen, onToggle }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    if (!isOpen) return;
+    function onMouseDown(e) {
+      if (ref.current && !ref.current.contains(e.target)) onToggle(false);
+    }
+    document.addEventListener("mousedown", onMouseDown);
+    return () => document.removeEventListener("mousedown", onMouseDown);
+  }, [isOpen, onToggle]);
+
+  return (
+    <div ref={ref} style={{ position: "relative" }}>
+      <div onClick={() => onToggle(!isOpen)}>{children}</div>
+      {isOpen && (
+        <div style={{ position: "absolute", top: "calc(100% + 4px)", left: 0, zIndex: 100 }}>
+          <Popover {...popoverProps} />
+        </div>
+      )}
+    </div>
+  );
+}
 
 const iconFilter = { filter: "brightness(0) invert(0.53)" };
 
@@ -47,6 +166,16 @@ export default function ScoringAgentsContent() {
   const [sortField, setSortField] = useState(null);
   const [sortDir, setSortDir] = useState("asc");
   const [activeMetric, setActiveMetric] = useState("all");
+  const [openPopover, setOpenPopover] = useState(null);
+  const [filterSelections, setFilterSelections] = useState({});
+
+  function handleFilterSelect(key, value) {
+    setFilterSelections((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function handleFilterReset() {
+    setFilterSelections({});
+  }
 
   const activeCount = agents.filter((a) => a.status === "Active").length;
   const avgScore = Math.round(agents.reduce((s, a) => s + a.score, 0) / agents.length);
@@ -55,10 +184,10 @@ export default function ScoringAgentsContent() {
 
   const metrics = [
     { key: "all", icon: "Users", label: "Total Agents", value: String(agents.length) },
-    { key: "active", icon: "ActiveUser", label: "Active", value: String(activeCount), valueColor: "var(--utilities-content-content-green)" },
+    { key: "active", icon: "ActiveUser", label: "Active", value: String(activeCount), valueColor: "var(--utilities-content-content-green)", filterable: true },
     { key: "all", icon: "ChartBars", label: "Average Score", value: `${avgScore}%`, valueColor: "var(--utilities-content-content-green)", trend: "4.2%", trendUp: true },
     { key: "all", icon: "LiveChat", label: "Total Evaluations", value: String(totalEvals) },
-    { key: "trendDown", icon: "Trend", label: "Trending Down", value: String(trendDownCount), labelColor: "var(--utilities-content-content-red)", valueColor: "var(--utilities-content-content-red)", iconStyle: { filter: "brightness(0) saturate(100%) invert(40%) sepia(78%) saturate(1640%) hue-rotate(335deg) brightness(95%) contrast(97%)" } },
+    { key: "trendDown", icon: "Trend", label: "Trending Down", value: String(trendDownCount), labelColor: "var(--utilities-content-content-red)", valueColor: "var(--utilities-content-content-red)", iconStyle: { filter: "brightness(0) saturate(100%) invert(40%) sepia(78%) saturate(1640%) hue-rotate(335deg) brightness(95%) contrast(97%)" }, danger: true, filterable: true },
   ];
 
   const handleSort = (field) => {
@@ -120,14 +249,31 @@ export default function ScoringAgentsContent() {
           />
         </div>
         <div className="sa-toolbar-actions">
-          <button className="btn btn-secondary">
-            <img src="/icons/16px/Filter.svg" width={16} height={16} alt="" style={iconFilter} />
-            <span className="btn-label">Filters</span>
-          </button>
-          <button className="btn btn-secondary">
-            <img src="/icons/16px/Calendar.svg" width={16} height={16} alt="" style={iconFilter} />
-            <span className="btn-label">Last 30 days</span>
-          </button>
+          <FiltersButton
+            filterSelections={filterSelections}
+            onSelect={handleFilterSelect}
+            onReset={handleFilterReset}
+          />
+          <PopoverAnchor
+            isOpen={openPopover === "date"}
+            onToggle={(v) => setOpenPopover(v ? "date" : null)}
+            popoverProps={{
+              content: "text",
+              placeholder: "Search...",
+              sections: [[
+                { label: "Last 7 days",   icon: "/icons/16px/Clock.svg" },
+                { label: "Last 30 days",  icon: "/icons/16px/Clock.svg" },
+                { label: "Last 90 days",  icon: "/icons/16px/Clock.svg" },
+                { label: "Last 6 months", icon: "/icons/16px/Calendar.svg" },
+                { label: "Last year",     icon: "/icons/16px/Calendar.svg" },
+              ]],
+            }}
+          >
+            <button className="btn btn-secondary">
+              <img src="/icons/16px/Calendar.svg" width={16} height={16} alt="" style={iconFilter} />
+              <span className="btn-label">Last 30 days</span>
+            </button>
+          </PopoverAnchor>
           <button className="btn btn-accent">
             <img src="/icons/16px/Plus.svg" width={16} height={16} alt="" style={{ filter: "brightness(0) invert(1)" }} />
             <span className="btn-label">Add QA Agent</span>
@@ -139,10 +285,10 @@ export default function ScoringAgentsContent() {
       <div className="sa-metrics">
         {metrics.map((m) => (
           <div
-            className={`sa-metric-card${activeMetric === m.key ? " sa-metric-active" : ""}`}
+            className={`sa-metric-card${m.danger ? " sa-metric-danger" : ""}${m.filterable && activeMetric === m.key ? " sa-metric-active" : ""}`}
             key={m.label}
-            onClick={() => setActiveMetric(activeMetric === m.key ? "all" : m.key)}
-            style={{ cursor: "pointer" }}
+            onClick={m.filterable ? () => setActiveMetric(activeMetric === m.key ? "all" : m.key) : undefined}
+            style={{ cursor: m.filterable ? "pointer" : "default" }}
           >
             <div className="sa-metric-header">
               <img src={`/icons/16px/${m.icon}.svg`} width={16} height={16} alt="" style={m.iconStyle || iconFilter} />
