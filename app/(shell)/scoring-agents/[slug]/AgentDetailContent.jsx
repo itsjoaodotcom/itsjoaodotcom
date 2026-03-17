@@ -269,28 +269,39 @@ export default function AgentDetailContent({ slug }) {
 
       {hasFilters && (
         <div className="sa-filters-bar">
-          {filterCategories.filter((cat) => filterSelections[cat.key]?.value?.length > 0).map((cat) => (
-            <FiltersPopover
-              key={cat.key}
-              filterSelections={filterSelections}
-              onSelect={handleFilterSelect}
-              onReset={handleFilterReset}
-              filterCategories={filterCategories}
-            >
-              <FilterChip
-                label={cat.label}
-                values={filterSelections[cat.key]?.value ?? []}
-                op={filterSelections[cat.key]?.op ?? "is"}
-                onRemove={() => handleFilterSelect(cat.key, null)}
-              />
+          <div className="sa-filters-bar-chips">
+            {filterCategories.filter((cat) => filterSelections[cat.key]?.value?.length > 0).map((cat) => (
+              <FiltersPopover
+                key={cat.key}
+                filterSelections={filterSelections}
+                onSelect={handleFilterSelect}
+                onReset={handleFilterReset}
+                filterCategories={filterCategories}
+              >
+                <FilterChip
+                  label={cat.label}
+                  values={filterSelections[cat.key]?.value ?? []}
+                  op={filterSelections[cat.key]?.op ?? "is"}
+                  onRemove={() => handleFilterSelect(cat.key, null)}
+                  onOpChange={(newOp) => setFilterSelections((prev) => ({ ...prev, [cat.key]: { ...prev[cat.key], op: newOp } }))}
+                  categoryItems={cat.items}
+                  onValueToggle={(v) => handleFilterSelect(cat.key, v)}
+                />
+              </FiltersPopover>
+            ))}
+            <FiltersPopover filterSelections={filterSelections} onSelect={handleFilterSelect} onReset={handleFilterReset} filterCategories={filterCategories}>
+              <button className="sa-add-filter-btn">
+                <img src="/icons/16px/Plus.svg" width={12} height={12} alt="" style={iconFilter} />
+                <span>Add filter</span>
+              </button>
             </FiltersPopover>
-          ))}
-          <FiltersPopover filterSelections={filterSelections} onSelect={handleFilterSelect} onReset={handleFilterReset} filterCategories={filterCategories}>
-            <button className="sa-add-filter-btn">
-              <img src="/icons/16px/Plus.svg" width={12} height={12} alt="" style={iconFilter} />
-              <span>Add filter</span>
+          </div>
+          <div className="sa-filters-bar-actions">
+            <button className="btn btn-ghost btn-sm" onClick={handleFilterReset}>
+              <img src="/icons/16px/Cross.svg" width={16} height={16} alt="" style={iconFilter} />
+              <span className="btn-label">Clear</span>
             </button>
-          </FiltersPopover>
+          </div>
         </div>
       )}
 

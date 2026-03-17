@@ -206,26 +206,34 @@ export default function ScoringAgentsContent() {
       {/* Active filters bar */}
       {Object.keys(filterSelections).length > 0 && (
         <div className="sa-filters-bar">
-          {filterCategories
-            .filter((cat) => filterSelections[cat.key]?.value?.length > 0)
-            .map((cat) => (
-              <FilterChip
-                key={cat.key}
-                label={cat.label}
-                values={filterSelections[cat.key].value}
-                op={filterSelections[cat.key].op ?? "is"}
-                onRemove={() => handleFilterSelect(cat.key, null)}
-                onOpChange={(newOp) => handleFilterOpChange(cat.key, newOp)}
-                categoryItems={cat.items}
-                onValueToggle={(v) => handleFilterSelect(cat.key, v)}
-              />
-            ))}
-          <FiltersPopover filterSelections={filterSelections} onSelect={handleFilterSelect} onReset={handleFilterReset} filterCategories={filterCategories}>
-            <button className="sa-add-filter-btn">
-              <img src="/icons/16px/Plus.svg" width={12} height={12} alt="" style={iconFilter} />
-              <span>Add filter</span>
+          <div className="sa-filters-bar-chips">
+            {filterCategories
+              .filter((cat) => filterSelections[cat.key]?.value?.length > 0)
+              .map((cat) => (
+                <FilterChip
+                  key={cat.key}
+                  label={cat.label}
+                  values={filterSelections[cat.key].value}
+                  op={filterSelections[cat.key].op ?? "is"}
+                  onRemove={() => handleFilterSelect(cat.key, null)}
+                  onOpChange={(newOp) => handleFilterOpChange(cat.key, newOp)}
+                  categoryItems={cat.items}
+                  onValueToggle={(v) => handleFilterSelect(cat.key, v)}
+                />
+              ))}
+            <FiltersPopover filterSelections={filterSelections} onSelect={handleFilterSelect} onReset={handleFilterReset} filterCategories={filterCategories}>
+              <button className="sa-add-filter-btn">
+                <img src="/icons/16px/Plus.svg" width={12} height={12} alt="" style={iconFilter} />
+                <span>Add filter</span>
+              </button>
+            </FiltersPopover>
+          </div>
+          <div className="sa-filters-bar-actions">
+            <button className="btn btn-ghost btn-sm" onClick={handleFilterReset}>
+              <img src="/icons/16px/Cross.svg" width={16} height={16} alt="" style={iconFilter} />
+              <span className="btn-label">Clear</span>
             </button>
-          </FiltersPopover>
+          </div>
         </div>
       )}
 

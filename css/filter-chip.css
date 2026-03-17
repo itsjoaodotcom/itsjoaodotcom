@@ -6,12 +6,26 @@
 
 .sa-filters-bar {
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
   align-items: center;
+  gap: 6px;
   padding: 10px 20px;
   border-bottom: 1px solid var(--stroke-primary);
   flex-shrink: 0;
+}
+
+.sa-filters-bar-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.sa-filters-bar-actions {
+  flex-shrink: 0;
+  margin-left: auto;
+  padding-left: 8px;
 }
 
 /* ─── Chip ───────────────────────────────────────────── */
