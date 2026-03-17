@@ -67,7 +67,8 @@ export default function Popover({
                   item={item}
                   drag={drag}
                   checkbox={checkbox}
-                  selected={selectedLabels.includes(item.label)}
+                  selected={item.selected ?? selectedLabels.includes(item.label)}
+                  tick={!!item.tick}
                   active={!!item.active}
                   badge={item.badge ?? null}
                   chevron={!!item.chevron}

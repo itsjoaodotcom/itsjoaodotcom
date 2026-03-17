@@ -9,7 +9,7 @@ function computeAlign(el, estimatedWidth = 200) {
 }
 
 export default function FilterChip({ label, values = [], op = "is", onRemove, onOpChange, categoryItems = [], onValueToggle }) {
-  const displayValue = values.join(", ");
+  const displayValue = values.length > 1 ? `${values.length} ${label}` : values[0] ?? "";
   const [opOpen, setOpOpen] = useState(false);
   const [opAlign, setOpAlign] = useState("left");
   const [valOpen, setValOpen] = useState(false);

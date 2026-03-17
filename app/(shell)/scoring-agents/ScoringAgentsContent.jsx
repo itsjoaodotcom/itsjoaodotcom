@@ -213,10 +213,9 @@ function DateRangeButton() {
           <Popover
             content="text"
             noHeader
-            sections={[DATE_PRESETS.map((p) => ({ label: p, radio: true, radioSelected: activePeriod === p }))]}
+            sections={[DATE_PRESETS.map((p) => ({ label: p, tick: true, selected: activePeriod === p }))]}
             onItemClick={(item) => {
               if (item.label === "Custom") {
-                setActivePeriod("Custom");
                 setMode("calendar");
               } else {
                 setActivePeriod(item.label);
@@ -233,6 +232,7 @@ function DateRangeButton() {
           <Calendar
             onCancel={() => setMode(null)}
             onApply={({ from, to }) => {
+              setActivePeriod("Custom");
               setActiveRange({ from, to });
               setMode(null);
             }}

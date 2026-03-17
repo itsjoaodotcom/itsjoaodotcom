@@ -11,6 +11,7 @@ export default function PopoverItem({
   chevron = false,
   radio = false,
   radioSelected = false,
+  tick = false,
   onClick,
   onHover,
 }) {
@@ -39,7 +40,10 @@ export default function PopoverItem({
       {radio && (
         <span className={`popover-radio${radioSelected ? " popover-radio--on" : ""}`} />
       )}
-      {(checkbox || selected) && (
+      {tick && selected && (
+        <img src="/icons/16px/Check.svg" alt="" className="popover-item-icon popover-item-tick" />
+      )}
+      {!tick && (checkbox || selected) && (
         <span className={`popover-item-checkbox${selected ? " popover-item-checkbox--checked" : ""}`} />
       )}
     </button>

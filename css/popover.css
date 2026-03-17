@@ -224,6 +224,13 @@
   left: 2px;
 }
 
+/* ─── Tick (check only, selected state) ─────────────────── */
+
+.popover-item-tick {
+  margin-left: auto;
+  filter: brightness(0) saturate(100%) invert(27%) sepia(89%) saturate(574%) hue-rotate(199deg) brightness(97%) contrast(92%);
+}
+
 /* ─── Drag handle ───────────────────────────────────────── */
 
 .popover-drag-handle {

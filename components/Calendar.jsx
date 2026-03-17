@@ -51,10 +51,10 @@ export default function Calendar({ onCancel, onApply }) {
     if (cell.outside) return "outside";
     const d = cell.date;
     const isFrom = sameDay(d, from);
-    const isTo = sameDay(d, effTo);
-    if (isFrom && isTo) return "single";
+    const isEffTo = sameDay(d, effTo);
+    if (isFrom && (!effTo || isEffTo)) return "single";
     if (isFrom) return "from";
-    if (isTo) return "to";
+    if (isEffTo) return hovered ? "hover-to" : "to";
     if (from && effTo && d > from && d < effTo) return "range";
     return "default";
   }
@@ -104,8 +104,6 @@ export default function Calendar({ onCancel, onApply }) {
               onMouseEnter={() => !cell.outside && from && !to && setHovered(cell.date)}
               onMouseLeave={() => setHovered(null)}
             >
-              {state === "from" && effTo && <div className="cal-range-half cal-range-half-right" />}
-              {state === "to" && <div className="cal-range-half cal-range-half-left" />}
               <div className="cal-cell-inner">{cell.day}</div>
             </div>
           );

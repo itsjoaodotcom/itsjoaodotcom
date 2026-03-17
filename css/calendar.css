@@ -7,7 +7,7 @@
 .cal {
   display: flex;
   flex-direction: column;
-  width: 260px;
+  width: 240px;
   background: var(--surface-popover);
   border: 1px solid var(--stroke-primary);
   border-radius: 8px;
@@ -21,7 +21,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 8px 8px 12px;
+  padding: 6px;
   border-bottom: 1px solid var(--stroke-primary);
   flex-shrink: 0;
 }
@@ -29,18 +29,19 @@
 .cal-nav {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 6px;
 }
 
 .cal-nav-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
+  padding: 4px;
   border: none;
   background: transparent;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
   transition: background 0.1s;
 }
@@ -51,33 +52,35 @@
 
 .cal-month {
   font-family: var(--font-family);
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 20px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
   color: var(--content-primary);
-  padding: 0 6px;
   -webkit-font-smoothing: antialiased;
 }
 
 .cal-year-btn {
   display: flex;
   align-items: center;
-  gap: 2px;
-  padding: 2px 6px;
-  border-radius: 4px;
+  gap: 4px;
+  padding: 6px;
+  background: var(--button-secondary);
+  border: 1px solid var(--stroke-primary);
+  border-radius: 6px;
+  box-shadow: var(--shadow-e1);
   cursor: pointer;
   transition: background 0.1s;
 }
 
 .cal-year-btn:hover {
-  background: var(--button-ghosthover);
+  background: var(--button-secondaryhover);
 }
 
 .cal-year-btn span {
   font-family: var(--font-family);
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 20px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
   color: var(--content-primary);
   -webkit-font-smoothing: antialiased;
 }
@@ -87,17 +90,17 @@
 .cal-weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  padding: 6px 6px 2px;
+  padding: 4px 8px 0;
 }
 
 .cal-weekday {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 28px;
+  height: 32px;
   font-family: var(--font-family);
-  font-size: 11px;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 400;
   line-height: 16px;
   color: var(--content-tertiary);
   -webkit-font-smoothing: antialiased;
@@ -108,7 +111,7 @@
 .cal-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  padding: 0 6px 6px;
+  padding: 0 8px 8px;
 }
 
 /* ─── Cell ────────────────────────────────────────────────── */
@@ -118,12 +121,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 28px;
+  height: 32px;
   cursor: pointer;
 }
 
 .cal-cell-outside {
   cursor: default;
+  opacity: 0.3;
 }
 
 .cal-cell-inner {
@@ -131,25 +135,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
+  width: 100%;
+  height: 32px;
+  border-radius: 8px;
   font-family: var(--font-family);
   font-size: 12px;
   font-weight: 400;
   line-height: 16px;
-  color: var(--content-primary);
+  color: var(--content-secondary);
   z-index: 1;
   transition: background 0.1s;
   -webkit-font-smoothing: antialiased;
 }
 
-.cal-cell-outside .cal-cell-inner {
-  color: var(--content-quartenary);
-}
-
-.cal-cell:not(.cal-cell-outside):hover .cal-cell-inner {
-  background: var(--button-ghosthover);
+.cal-cell:not(.cal-cell-outside):not(.cal-cell-from):not(.cal-cell-to):not(.cal-cell-single):not(.cal-cell-range):not(.cal-cell-hover-to):hover .cal-cell-inner {
+  outline: 1px solid var(--stroke-accent, #4061d8);
+  outline-offset: -1px;
 }
 
 /* ─── Selection states ────────────────────────────────────── */
@@ -158,48 +159,44 @@
 .cal-cell-to .cal-cell-inner,
 .cal-cell-single .cal-cell-inner {
   background: var(--button-accent);
-  color: #fff;
+  color: var(--content-onaccent, #fff);
+  border-radius: 8px;
 }
 
-.cal-cell-from:hover .cal-cell-inner,
-.cal-cell-to:hover .cal-cell-inner,
-.cal-cell-single:hover .cal-cell-inner {
-  background: var(--button-accenthover);
+/* ─── Hover-to (preview end date) ────────────────────────── */
+
+.cal-cell-hover-to .cal-cell-inner {
+  background: var(--button-ghosthover);
+  color: var(--content-secondary);
+  border-radius: 8px;
+  outline: 1px solid var(--stroke-accent, #4061d8);
+  outline-offset: -1px;
 }
 
 /* ─── Range fill ──────────────────────────────────────────── */
 
-.cal-cell-range::before {
-  content: "";
-  position: absolute;
-  inset: 2px 0;
-  background: var(--blue-01);
-  z-index: 0;
+.cal-cell-range .cal-cell-inner {
+  background: var(--button-ghosthover);
+  border-radius: 0;
 }
 
-/* Half-width overlays for from/to endpoints connecting to range */
-
-.cal-range-half {
-  position: absolute;
-  top: 2px;
-  bottom: 2px;
-  width: 50%;
-  background: var(--blue-01);
-  z-index: 0;
+/* Hover on range cells — always full radius */
+.cal-cell-range:hover .cal-cell-inner,
+.cal-grid .cal-cell-range:nth-child(7n+1):hover .cal-cell-inner,
+.cal-grid .cal-cell-range:nth-child(7n):hover .cal-cell-inner {
+  border-radius: 8px;
+  outline: 1px solid var(--stroke-accent, #4061d8);
+  outline-offset: -1px;
 }
 
-.cal-range-half-right {
-  left: 50%;
+/* Monday column (1st of each row) — left rounded */
+.cal-grid .cal-cell-range:nth-child(7n+1) .cal-cell-inner {
+  border-radius: 8px 0 0 8px;
 }
 
-.cal-range-half-left {
-  right: 50%;
-}
-
-/* Dark mode range color */
-html.dark .cal-cell-range::before,
-html.dark .cal-range-half {
-  background: rgba(64, 97, 216, 0.18);
+/* Sunday column (7th of each row) — right rounded */
+.cal-grid .cal-cell-range:nth-child(7n) .cal-cell-inner {
+  border-radius: 0 8px 8px 0;
 }
 
 /* ─── Footer ──────────────────────────────────────────────── */
@@ -208,8 +205,8 @@ html.dark .cal-range-half {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 6px;
-  padding: 8px 10px;
+  gap: 4px;
+  padding: 6px;
   border-top: 1px solid var(--stroke-primary);
   flex-shrink: 0;
 }
