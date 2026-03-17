@@ -1,265 +1,35 @@
 "use client";
 
-import { useState, useMemo, useRef, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Tag from "../../../components/Tag";
-import Popover from "../../../components/Popover";
 import FilterChip from "../../../components/FilterChip";
-import Calendar from "../../../components/Calendar";
+import DateRangeButton from "../../../components/DateRangeButton";
+import { FiltersButton, FiltersPopover } from "../../../components/FiltersPopover";
 
-
-function computeAlign(el, estimatedWidth = 260) {
-  const rect = el.getBoundingClientRect();
-  return window.innerWidth - rect.right >= estimatedWidth ? "left" : "right";
-}
-
-function FiltersPopover({ filterSelections, onSelect, onReset, filterCategories, children }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [align, setAlign] = useState("right");
-  const [activeCategory, setActiveCategory] = useState(null);
-  const [subLevelStyle, setSubLevelStyle] = useState({ top: 0, left: undefined, right: 240 });
-  const [filterQuery, setFilterQuery] = useState("");
-  const ref = useRef(null);
-  const closeTimer = useRef(null);
-
-  function scheduleClose() {
-    closeTimer.current = setTimeout(() => setActiveCategory(null), 150);
-  }
-  function cancelClose() {
-    clearTimeout(closeTimer.current);
-  }
-
-  useEffect(() => {
-    if (!isOpen) return;
-    function onMouseDown(e) {
-      if (!ref.current?.contains(e.target)) {
-        cancelClose();
-        setIsOpen(false);
-        setActiveCategory(null);
-        setFilterQuery("");
-      }
-    }
-    document.addEventListener("mousedown", onMouseDown);
-    return () => {
-      document.removeEventListener("mousedown", onMouseDown);
-      cancelClose();
-    };
-  }, [isOpen]);
-
-  const hasFilters = filterCategories.some((cat) => filterSelections[cat.key]?.value?.length > 0);
-  const activeCat = filterCategories.find((c) => c.key === activeCategory);
-
-  return (
-    <div ref={ref} style={{ position: "relative" }}>
-      <div onClick={() => {
-        if (!isOpen && ref.current) setAlign(computeAlign(ref.current));
-        setIsOpen((v) => !v);
-        setActiveCategory(null);
-      }}>
-        {children}
-      </div>
-      {isOpen && (
-        <div
-          style={{ position: "absolute", top: "calc(100% + 4px)", ...(align === "left" ? { left: -4 } : { right: -4 }), zIndex: 100 }}
-          onMouseEnter={cancelClose}
-          onMouseLeave={scheduleClose}
-        >
-          <Popover
-            content="text"
-            placeholder="Find filter..."
-            noInternalSearch
-            sections={filterQuery.trim()
-              ? filterCategories.flatMap((cat) =>
-                  cat.items
-                    .filter((label) => label !== "All" && label.toLowerCase().includes(filterQuery.toLowerCase()))
-                    .map((label) => ({ label, _cat: cat.key }))
-                ).reduce((acc, item) => { if (!acc[0]) acc[0] = []; acc[0].push(item); return acc; }, [])
-              : [filterCategories.map((cat) => ({
-                  label: cat.label,
-                  icon: cat.icon,
-                  chevron: true,
-                  active: activeCategory === cat.key,
-                  badge: filterSelections[cat.key]?.value?.length > 0 ? filterSelections[cat.key].value.length : null,
-                }))]
-            }
-            bottomActions={hasFilters}
-            onSearch={(q) => { setFilterQuery(q); setActiveCategory(null); }}
-            onItemHover={(item, _si, _ii, e) => {
-              if (filterQuery.trim()) return;
-              const cat = filterCategories.find((c) => c.label === item.label);
-              if (cat) {
-                cancelClose();
-                setActiveCategory(cat.key);
-                if (e) {
-                  const itemRect = e.currentTarget.getBoundingClientRect();
-                  const containerRect = ref.current.getBoundingClientRect();
-                  const top = itemRect.top - containerRect.top - 4;
-                  const MAIN_W = 240, SUB_W = 220, GAP = 4;
-                  // main popover right edge in window coords depends on current alignment
-                  const mainRight = align === "left"
-                    ? containerRect.left - 4 + MAIN_W
-                    : containerRect.right + 4;
-                  if (window.innerWidth - mainRight - GAP >= SUB_W) {
-                    // sub-level to the RIGHT of main popover
-                    setSubLevelStyle({ top, left: mainRight + GAP - containerRect.left, right: undefined });
-                  } else {
-                    // sub-level to the LEFT of main popover
-                    const mainLeft = mainRight - MAIN_W;
-                    setSubLevelStyle({ top, left: undefined, right: containerRect.right - mainLeft + GAP });
-                  }
-                }
-              }
-            }}
-            onItemClick={(item, sectionIndex) => {
-              if (sectionIndex === -1) { onReset(); return; }
-              if (item._cat) {
-                onSelect(item._cat, item.label);
-                setFilterQuery("");
-              }
-            }}
-          />
-        </div>
-      )}
-      {isOpen && activeCat && (
-        <div
-          style={{ position: "absolute", top: subLevelStyle.top, left: subLevelStyle.left, right: subLevelStyle.right, zIndex: 100 }}
-          onMouseEnter={cancelClose}
-          onMouseLeave={scheduleClose}
-        >
-          <Popover
-            content="text"
-            noHeader
-            checkbox={true}
-            selectedLabels={filterSelections[activeCategory]?.value ?? []}
-            sections={[activeCat.items.map((label) => ({ label }))]}
-            bottomActions={filterSelections[activeCategory]?.value?.length > 0}
-            onItemClick={(item, sectionIndex) => {
-              if (sectionIndex === -1) { onSelect(activeCategory, null); return; }
-              onSelect(activeCategory, item.label);
-            }}
-          />
-        </div>
-      )}
-    </div>
-  );
-}
-
-function FiltersButton({ filterSelections, onSelect, onReset, filterCategories }) {
-  const hasFilters = filterCategories.some((cat) => filterSelections[cat.key]?.value?.length > 0);
-  return (
-    <FiltersPopover filterSelections={filterSelections} onSelect={onSelect} onReset={onReset} filterCategories={filterCategories}>
-      <button className="btn btn-secondary">
-        <span style={{ position: "relative", display: "inline-flex", width: 16, height: 16, flexShrink: 0 }}>
-          <img src="/icons/16px/Filter.svg" width={16} height={16} alt="" style={iconFilter} />
-          {hasFilters && (
-            <span style={{
-              position: "absolute", left: 9, top: 1,
-              width: 6, height: 6, borderRadius: "50%",
-              background: "var(--content-accent, #4061d8)",
-              boxShadow: "0 0 0 1.5px var(--surface-primary, #fff)",
-            }} />
-          )}
-        </span>
-        <span className="btn-label">Filters</span>
-      </button>
-    </FiltersPopover>
-  );
-}
-
-const DATE_PRESETS = ["Last 7 days", "Last 30 days", "Last 90 days", "Custom"];
-
-function formatRange(from, to) {
-  if (!from || !to) return "Custom";
-  const opts = { month: "short", day: "numeric" };
-  return `${from.toLocaleDateString("en-US", opts)} – ${to.toLocaleDateString("en-US", opts)}`;
-}
-
-function DateRangeButton() {
-  const [mode, setMode] = useState(null); // null | "dropdown" | "calendar"
-  const [activePeriod, setActivePeriod] = useState("Last 30 days");
-  const [activeRange, setActiveRange] = useState(null);
-  const [align, setAlign] = useState("right");
-  const ref = useRef(null);
-
-  useEffect(() => {
-    if (!mode) return;
-    function onMouseDown(e) {
-      if (ref.current && !ref.current.contains(e.target)) setMode(null);
-    }
-    document.addEventListener("mousedown", onMouseDown);
-    return () => document.removeEventListener("mousedown", onMouseDown);
-  }, [mode]);
-
-  const label = activePeriod === "Custom" && activeRange
-    ? formatRange(activeRange.from, activeRange.to)
-    : activePeriod;
-
-  return (
-    <div ref={ref} style={{ position: "relative" }}>
-      <button
-        className="btn btn-secondary"
-        onClick={() => {
-          if (mode) { setMode(null); return; }
-          if (ref.current) setAlign(computeAlign(ref.current, 220));
-          setMode("dropdown");
-        }}
-      >
-        <img src="/icons/16px/Calendar.svg" width={16} height={16} alt="" style={iconFilter} />
-        <span className="btn-label">{label}</span>
-      </button>
-
-      {mode === "dropdown" && (
-        <div style={{ position: "absolute", top: "calc(100% + 4px)", ...(align === "left" ? { left: -4 } : { right: -4 }), zIndex: 100 }}>
-          <Popover
-            content="text"
-            noHeader
-            sections={[DATE_PRESETS.map((p) => ({ label: p, tick: true, selected: activePeriod === p }))]}
-            onItemClick={(item) => {
-              if (item.label === "Custom") {
-                setMode("calendar");
-              } else {
-                setActivePeriod(item.label);
-                setActiveRange(null);
-                setMode(null);
-              }
-            }}
-          />
-        </div>
-      )}
-
-      {mode === "calendar" && (
-        <div style={{ position: "absolute", top: "calc(100% + 4px)", ...(align === "left" ? { left: -4 } : { right: -4 }), zIndex: 100 }}>
-          <Calendar
-            onCancel={() => setMode(null)}
-            onApply={({ from, to }) => {
-              setActivePeriod("Custom");
-              setActiveRange({ from, to });
-              setMode(null);
-            }}
-          />
-        </div>
-      )}
-    </div>
-  );
-}
 
 const iconFilter = { filter: "brightness(0) invert(0.53)" };
 
 const agents = [
-  { name: "Chat Quality Monitor",      channel: "LiveChat",    channelLabel: "Chat Support",  teams: "Chat Support",      extra: 2, score: 96, evaluations: 142, trend: 4.2, trendUp: true,  status: "Active" },
-  { name: "Call Center QA Analyst",    channel: "Globe",       channelLabel: "Social Media",  teams: "Call Center",       extra: 2, score: 94, evaluations: 128, trend: 2.8, trendUp: true,  status: "Active" },
-  { name: "Social Media QA Agent",     channel: "Globe",       channelLabel: "Social Media",  teams: "Advanced Support",  extra: 2, score: 91, evaluations: 98,  trend: 1.5, trendUp: true,  status: "Active" },
-  { name: "Chat Compliance Auditor",   channel: "Email",       channelLabel: "Email",         teams: "Social Media",      extra: 2, score: 89, evaluations: 86,  trend: 3.1, trendUp: true,  status: "Draft"  },
-  { name: "Chat Escalation Reviewer",  channel: "AnswerCall",  channelLabel: "Call Center",   teams: "Chat Support",      extra: 2, score: 88, evaluations: 74,  trend: 0.8, trendUp: true,  status: "Active" },
-  { name: "Call Scoring Analyst",      channel: "Email",       channelLabel: "Email",         teams: "Social Media",      extra: 2, score: 85, evaluations: 112, trend: 1.2, trendUp: false, status: "Draft"  },
-  { name: "Email SLA Monitor",         channel: "LiveChat",    channelLabel: "Chat Support",  teams: "Call Center",       extra: 2, score: 82, evaluations: 95,  trend: 2,   trendUp: true,  status: "Active" },
-  { name: "Social Engagement Auditor", channel: "Email",       channelLabel: "Email",         teams: "Advanced Support",  extra: 2, score: 77, evaluations: 64,  trend: 3.5, trendUp: false, status: "Active" },
-  { name: "Chat CSAT Tracker",         channel: "LiveChat",    channelLabel: "Chat Support",  teams: "Chat Support",      extra: 2, score: 68, evaluations: 58,  trend: 5.2, trendUp: false, status: "Active" },
-  { name: "Email Response Evaluator",  channel: "AnswerCall",  channelLabel: "Call Center",   teams: "Chat Support",      extra: 2, score: 63, evaluations: 42,  trend: 8.1, trendUp: false, status: "Active" },
-  { name: "Compliance Risk Monitor",   channel: "LiveChat",    channelLabel: "Chat Support",  teams: "Advanced Support",  extra: 2, score: 96, evaluations: 142, trend: 4.2, trendUp: true,  status: "Active" },
-  { name: "Tone & Empathy Auditor",    channel: "Globe",       channelLabel: "Social Media",  teams: "Call Center",       extra: 2, score: 94, evaluations: 128, trend: 2.8, trendUp: true,  status: "Active" },
-  { name: "Knowledge Base Validator",  channel: "Globe",       channelLabel: "Social Media",  teams: "Social Media",      extra: 2, score: 91, evaluations: 98,  trend: 1.5, trendUp: true,  status: "Active" },
+  { name: "Chat Quality Monitor",      channel: "LiveChat",    channelLabel: "Chat Support",  teams: "Chat Support",      extra: 2, score: 96, evaluations: 142, trend: 4.2, trendUp: true,  status: "Active", lastRun: "15/03/2026" },
+  { name: "Call Center QA Analyst",    channel: "Globe",       channelLabel: "Social Media",  teams: "Call Center",       extra: 2, score: 94, evaluations: 128, trend: 2.8, trendUp: true,  status: "Active", lastRun: "12/03/2026" },
+  { name: "Social Media QA Agent",     channel: "Globe",       channelLabel: "Social Media",  teams: "Advanced Support",  extra: 2, score: 91, evaluations: 98,  trend: 1.5, trendUp: true,  status: "Active", lastRun: "05/03/2026" },
+  { name: "Chat Compliance Auditor",   channel: "Email",       channelLabel: "Email",         teams: "Social Media",      extra: 2, score: 89, evaluations: 86,  trend: 3.1, trendUp: true,  status: "Draft",  lastRun: "01/03/2026" },
+  { name: "Chat Escalation Reviewer",  channel: "AnswerCall",  channelLabel: "Call Center",   teams: "Chat Support",      extra: 2, score: 88, evaluations: 74,  trend: 0.8, trendUp: true,  status: "Active", lastRun: "22/02/2026" },
+  { name: "Call Scoring Analyst",      channel: "Email",       channelLabel: "Email",         teams: "Social Media",      extra: 2, score: 85, evaluations: 112, trend: 1.2, trendUp: false, status: "Draft",  lastRun: "15/02/2026" },
+  { name: "Email SLA Monitor",         channel: "LiveChat",    channelLabel: "Chat Support",  teams: "Call Center",       extra: 2, score: 82, evaluations: 95,  trend: 2,   trendUp: true,  status: "Active", lastRun: "05/01/2026" },
+  { name: "Social Engagement Auditor", channel: "Email",       channelLabel: "Email",         teams: "Advanced Support",  extra: 2, score: 77, evaluations: 64,  trend: 3.5, trendUp: false, status: "Active", lastRun: "15/12/2025" },
+  { name: "Chat CSAT Tracker",         channel: "LiveChat",    channelLabel: "Chat Support",  teams: "Chat Support",      extra: 2, score: 68, evaluations: 58,  trend: 5.2, trendUp: false, status: "Active", lastRun: "20/12/2025" },
+  { name: "Email Response Evaluator",  channel: "AnswerCall",  channelLabel: "Call Center",   teams: "Chat Support",      extra: 2, score: 63, evaluations: 42,  trend: 8.1, trendUp: false, status: "Active", lastRun: "10/11/2025" },
+  { name: "Compliance Risk Monitor",   channel: "LiveChat",    channelLabel: "Chat Support",  teams: "Advanced Support",  extra: 2, score: 96, evaluations: 142, trend: 4.2, trendUp: true,  status: "Active", lastRun: "14/03/2026" },
+  { name: "Tone & Empathy Auditor",    channel: "Globe",       channelLabel: "Social Media",  teams: "Call Center",       extra: 2, score: 94, evaluations: 128, trend: 2.8, trendUp: true,  status: "Active", lastRun: "25/02/2026" },
+  { name: "Knowledge Base Validator",  channel: "Globe",       channelLabel: "Social Media",  teams: "Social Media",      extra: 2, score: 91, evaluations: 98,  trend: 1.5, trendUp: true,  status: "Active", lastRun: "18/01/2026" },
 ];
+
+function parseDMY(str) {
+  const [d, m, y] = str.split("/");
+  return new Date(+y, +m - 1, +d);
+}
 
 const METRIC_FILTERS = {
   all: () => true,
@@ -287,6 +57,7 @@ export default function ScoringAgentsContent() {
   const [sortDir, setSortDir] = useState("asc");
   const [activeMetric, setActiveMetric] = useState("all");
   const [filterSelections, setFilterSelections] = useState({});
+  const [dateFilter, setDateFilter] = useState(null);
 
   function handleFilterSelect(key, value) {
     setFilterSelections((prev) => {
@@ -375,6 +146,13 @@ export default function ScoringAgentsContent() {
       list = list.filter((a) => op === "is not" ? !arr.includes(a.name) : arr.includes(a.name));
     }
 
+    if (dateFilter) {
+      list = list.filter((a) => {
+        const d = parseDMY(a.lastRun);
+        return d >= dateFilter.from && d <= dateFilter.to;
+      });
+    }
+
     if (sortField) {
       list.sort((a, b) => {
         let va = a[sortField];
@@ -389,7 +167,7 @@ export default function ScoringAgentsContent() {
     }
 
     return list;
-  }, [search, sortField, sortDir, activeMetric, filterSelections]);
+  }, [search, sortField, sortDir, activeMetric, filterSelections, dateFilter]);
 
   return (
     <div className="sa-content">
@@ -417,7 +195,7 @@ export default function ScoringAgentsContent() {
             onReset={handleFilterReset}
             filterCategories={filterCategories}
           />
-          <DateRangeButton />
+          <DateRangeButton onChange={setDateFilter} />
           <button className="btn btn-accent">
             <img src="/icons/16px/Plus.svg" width={16} height={16} alt="" style={{ filter: "brightness(0) invert(1)" }} />
             <span className="btn-label">Add QA Agent</span>

@@ -36,6 +36,8 @@ export default function Calendar({ onCancel, onApply }) {
   const [from, setFrom] = useState(null);
   const [to, setTo] = useState(null);
   const [hovered, setHovered] = useState(null);
+  const [yearOpen, setYearOpen] = useState(false);
+  const [yearRangeStart, setYearRangeStart] = useState(() => today.getFullYear() - 11);
 
   const effTo = to || (from && !to && hovered && hovered >= from ? hovered : null);
 
@@ -66,49 +68,89 @@ export default function Calendar({ onCancel, onApply }) {
     if (month === 11) { setMonth(0); setYear(y => y + 1); } else setMonth(m => m + 1);
   }
 
+  function toggleYearPicker() {
+    if (!yearOpen) setYearRangeStart(year - 11);
+    setYearOpen(v => !v);
+  }
+
   const cells = getCalendarGrid(year, month);
   const canApply = !!(from && to);
+  const yearPages = Array.from({ length: 12 }, (_, i) => yearRangeStart + i);
 
   return (
     <div className="cal">
       <div className="cal-header">
         <div className="cal-nav">
-          <button className="cal-nav-btn" onClick={prevMonth}>
-            <img src="/icons/16px/ChevronLeft.svg" width={12} height={12} alt="" style={iconFilter} />
-          </button>
-          <button className="cal-nav-btn" onClick={nextMonth}>
-            <img src="/icons/16px/ChevronRight.svg" width={12} height={12} alt="" style={iconFilter} />
-          </button>
-          <span className="cal-month">{MONTHS[month]}</span>
+          {!yearOpen && (
+            <>
+              <button className="cal-nav-btn" onClick={prevMonth}>
+                <img src="/icons/16px/ChevronLeft.svg" width={12} height={12} alt="" style={iconFilter} />
+              </button>
+              <button className="cal-nav-btn" onClick={nextMonth}>
+                <img src="/icons/16px/ChevronRight.svg" width={12} height={12} alt="" style={iconFilter} />
+              </button>
+              <span className="cal-month">{MONTHS[month]}</span>
+            </>
+          )}
         </div>
-        <div className="cal-year-btn">
+        <button className="cal-year-btn" onClick={toggleYearPicker}>
           <span>{year}</span>
-          <img src="/icons/16px/ChevronBottom.svg" width={16} height={16} alt="" style={iconFilter} />
-        </div>
+          <img
+            src="/icons/16px/ChevronBottom.svg"
+            width={16} height={16} alt=""
+            style={{ ...iconFilter, transform: yearOpen ? "rotate(180deg)" : "none", transition: "transform 0.15s" }}
+          />
+        </button>
       </div>
 
-      <div className="cal-weekdays">
-        {["M","T","W","T","F","S","S"].map((d, i) => (
-          <div key={i} className="cal-weekday">{d}</div>
-        ))}
-      </div>
-
-      <div className="cal-grid">
-        {cells.map((cell, i) => {
-          const state = getCellState(cell);
-          return (
-            <div
-              key={i}
-              className={`cal-cell${state !== "default" ? ` cal-cell-${state}` : ""}`}
-              onClick={() => handleClick(cell)}
-              onMouseEnter={() => !cell.outside && from && !to && setHovered(cell.date)}
-              onMouseLeave={() => setHovered(null)}
-            >
-              <div className="cal-cell-inner">{cell.day}</div>
-            </div>
-          );
-        })}
-      </div>
+      {yearOpen ? (
+        <>
+          <div className="cal-year-nav">
+            <button className="cal-nav-btn" onClick={() => setYearRangeStart(s => s - 12)}>
+              <img src="/icons/16px/ChevronLeft.svg" width={12} height={12} alt="" style={iconFilter} />
+            </button>
+            <span className="cal-year-nav-label">{yearRangeStart} – {yearRangeStart + 11}</span>
+            <button className="cal-nav-btn" onClick={() => setYearRangeStart(s => s + 12)}>
+              <img src="/icons/16px/ChevronRight.svg" width={12} height={12} alt="" style={iconFilter} />
+            </button>
+          </div>
+          <div className="cal-year-grid">
+            {yearPages.map(y => (
+              <button
+                key={y}
+                className={`cal-year-item${y === year ? " cal-year-item-selected" : ""}`}
+                onClick={() => { setYear(y); setYearOpen(false); }}
+              >
+                {y}
+              </button>
+            ))}
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="cal-weekdays">
+            {["M","T","W","T","F","S","S"].map((d, i) => (
+              <div key={i} className="cal-weekday">{d}</div>
+            ))}
+          </div>
+          <div className="cal-grid">
+            {cells.map((cell, i) => {
+              const state = getCellState(cell);
+              return (
+                <div
+                  key={i}
+                  className={`cal-cell${state !== "default" ? ` cal-cell-${state}` : ""}`}
+                  onClick={() => handleClick(cell)}
+                  onMouseEnter={() => !cell.outside && from && !to && setHovered(cell.date)}
+                  onMouseLeave={() => setHovered(null)}
+                >
+                  <div className="cal-cell-inner">{cell.day}</div>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
 
       <div className="cal-footer">
         <button className="btn btn-ghost" onClick={onCancel}>

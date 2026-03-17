@@ -34,7 +34,7 @@ export default function PopoverItem({
       {badge != null && (
         <span className="popover-item-badge">{badge}</span>
       )}
-      {chevron && (
+      {chevron && !(tick && selected) && (
         <img src="/icons/16px/ChevronRight.svg" alt="" className="popover-item-icon" />
       )}
       {radio && (

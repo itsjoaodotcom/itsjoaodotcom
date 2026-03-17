@@ -567,7 +567,7 @@
 }
 
 .sad-col-strategy {
-  width: 160px;
+  width: 220px;
   flex-shrink: 0;
 }
 
@@ -586,7 +586,6 @@
 
 .sad-col-definition {
   align-items: flex-start;
-  padding-top: 14px;
 }
 
 /* Recent Evaluations section */
@@ -629,6 +628,10 @@
 .sad-chart-container .sa-table-header,
 .sad-criteria-defs-table .sa-table-header {
   border-top: none;
+}
+
+.sad-criteria-defs-table .sa-cell {
+  padding: 14px;
 }
 
 .sad-col-id {
@@ -819,6 +822,7 @@
 /* Inner wrapper to provide the white inset background */
 .sad-modal-header,
 .sad-modal-description,
+.sad-modal-violation,
 .sad-modal-tabs,
 .sad-modal-table-wrap {
   background: var(--surface-primary);
@@ -904,24 +908,95 @@
   color: var(--content-tertiary);
 }
 
-/* Description */
+/* Description / Details card */
 .sad-modal-description {
   padding: 4px 16px 8px;
   margin: 0 2px;
 }
 
-.sad-modal-description-box {
+.sad-modal-details {
   background: var(--surface-secondary, #fafafa);
   border: 1px solid var(--stroke-primary, rgba(0, 0, 0, 0.04));
   border-radius: 6px;
-  padding: 8px 12px 8px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.sad-modal-description-text {
+.sad-modal-details-header {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 12px 0;
+}
+
+.sad-modal-details-label {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.sad-modal-details-label-text {
   font-size: 12px;
   font-weight: 400;
   line-height: 16px;
-  color: rgba(0, 0, 0, 0.4);
+  color: var(--content-secondary);
+  white-space: nowrap;
+}
+
+.sad-modal-details-content {
+  padding: 6px 12px 10px;
+}
+
+.sad-modal-details-text {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--content-quartenary, rgba(0, 0, 0, 0.4));
+  margin: 0;
+}
+
+/* Violations card */
+.sad-modal-violation {
+  padding: 4px 16px 8px;
+  margin: 0 2px;
+  background: var(--surface-primary);
+}
+
+.sad-modal-violation-card {
+  background: rgba(255, 230, 230, 0.4);
+  border: 1px solid #ffe6e6;
+  border-radius: 8px;
+}
+
+.sad-modal-violation-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+}
+
+.sad-modal-violation-title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--utilities-content-content-red, #d14c4d);
+}
+
+.sad-modal-violation-content {
+  padding: 0 12px 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sad-modal-violation-text {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-secondary);
   margin: 0;
 }
 

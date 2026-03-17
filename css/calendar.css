@@ -199,6 +199,71 @@
   border-radius: 0 8px 8px 0;
 }
 
+/* ─── Year picker ────────────────────────────────────────── */
+
+.cal-year-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px;
+  border-bottom: 1px solid var(--stroke-primary);
+  flex-shrink: 0;
+}
+
+.cal-year-nav-label {
+  font-family: var(--font-family);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--content-primary);
+  min-width: 80px;
+  text-align: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+.cal-year-grid {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 4px 8px;
+  gap: 2px 0;
+}
+
+.cal-year-item {
+  flex: 1 0 calc(100% / 3);
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--content-tertiary);
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.1s;
+}
+
+.cal-year-item:hover {
+  outline: 1px solid var(--stroke-accent, #4061d8);
+  outline-offset: -1px;
+}
+
+.cal-year-item-selected {
+  background: var(--button-accent);
+  color: var(--content-onaccent, #fff);
+  border: 1px solid var(--stroke-primary);
+}
+
+.cal-year-item-selected:hover {
+  background: var(--button-accent);
+  outline: none;
+}
+
 /* ─── Footer ──────────────────────────────────────────────── */
 
 .cal-footer {

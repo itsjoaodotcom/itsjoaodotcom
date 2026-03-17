@@ -1,8 +1,11 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
 import Tag from "../../../../components/Tag";
+import FilterChip from "../../../../components/FilterChip";
+import DateRangeButton from "../../../../components/DateRangeButton";
+import { FiltersButton, FiltersPopover } from "../../../../components/FiltersPopover";
 
 const iconFilter = { filter: "brightness(0) invert(0.53)" };
 
@@ -58,7 +61,7 @@ const scoreDistribution = [
 
 const evaluations = [
   {
-    id: "01", name: "James Mitchell", avatar: "/avatars/Avatar 01.png", team: "Chat", channel: "Chat", channelIcon: "LiveChat", score: 98, violations: null, date: "14/03/2026",
+    id: "01", name: "James Mitchell", avatar: "/avatars/Avatar 01.png", team: "Chat", channel: "Chat", channelIcon: "LiveChat", score: 98, violations: null, date: "14/03/2026", time: "09:14:22",
     contactName: "Priya Sharma", title: "Account Access & Verification Issue", channelTag: "social",
     description: "Customer contacted support regarding a account inquiry. They were transferred to Ahmed Mansour who handled the interaction via social. The conversation included 4 evaluated criteria points.",
     criteria: [
@@ -70,7 +73,7 @@ const evaluations = [
     ],
   },
   {
-    id: "02", name: "Sofia Martinez", avatar: "/avatars/Avatar 2.png", team: "Call center", channel: "Call center", channelIcon: "AnswerCall", score: 59, violations: null, date: "14/03/2026",
+    id: "02", name: "Sofia Martinez", avatar: "/avatars/Avatar 2.png", team: "Call center", channel: "Call center", channelIcon: "AnswerCall", score: 59, violations: null, date: "12/03/2026", time: "14:52:07",
     contactName: "Carlos Rivera", title: "Billing Dispute Resolution", channelTag: "social",
     description: "Customer contacted support regarding a billing discrepancy. The agent handled the interaction professionally and resolved the issue within the session.",
     criteria: [
@@ -82,7 +85,7 @@ const evaluations = [
     ],
   },
   {
-    id: "03", name: "Ahmed Mansour", avatar: "/avatars/Avatar 3.png", team: "Advanced support", channel: "Advanced support", channelIcon: "Globe", score: 98, violations: null, date: "14/03/2026",
+    id: "03", name: "Ahmed Mansour", avatar: "/avatars/Avatar 3.png", team: "Advanced support", channel: "Advanced support", channelIcon: "Globe", score: 98, violations: null, date: "05/03/2026", time: "11:30:45",
     contactName: "Fatima Al-Rashid", title: "Product Return & Refund Request", channelTag: "email",
     description: "Customer requested a return and refund for a defective product. The agent guided the customer through the process and confirmed the refund timeline.",
     criteria: [
@@ -94,7 +97,7 @@ const evaluations = [
     ],
   },
   {
-    id: "04", name: "Yuki Tanaka", avatar: "/avatars/Avatar 4.png", team: "Social media", channel: "Social media", channelIcon: "Globe", score: 86, violations: 1, date: "14/03/2026",
+    id: "04", name: "Yuki Tanaka", avatar: "/avatars/Avatar 4.png", team: "Social media", channel: "Social media", channelIcon: "Globe", score: 86, violations: 1, date: "22/02/2026", time: "16:08:33", violationText: ["Agent failed to document the escalation case correctly, leaving the technical team with incomplete information.", '"Case notes were missing required fields at the point of escalation transfer."'],
     contactName: "Liam O'Connor", title: "Service Outage Complaint", channelTag: "chat",
     description: "Customer reported a service outage affecting their account. The agent acknowledged the issue and escalated to the technical team but failed to follow up within the promised timeframe.",
     criteria: [
@@ -106,7 +109,7 @@ const evaluations = [
     ],
   },
   {
-    id: "05", name: "Marcus Webb", avatar: "/avatars/Avatar 5.png", team: "Chat", channel: "Chat", channelIcon: "LiveChat", score: 74, violations: null, date: "14/03/2026",
+    id: "05", name: "Marcus Webb", avatar: "/avatars/Avatar 5.png", team: "Chat", channel: "Chat", channelIcon: "LiveChat", score: 74, violations: null, date: "10/01/2026", time: "10:21:59",
     contactName: "Sarah Chen", title: "Subscription Upgrade Inquiry", channelTag: "call",
     description: "Customer called to inquire about upgrading their subscription plan. The agent provided clear information about the available options and pricing.",
     criteria: [
@@ -118,7 +121,7 @@ const evaluations = [
     ],
   },
   {
-    id: "06", name: "Nina Petrov", avatar: "/avatars/Avatar 6.png", team: "Chat", channel: "Chat", channelIcon: "LiveChat", score: 88, violations: null, date: "14/03/2026",
+    id: "06", name: "Nina Petrov", avatar: "/avatars/Avatar 6.png", team: "Chat", channel: "Chat", channelIcon: "LiveChat", score: 88, violations: null, date: "20/12/2025", time: "08:44:17",
     contactName: "David Park", title: "Password Reset Assistance", channelTag: "chat",
     description: "Customer needed help resetting their account password. The agent walked the customer through the reset process and verified the account was accessible.",
     criteria: [
@@ -130,7 +133,7 @@ const evaluations = [
     ],
   },
   {
-    id: "07", name: "Omar Khalid", avatar: "/avatars/Avatar 7.png", team: "Social media", channel: "Email", channelIcon: "Email", score: 85, violations: 2, date: "14/03/2026",
+    id: "07", name: "Omar Khalid", avatar: "/avatars/Avatar 7.png", team: "Social media", channel: "Email", channelIcon: "Email", score: 85, violations: 2, date: "15/11/2025", time: "17:03:41", violationText: ["Agent deviated from established compliance protocol during interaction.", '"Transcript segment shows non-compliant response pattern detected in two separate exchanges."'],
     contactName: "Anna Kowalski", title: "Delivery Delay Investigation", channelTag: "email",
     description: "Customer reported a delayed delivery. The agent investigated and found a logistics issue but failed to provide a resolution or compensation within the interaction.",
     criteria: [
@@ -164,7 +167,65 @@ export default function AgentDetailContent({ slug }) {
   const [expandedReasoning, setExpandedReasoning] = useState(null);
   const [activeModalTab, setActiveModalTab] = useState("Evaluation results");
   const [resultFilter, setResultFilter] = useState(null); // null | "Pass" | "Fail"
+  const [filterSelections, setFilterSelections] = useState({});
+  const [dateFilter, setDateFilter] = useState(null);
   const chatBottomRef = useRef(null);
+
+  function parseDMY(str) {
+    const [d, m, y] = str.split("/");
+    return new Date(+y, +m - 1, +d);
+  }
+
+  const filterCategories = useMemo(() => {
+    const channels = [...new Set(evaluations.map((e) => e.channel))];
+    const teams = [...new Set(evaluations.map((e) => e.team))];
+    return [
+      { key: "channel", label: "Channel", icon: "/icons/16px/Channel.svg", items: channels },
+      { key: "team",    label: "Team",    icon: "/icons/16px/Users.svg",   items: teams },
+    ];
+  }, []);
+
+  function handleFilterSelect(key, value) {
+    setFilterSelections((prev) => {
+      const current = prev[key]?.value ?? [];
+      if (value === null) {
+        const next = { ...prev };
+        delete next[key];
+        return next;
+      }
+      const exists = current.includes(value);
+      const next = exists ? current.filter((v) => v !== value) : [...current, value];
+      if (next.length === 0) {
+        const updated = { ...prev };
+        delete updated[key];
+        return updated;
+      }
+      return { ...prev, [key]: { value: next, op: prev[key]?.op ?? "is" } };
+    });
+  }
+
+  function handleFilterReset() {
+    setFilterSelections({});
+  }
+
+  const filteredEvaluations = useMemo(() => {
+    return evaluations.filter((e) => {
+      if (dateFilter) {
+        const d = parseDMY(e.date);
+        if (d < dateFilter.from || d > dateFilter.to) return false;
+      }
+      for (const [key, sel] of Object.entries(filterSelections)) {
+        if (!sel.value?.length) continue;
+        const val = key === "channel" ? e.channel : key === "team" ? e.team : null;
+        if (val === null) continue;
+        const match = sel.value.includes(val);
+        if (sel.op === "is not" ? match : !match) return false;
+      }
+      return true;
+    });
+  }, [filterSelections, dateFilter]);
+
+  const hasFilters = filterCategories.some((cat) => filterSelections[cat.key]?.value?.length > 0);
 
   useEffect(() => {
     if (activeModalTab === "Conversation history" && chatBottomRef.current) {
@@ -201,16 +262,37 @@ export default function AgentDetailContent({ slug }) {
           ))}
         </div>
         <div className="sad-tabs-actions">
-          <button className="btn btn-secondary">
-            <img src="/icons/16px/Filter.svg" width={16} height={16} alt="" style={iconFilter} />
-            <span className="btn-label">Filters</span>
-          </button>
-          <button className="btn btn-secondary">
-            <img src="/icons/16px/Calendar.svg" width={16} height={16} alt="" style={iconFilter} />
-            <span className="btn-label">Last 30 days</span>
-          </button>
+          <FiltersButton filterSelections={filterSelections} onSelect={handleFilterSelect} onReset={handleFilterReset} filterCategories={filterCategories} />
+          <DateRangeButton onChange={setDateFilter} />
         </div>
       </div>
+
+      {hasFilters && (
+        <div className="sa-filters-bar">
+          {filterCategories.filter((cat) => filterSelections[cat.key]?.value?.length > 0).map((cat) => (
+            <FiltersPopover
+              key={cat.key}
+              filterSelections={filterSelections}
+              onSelect={handleFilterSelect}
+              onReset={handleFilterReset}
+              filterCategories={filterCategories}
+            >
+              <FilterChip
+                label={cat.label}
+                values={filterSelections[cat.key]?.value ?? []}
+                op={filterSelections[cat.key]?.op ?? "is"}
+                onRemove={() => handleFilterSelect(cat.key, null)}
+              />
+            </FiltersPopover>
+          ))}
+          <FiltersPopover filterSelections={filterSelections} onSelect={handleFilterSelect} onReset={handleFilterReset} filterCategories={filterCategories}>
+            <button className="sa-add-filter-btn">
+              <img src="/icons/16px/Plus.svg" width={12} height={12} alt="" style={iconFilter} />
+              <span>Add filter</span>
+            </button>
+          </FiltersPopover>
+        </div>
+      )}
 
       {/* Scrollable content */}
       <div className="sad-scroll">
@@ -358,7 +440,7 @@ export default function AgentDetailContent({ slug }) {
                   <div className="sa-th sad-col-140"><span className="sa-th-label">Date</span></div>
                 </div>
 
-                {evaluations.map((e) => (
+                {filteredEvaluations.map((e) => (
                   <div className="sa-row sad-row-clickable" key={e.id} onClick={() => { setSelectedEval(e); setExpandedReasoning(null); setActiveModalTab("Evaluation results"); setResultFilter(null); }}>
                     <div className="sa-cell sad-col-id">
                       <span className="sa-cell-text" style={{ color: "var(--content-tertiary)" }}>{e.id}</span>
@@ -373,7 +455,7 @@ export default function AgentDetailContent({ slug }) {
                       <span className="sa-cell-text">{e.channel}</span>
                     </div>
                     <div className="sa-cell sad-col-148">
-                      <span className="sa-cell-text">{e.score}</span>
+                      <span className="sa-cell-text" style={{ color: e.score >= 80 ? "var(--utilities-content-content-green)" : e.score >= 70 ? "var(--utilities-content-content-orange)" : "var(--utilities-content-content-red)" }}>{e.score}</span>
                     </div>
                     <div className="sa-cell sad-col-148">
                       {e.violations ? (
@@ -421,12 +503,41 @@ export default function AgentDetailContent({ slug }) {
               </div>
             </div>
 
-            {/* Description */}
+            {/* Details */}
             <div className="sad-modal-description">
-              <div className="sad-modal-description-box">
-                <p className="sad-modal-description-text">{selectedEval.description}</p>
+              <div className="sad-modal-details">
+                <div className="sad-modal-details-header">
+                  <div className="sad-modal-details-label">
+                    <img src="/icons/16px/Calendar.svg" width={16} height={16} alt="" style={iconFilter} />
+                    <span className="sad-modal-details-label-text">{selectedEval.date}</span>
+                  </div>
+                  <div className="sad-modal-details-label">
+                    <img src="/icons/16px/Clock.svg" width={16} height={16} alt="" style={iconFilter} />
+                    <span className="sad-modal-details-label-text">{selectedEval.time}</span>
+                  </div>
+                </div>
+                <div className="sad-modal-details-content">
+                  <p className="sad-modal-details-text">{selectedEval.description}</p>
+                </div>
               </div>
             </div>
+
+            {/* Violations card */}
+            {selectedEval.violations > 0 && (
+              <div className="sad-modal-violation">
+                <div className="sad-modal-violation-card">
+                  <div className="sad-modal-violation-header">
+                    <img src="/icons/16px/Critical.svg" width={16} height={16} alt="" />
+                    <span className="sad-modal-violation-title">Critical Violations</span>
+                  </div>
+                  <div className="sad-modal-violation-content">
+                    {(selectedEval.violationText || []).map((line, i) => (
+                      <p key={i} className="sad-modal-violation-text">{line}</p>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Tabs */}
             <div className="sad-modal-tabs">
