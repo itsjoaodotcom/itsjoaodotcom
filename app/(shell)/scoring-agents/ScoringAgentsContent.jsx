@@ -27,17 +27,29 @@ function FiltersButton({ filterSelections, onSelect, onReset }) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState(null);
   const ref = useRef(null);
+  const closeTimer = useRef(null);
+
+  function scheduleClose() {
+    closeTimer.current = setTimeout(() => setActiveCategory(null), 150);
+  }
+  function cancelClose() {
+    clearTimeout(closeTimer.current);
+  }
 
   useEffect(() => {
     if (!isOpen) return;
     function onMouseDown(e) {
       if (!ref.current?.contains(e.target)) {
+        cancelClose();
         setIsOpen(false);
         setActiveCategory(null);
       }
     }
     document.addEventListener("mousedown", onMouseDown);
-    return () => document.removeEventListener("mousedown", onMouseDown);
+    return () => {
+      document.removeEventListener("mousedown", onMouseDown);
+      cancelClose();
+    };
   }, [isOpen]);
 
   const hasFilters = FILTER_CATEGORIES.some(
@@ -49,11 +61,25 @@ function FiltersButton({ filterSelections, onSelect, onReset }) {
   return (
     <div ref={ref} style={{ position: "relative" }}>
       <button className="btn btn-secondary" onClick={() => { setIsOpen((v) => !v); setActiveCategory(null); }}>
-        <img src="/icons/16px/Filter.svg" width={16} height={16} alt="" style={iconFilter} />
+        <span style={{ position: "relative", display: "inline-flex", width: 16, height: 16, flexShrink: 0 }}>
+          <img src="/icons/16px/Filter.svg" width={16} height={16} alt="" style={iconFilter} />
+          {hasFilters && (
+            <span style={{
+              position: "absolute", left: 9, top: 1,
+              width: 6, height: 6, borderRadius: "50%",
+              background: "var(--content-accent, #4061d8)",
+              boxShadow: "0 0 0 1.5px var(--surface-primary, #fff)",
+            }} />
+          )}
+        </span>
         <span className="btn-label">Filters</span>
       </button>
       {isOpen && (
-        <div style={{ position: "absolute", top: "calc(100% + 4px)", right: 0, zIndex: 100 }}>
+        <div
+          style={{ position: "absolute", top: "calc(100% + 4px)", right: 0, zIndex: 100 }}
+          onMouseEnter={cancelClose}
+          onMouseLeave={scheduleClose}
+        >
           <Popover
             content="text"
             placeholder="Find filter..."
@@ -68,7 +94,7 @@ function FiltersButton({ filterSelections, onSelect, onReset }) {
             bottomActions={hasFilters}
             onItemHover={(item) => {
               const cat = FILTER_CATEGORIES.find((c) => c.label === item.label);
-              if (cat) setActiveCategory(cat.key);
+              if (cat) { cancelClose(); setActiveCategory(cat.key); }
             }}
             onItemClick={(_, sectionIndex) => {
               if (sectionIndex === -1) { onReset(); return; }
@@ -77,7 +103,11 @@ function FiltersButton({ filterSelections, onSelect, onReset }) {
         </div>
       )}
       {isOpen && activeCat && (
-        <div style={{ position: "absolute", top: "calc(100% + 4px)", right: "244px", zIndex: 100 }}>
+        <div
+          style={{ position: "absolute", top: "calc(100% + 4px)", right: "244px", zIndex: 100 }}
+          onMouseEnter={cancelClose}
+          onMouseLeave={scheduleClose}
+        >
           <Popover
             content="text"
             subheader={activeCat.label}
