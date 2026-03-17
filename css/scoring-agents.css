@@ -402,18 +402,12 @@
 }
 
 .sad-chart-card {
-  flex: 1;
+  flex: 1 1 0;
   min-width: 280px;
   border-radius: 8px;
   background: var(--surface-secondary);
   border: 1px solid var(--stroke-primary);
   overflow: hidden;
-}
-
-.sad-chart-fixed {
-  flex: 1;
-  min-width: 280px;
-  max-width: 558px;
 }
 
 .sad-chart-header {
@@ -536,6 +530,65 @@
   white-space: nowrap;
 }
 
+/* Collapsible animation */
+.sad-collapse-inner {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease;
+}
+
+.sad-collapse-open .sad-collapse-inner {
+  max-height: 600px;
+  transition: max-height 0.35s ease;
+}
+
+.sad-chevron {
+  transition: transform 0.25s ease;
+}
+
+.sad-chevron-open {
+  transform: rotate(180deg);
+}
+
+/* Criteria Definitions section */
+.sad-criteria-defs-section {
+  padding: 0 20px 20px;
+}
+
+.sad-criteria-defs-wrap {
+  padding: 0 2px 2px;
+}
+
+.sad-criteria-defs-table {
+  background: var(--surface-primary);
+  border: 1px solid var(--stroke-primary);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.sad-col-strategy {
+  width: 160px;
+  flex-shrink: 0;
+}
+
+.sad-col-definition {
+  flex: 2;
+  min-width: 0;
+}
+
+.sad-col-definition .sa-cell-text,
+.sad-criteria-def-text {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  color: var(--content-tertiary);
+}
+
+.sad-col-definition {
+  align-items: flex-start;
+  padding-top: 14px;
+}
+
 /* Recent Evaluations section */
 .sad-recent-evals {
   display: flex;
@@ -573,7 +626,8 @@
   flex-shrink: 0;
 }
 
-.sad-chart-container .sa-table-header {
+.sad-chart-container .sa-table-header,
+.sad-criteria-defs-table .sa-table-header {
   border-top: none;
 }
 
@@ -799,14 +853,27 @@
   width: 42px;
   height: 42px;
   border-radius: 6px;
-  background: #e6f7ef;
-  color: #2a6b4a;
   font-size: 14px;
   font-weight: 600;
   line-height: 42px;
   text-align: center;
   flex-shrink: 0;
   box-shadow: inset 0 0 0 1px var(--stroke-primary);
+}
+
+.sad-modal-avatar-green {
+  background: #e6f7ef;
+  color: #2a6b4a;
+}
+
+.sad-modal-avatar-orange {
+  background: #fff3e0;
+  color: #9a5200;
+}
+
+.sad-modal-avatar-red {
+  background: #fdecea;
+  color: #9b1c1c;
 }
 
 .sad-modal-header-info {

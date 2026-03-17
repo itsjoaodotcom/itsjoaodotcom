@@ -58,7 +58,7 @@ const scoreDistribution = [
 
 const evaluations = [
   {
-    id: "01", name: "James Mitchell", icon: "LiveChat", team: "Chat", channel: "Chat", channelIcon: "LiveChat", score: 98, violations: null, date: "14/03/2026",
+    id: "01", name: "James Mitchell", avatar: "/avatars/Avatar 01.png", team: "Chat", channel: "Chat", channelIcon: "LiveChat", score: 98, violations: null, date: "14/03/2026",
     contactName: "Priya Sharma", title: "Account Access & Verification Issue", channelTag: "social",
     description: "Customer contacted support regarding a account inquiry. They were transferred to Ahmed Mansour who handled the interaction via social. The conversation included 4 evaluated criteria points.",
     criteria: [
@@ -70,7 +70,7 @@ const evaluations = [
     ],
   },
   {
-    id: "02", name: "Social media", icon: "Globe", team: "Call center", channel: "Call center", channelIcon: "AnswerCall", score: 59, violations: null, date: "14/03/2026",
+    id: "02", name: "Sofia Martinez", avatar: "/avatars/Avatar 2.png", team: "Call center", channel: "Call center", channelIcon: "AnswerCall", score: 59, violations: null, date: "14/03/2026",
     contactName: "Carlos Rivera", title: "Billing Dispute Resolution", channelTag: "social",
     description: "Customer contacted support regarding a billing discrepancy. The agent handled the interaction professionally and resolved the issue within the session.",
     criteria: [
@@ -82,7 +82,7 @@ const evaluations = [
     ],
   },
   {
-    id: "03", name: "Social media", icon: "Globe", team: "Advanced support", channel: "Advanced support", channelIcon: "Globe", score: 98, violations: null, date: "14/03/2026",
+    id: "03", name: "Ahmed Mansour", avatar: "/avatars/Avatar 3.png", team: "Advanced support", channel: "Advanced support", channelIcon: "Globe", score: 98, violations: null, date: "14/03/2026",
     contactName: "Fatima Al-Rashid", title: "Product Return & Refund Request", channelTag: "email",
     description: "Customer requested a return and refund for a defective product. The agent guided the customer through the process and confirmed the refund timeline.",
     criteria: [
@@ -94,7 +94,7 @@ const evaluations = [
     ],
   },
   {
-    id: "04", name: "Email", icon: "Email", team: "Social media", channel: "Social media", channelIcon: "Globe", score: 86, violations: 1, date: "14/03/2026",
+    id: "04", name: "Yuki Tanaka", avatar: "/avatars/Avatar 4.png", team: "Social media", channel: "Social media", channelIcon: "Globe", score: 86, violations: 1, date: "14/03/2026",
     contactName: "Liam O'Connor", title: "Service Outage Complaint", channelTag: "chat",
     description: "Customer reported a service outage affecting their account. The agent acknowledged the issue and escalated to the technical team but failed to follow up within the promised timeframe.",
     criteria: [
@@ -106,7 +106,7 @@ const evaluations = [
     ],
   },
   {
-    id: "05", name: "Call center", icon: "AnswerCall", team: "Chat", channel: "Chat", channelIcon: "LiveChat", score: 74, violations: null, date: "14/03/2026",
+    id: "05", name: "Marcus Webb", avatar: "/avatars/Avatar 5.png", team: "Chat", channel: "Chat", channelIcon: "LiveChat", score: 74, violations: null, date: "14/03/2026",
     contactName: "Sarah Chen", title: "Subscription Upgrade Inquiry", channelTag: "call",
     description: "Customer called to inquire about upgrading their subscription plan. The agent provided clear information about the available options and pricing.",
     criteria: [
@@ -118,7 +118,7 @@ const evaluations = [
     ],
   },
   {
-    id: "06", name: "Call center", icon: "AnswerCall", team: "Chat", channel: "Chat", channelIcon: "LiveChat", score: 88, violations: null, date: "14/03/2026",
+    id: "06", name: "Nina Petrov", avatar: "/avatars/Avatar 6.png", team: "Chat", channel: "Chat", channelIcon: "LiveChat", score: 88, violations: null, date: "14/03/2026",
     contactName: "David Park", title: "Password Reset Assistance", channelTag: "chat",
     description: "Customer needed help resetting their account password. The agent walked the customer through the reset process and verified the account was accessible.",
     criteria: [
@@ -130,7 +130,7 @@ const evaluations = [
     ],
   },
   {
-    id: "07", name: "Email", icon: "Email", team: "Social media", channel: "Email", channelIcon: "Email", score: 85, violations: 2, date: "14/03/2026",
+    id: "07", name: "Omar Khalid", avatar: "/avatars/Avatar 7.png", team: "Social media", channel: "Email", channelIcon: "Email", score: 85, violations: 2, date: "14/03/2026",
     contactName: "Anna Kowalski", title: "Delivery Delay Investigation", channelTag: "email",
     description: "Customer reported a delayed delivery. The agent investigated and found a logistics issue but failed to provide a resolution or compensation within the interaction.",
     criteria: [
@@ -143,11 +143,22 @@ const evaluations = [
   },
 ];
 
+const criteriaDefinitions = [
+  { criterion: "Greeting Protocol",    strategy: "behavioral",        strategyColor: "green",  weight: "15%",           definition: "Agent greets the customer appropriately using standard greeting words/phrases (hello, welcome, hi, good morning/evening, how can I help/assist)." },
+  { criterion: "Issue Resolution",     strategy: "outcome",           strategyColor: "blue",   weight: "25%",           definition: "Agent resolves the customer's issue completely within the interaction, providing accurate and relevant solutions." },
+  { criterion: "Empathy Display",      strategy: "sentiment",         strategyColor: "purple", weight: "10%",           definition: "Agent demonstrates empathy and understanding throughout the conversation, acknowledging the customer's feelings and frustrations." },
+  { criterion: "Knowledge Accuracy",   strategy: "knowledge_accuracy",strategyColor: "orange", weight: "25%",           definition: "Agent's information is accurate and verified against the Knowledge Base. Violated when agent contradicts KB, fabricates details, or gives wrong information." },
+  { criterion: "Compliance Check",     strategy: "override",          strategyColor: "red",    weight: "Override (100%)",definition: "Agent responded throughout the conversation and did not abandon it. If violated, ALL other criteria are ignored and the interaction score is forced to 0." },
+  { criterion: "Tone Appropriateness", strategy: "sentiment",         strategyColor: "purple", weight: "15%",           definition: "Agent maintains professional, respectful language throughout. Violated when blaming, dismissive, condescending, unprofessional, sarcastic, or aggressive language is detected." },
+  { criterion: "Follow-up Action",     strategy: "behavioral",        strategyColor: "green",  weight: "10%",           definition: "Agent clearly communicates next steps and follow-up actions to the customer before closing the interaction." },
+];
+
 const tabs = ["Evaluations", "Agents Report", "Teams Report", "History"];
 const tabIcons = { "Evaluations": "Reports", "Agents Report": "Users", "Teams Report": "Reports" };
 
 export default function AgentDetailContent({ slug }) {
   const [activeTab, setActiveTab] = useState("Evaluations");
+  const [criteriaDefsOpen, setCriteriaDefsOpen] = useState(false);
   const [criteriaOpen, setCriteriaOpen] = useState(true);
   const [selectedEval, setSelectedEval] = useState(null);
   const [expandedReasoning, setExpandedReasoning] = useState(null);
@@ -222,7 +233,7 @@ export default function AgentDetailContent({ slug }) {
         {/* Charts */}
         <div className="sad-charts">
           {/* Criterion Pass Rates */}
-          <div className="sad-chart-card sad-chart-fixed">
+          <div className="sad-chart-card">
             <div className="sad-chart-header">
               <div className="sad-chart-title">
                 <span>Criterion Pass Rates</span>
@@ -274,6 +285,53 @@ export default function AgentDetailContent({ slug }) {
           </div>
         </div>
 
+        {/* Criteria Definitions */}
+        <div className="sad-criteria-defs-section">
+          <div className="sad-chart-card">
+            <div className="sad-chart-header">
+              <div className="sad-chart-title">
+                <span>Criteria Definitions</span>
+                <span className="popover-item-badge">{criteriaDefinitions.length}</span>
+              </div>
+              <div style={{ padding: "8px" }}>
+                <button className="btn btn-ghost btn-icon" onClick={() => setCriteriaDefsOpen((o) => !o)}>
+                  <img src="/icons/16px/ChevronBottom.svg" width={16} height={16} alt="" style={iconFilter} className={`sad-chevron${criteriaDefsOpen ? " sad-chevron-open" : ""}`} />
+                </button>
+              </div>
+            </div>
+            <div className={`sad-collapse${criteriaDefsOpen ? " sad-collapse-open" : ""}`}>
+              <div className="sad-collapse-inner">
+              <div className="sad-criteria-defs-wrap">
+                <div className="sad-criteria-defs-table">
+                  <div className="sa-table-header">
+                    <div className="sa-th sad-col-flex"><span className="sa-th-label">Criterion</span></div>
+                    <div className="sa-th sad-col-strategy"><span className="sa-th-label">Strategy</span></div>
+                    <div className="sa-th sad-col-148"><span className="sa-th-label">Weight</span></div>
+                    <div className="sa-th sad-col-definition"><span className="sa-th-label">Definition</span></div>
+                  </div>
+                  {criteriaDefinitions.map((c) => (
+                    <div className="sa-row" key={c.criterion}>
+                      <div className="sa-cell sad-col-flex">
+                        <span className="sa-cell-text">{c.criterion}</span>
+                      </div>
+                      <div className="sa-cell sad-col-strategy">
+                        <Tag color={c.strategyColor} label={c.strategy} size="sm" />
+                      </div>
+                      <div className="sa-cell sad-col-148">
+                        <span className="sa-cell-text">{c.weight}</span>
+                      </div>
+                      <div className="sa-cell sad-col-definition">
+                        <span className="sa-cell-text sad-criteria-def-text">{c.definition}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Recent Evaluations */}
         <div className="sad-recent-evals">
           <div className="sad-recent-evals-header">
@@ -282,11 +340,12 @@ export default function AgentDetailContent({ slug }) {
             </div>
             <div className="sad-recent-evals-header-right">
               <button className="btn btn-ghost btn-icon" onClick={() => setCriteriaOpen((o) => !o)}>
-                <img src={`/icons/16px/${criteriaOpen ? "ChevronTop" : "ChevronBottom"}.svg`} width={16} height={16} alt="" style={iconFilter} />
+                <img src="/icons/16px/ChevronBottom.svg" width={16} height={16} alt="" style={iconFilter} className={`sad-chevron${criteriaOpen ? " sad-chevron-open" : ""}`} />
               </button>
             </div>
           </div>
-          {criteriaOpen && (
+          <div className={`sad-collapse${criteriaOpen ? " sad-collapse-open" : ""}`}>
+            <div className="sad-collapse-inner">
             <div className="sad-chart-content-wrap">
               <div className="sad-chart-container">
                 <div className="sa-table-header">
@@ -305,10 +364,7 @@ export default function AgentDetailContent({ slug }) {
                       <span className="sa-cell-text" style={{ color: "var(--content-tertiary)" }}>{e.id}</span>
                     </div>
                     <div className="sa-cell sad-col-flex">
-                      <div className="sa-channel">
-                        <img src={`/icons/16px/${e.icon}.svg`} width={16} height={16} alt="" style={iconFilter} />
-                        <span className="sa-cell-text">{e.name}</span>
-                      </div>
+                      <span className="sa-cell-text">{e.name}</span>
                     </div>
                     <div className="sa-cell sad-col-flex">
                       <span className="sa-cell-text">{e.team}</span>
@@ -336,7 +392,8 @@ export default function AgentDetailContent({ slug }) {
                 ))}
               </div>
             </div>
-          )}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -348,11 +405,11 @@ export default function AgentDetailContent({ slug }) {
             {/* Header */}
             <div className="sad-modal-header">
               <div className="sad-modal-header-left">
-                <div className="sad-modal-avatar">{selectedEval.score}</div>
+                <div className={`sad-modal-avatar${selectedEval.score >= 80 ? " sad-modal-avatar-green" : selectedEval.score >= 60 ? " sad-modal-avatar-orange" : " sad-modal-avatar-red"}`}>{selectedEval.score}</div>
                 <div className="sad-modal-header-info">
                   <span className="sad-modal-title">{selectedEval.title}</span>
                   <div className="sad-modal-subtitle-row">
-                    <span className="sad-modal-contact">{selectedEval.contactName}</span>
+                    <span className="sad-modal-contact">{selectedEval.name}</span>
                     <Tag color="grey" label={selectedEval.channelTag} size="sm" iconLeft={false} />
                   </div>
                 </div>
@@ -459,8 +516,8 @@ export default function AgentDetailContent({ slug }) {
                           <div className="sad-modal-connection-divider" />
                           <div className="sad-modal-connection-content">
                             <div className="sad-modal-connection-author">
-                              <img src="/avatars/Avatar 2.png" className="sad-modal-connection-avatar" width={16} height={16} alt="" />
-                              <span className="sad-modal-connection-author-name">{selectedEval.contactName}</span>
+                              <img src={selectedEval.avatar} className="sad-modal-connection-avatar" width={16} height={16} alt="" />
+                              <span className="sad-modal-connection-author-name">{selectedEval.name}</span>
                             </div>
                             <p className="sad-modal-connection-message">{c.reasoning}</p>
                           </div>
@@ -488,13 +545,13 @@ export default function AgentDetailContent({ slug }) {
                       <div className="sad-modal-chat-bubble sad-modal-chat-bubble-agent">
                         <div className="sad-modal-chat-author">
                           <img
-                            src={msg.isAI ? "/images/Revolut_Logo.png" : "/avatars/Avatar 01.png"}
+                            src={msg.isAI ? "/images/Revolut_Logo.png" : selectedEval.avatar}
                             className={`sad-modal-chat-avatar${msg.isAI ? "" : " sad-modal-chat-avatar-human"}`}
                             width={16}
                             height={16}
                             alt=""
                           />
-                          <span className="sad-modal-chat-author-name">{msg.author}</span>
+                          <span className="sad-modal-chat-author-name">{msg.isAI ? msg.author : selectedEval.name}</span>
                         </div>
                         <p className="sad-modal-chat-text sad-modal-chat-text-agent">{msg.text}</p>
                       </div>

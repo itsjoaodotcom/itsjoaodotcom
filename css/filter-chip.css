@@ -1,0 +1,113 @@
+/*
+ * filter-chip.css — FilterChip component
+ */
+
+/* ─── Bar ────────────────────────────────────────────── */
+
+.sa-filters-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--stroke-primary);
+  flex-shrink: 0;
+}
+
+/* ─── Chip ───────────────────────────────────────────── */
+
+.filter-chip {
+  display: flex;
+  align-items: center;
+  background: var(--button-secondary);
+  border: 1px solid var(--stroke-primary);
+  border-radius: 5px;
+  flex-shrink: 0;
+}
+
+/* ─── Segments ───────────────────────────────────────── */
+
+.filter-chip-label,
+.filter-chip-operator,
+.filter-chip-value {
+  padding: 4px 6px;
+  font-family: var(--font-family);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  white-space: nowrap;
+  border-right: 1px solid var(--stroke-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+.filter-chip-label,
+.filter-chip-value {
+  color: var(--content-primary);
+}
+
+.filter-chip-operator {
+  color: var(--content-tertiary);
+}
+
+/* ─── Clickable operator / value buttons ─────────────── */
+
+.filter-chip-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: block;
+  transition: background 0.1s;
+}
+
+.filter-chip-operator.filter-chip-btn,
+.filter-chip-value.filter-chip-btn {
+  border-right: 1px solid var(--stroke-primary);
+}
+
+.filter-chip-btn:hover {
+  background: var(--button-secondaryhover);
+}
+
+/* ─── Remove button ──────────────────────────────────── */
+
+.filter-chip-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.1s;
+}
+
+.filter-chip-remove:hover {
+  background: var(--button-secondaryhover);
+}
+
+/* ─── Add filter button ───────────────────────────────── */
+
+.sa-add-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 6px;
+  background: var(--surface-tint, rgba(0, 0, 0, 0.04));
+  border: 1px dashed var(--stroke-dashed, rgba(0, 0, 0, 0.1));
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--content-primary);
+  white-space: nowrap;
+  flex-shrink: 0;
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.1s;
+}
+
+.sa-add-filter-btn:hover {
+  background: var(--button-secondaryhover);
+}

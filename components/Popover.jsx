@@ -1,11 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import PopoverItem from "./PopoverItem";
 
 export default function Popover({
   content = "users",     // "users" | "text"
   placeholder = "Search...",
   subheader = null,      // string — small category label instead of search input (sub-level view)
+  noHeader = false,      // hide header entirely
+  noInternalSearch = false,
   sections = [],
   drag = false,
   checkbox = false,
@@ -16,6 +19,9 @@ export default function Popover({
   onItemClick,
   onItemHover,
 }) {
+  const [query, setQuery] = useState("");
+  const q = query.toLowerCase().trim();
+
   const defaultBottomActions = [
     { icon: "/icons/16px/Retry.svg", label: "Reset filters" },
   ];
@@ -27,7 +33,7 @@ export default function Popover({
 
   return (
     <div className="popover">
-      {subheader ? (
+      {!noHeader && (subheader ? (
         <div className="popover-subheader">
           <span className="popover-subheader-label">{subheader}</span>
         </div>
@@ -37,17 +43,24 @@ export default function Popover({
             className="popover-input"
             type="text"
             placeholder={placeholder}
-            onChange={(e) => onSearch && onSearch(e.target.value)}
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              onSearch && onSearch(e.target.value);
+            }}
           />
         </div>
-      )}
+      ))}
 
       <div className="popover-body">
-        {sections.map((items, sectionIndex) => (
+        {sections.map((items, sectionIndex) => {
+          const filtered = (q && !noInternalSearch) ? items.filter((item) => item.label.toLowerCase().includes(q)) : items;
+          if (filtered.length === 0) return null;
+          return (
           <div key={sectionIndex}>
             {sectionIndex > 0 && <div className="popover-divider" />}
             <div className="popover-section">
-              {items.map((item, itemIndex) => (
+              {filtered.map((item, itemIndex) => (
                 <PopoverItem
                   key={itemIndex}
                   content={content}
@@ -61,12 +74,13 @@ export default function Popover({
                   radio={!!item.radio}
                   radioSelected={!!item.radioSelected}
                   onClick={() => onItemClick && onItemClick(item, sectionIndex, itemIndex)}
-                  onHover={() => onItemHover && onItemHover(item, sectionIndex, itemIndex)}
+                  onHover={(e) => onItemHover && onItemHover(item, sectionIndex, itemIndex, e)}
                 />
               ))}
             </div>
           </div>
-        ))}
+          );
+        })}
 
         {actionItems.length > 0 && (
           <>
