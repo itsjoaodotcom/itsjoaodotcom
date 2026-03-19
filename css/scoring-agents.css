@@ -170,7 +170,6 @@
 /* Header row */
 .sa-table-header {
   display: flex;
-  border-top: 1px solid var(--stroke-primary);
   border-bottom: 1px solid var(--stroke-primary);
   position: sticky;
   top: 0;
@@ -516,8 +515,16 @@
 }
 
 /* Score Distribution */
-.sad-dist-fill {
-  background: var(--content-secondary);
+.sad-dist-fill-green {
+  background: var(--utilities-content-content-green, #47ad7a);
+}
+
+.sad-dist-fill-orange {
+  background: var(--utilities-content-content-orange, #d17f3a);
+}
+
+.sad-dist-fill-red {
+  background: var(--utilities-content-content-red, #d14c4d);
 }
 
 .sad-dist-count {
@@ -979,7 +986,46 @@
   border-radius: 6px;
   padding: 10px 12px;
   display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sad-modal-details-card-text {
+  display: flex;
   flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.sad-modal-score-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  border: 1px solid var(--stroke-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.32px;
+  flex-shrink: 0;
+}
+
+.sad-modal-score-green {
+  background: var(--utilities-surface-greensubtle, #e6f7ef);
+  color: var(--utilities-content-onsoft-green, #2a6b4a);
+}
+
+.sad-modal-score-orange {
+  background: var(--utilities-surface-orangesubtle, #fff2e6);
+  color: var(--utilities-content-onsoft-orange, #9a5200);
+}
+
+.sad-modal-score-red {
+  background: var(--utilities-surface-redsubtle, #ffe6e6);
+  color: var(--utilities-content-onsoft-red, #9b1c1c);
 }
 
 .sad-modal-details-title {
@@ -997,10 +1043,9 @@
 
 .sad-modal-details-desc {
   font-family: var(--font-family);
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 400;
-  line-height: 20px;
-  letter-spacing: -0.28px;
+  line-height: 16px;
   color: var(--content-tertiary);
   margin: 0;
 }
@@ -1040,7 +1085,7 @@
   background: var(--surface-primary, white);
   border: 1px solid var(--stroke-primary);
   border-radius: 6px;
-  overflow: hidden;
+  overflow-x: auto;
 }
 
 /* Table header */
@@ -1084,9 +1129,10 @@
 }
 
 /* Column widths */
-.sad-modal-eval-col-criterion { width: 200px; flex-shrink: 0; }
-.sad-modal-eval-col-category  { width: 140px; flex-shrink: 0; }
-.sad-modal-eval-col-result    { width: 140px; flex-shrink: 0; }
+.sad-modal-eval-col-criterion { width: 220px; flex-shrink: 0; }
+.sad-modal-eval-col-category  { width: 120px; flex-shrink: 0; }
+.sad-modal-eval-col-result    { width: 100px; flex-shrink: 0; }
+.sad-modal-eval-col-score     { width: 100px; flex-shrink: 0; }
 .sad-modal-eval-col-reasoning { flex: 1; min-width: 0; }
 .sad-modal-eval-col-radio     { width: 48px; flex-shrink: 0; }
 
@@ -1108,6 +1154,16 @@
   display: flex;
   align-items: flex-start;
   padding: 14px 16px;
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-secondary);
+}
+
+.sad-modal-eval-col-score.sad-modal-eval-cell {
+  padding: 14px 20px;
 }
 
 .sad-modal-eval-col-reasoning.sad-modal-eval-cell {
@@ -1214,16 +1270,23 @@
   opacity: 1;
 }
 
-.sad-modal-chat-msg-highlighted .sad-modal-chat-bubble {
+.sad-modal-chat-msg-highlighted .sad-modal-chat-bubble,
+.sad-modal-chat-msg-highlighted-fail .sad-modal-chat-bubble {
   outline: 1px solid var(--surface-accent, #4061d8);
   outline-offset: 2px;
 }
 
-.sad-modal-chat-msg-customer.sad-modal-chat-msg-highlighted .sad-modal-chat-bubble {
+.sad-modal-chat-msg-highlighted-fail .sad-modal-chat-bubble {
+  outline-color: var(--utilities-content-content-red, #d14c4d);
+}
+
+.sad-modal-chat-msg-customer.sad-modal-chat-msg-highlighted .sad-modal-chat-bubble,
+.sad-modal-chat-msg-customer.sad-modal-chat-msg-highlighted-fail .sad-modal-chat-bubble {
   border-radius: 10px 10px 10px 6px;
 }
 
-.sad-modal-chat-msg-agent.sad-modal-chat-msg-highlighted .sad-modal-chat-bubble {
+.sad-modal-chat-msg-agent.sad-modal-chat-msg-highlighted .sad-modal-chat-bubble,
+.sad-modal-chat-msg-agent.sad-modal-chat-msg-highlighted-fail .sad-modal-chat-bubble {
   border-radius: 10px 10px 6px 10px;
 }
 

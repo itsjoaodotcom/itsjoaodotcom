@@ -31,12 +31,6 @@ function parseDMY(str) {
   return new Date(+y, +m - 1, +d);
 }
 
-const METRIC_FILTERS = {
-  all: () => true,
-  active: (a) => a.status === "Active",
-  draft: (a) => a.status === "Draft",
-  trendDown: (a) => !a.trendUp,
-};
 
 function SortIcon({ field, sortField, sortDir }) {
   if (field !== sortField) return <img src="/icons/16px/ArrowBottom.svg" width={16} height={16} alt="" />;
@@ -55,7 +49,6 @@ export default function ScoringAgentsContent() {
   const [search, setSearch] = useState("");
   const [sortField, setSortField] = useState(null);
   const [sortDir, setSortDir] = useState("asc");
-  const [activeMetric, setActiveMetric] = useState("all");
   const [filterSelections, setFilterSelections] = useState({});
   const [dateFilter, setDateFilter] = useState(null);
 
@@ -83,18 +76,6 @@ export default function ScoringAgentsContent() {
     setFilterSelections({});
   }
 
-  const activeCount = agents.filter((a) => a.status === "Active").length;
-  const avgScore = Math.round(agents.reduce((s, a) => s + a.score, 0) / agents.length);
-  const totalEvals = agents.reduce((s, a) => s + a.evaluations, 0);
-  const trendDownCount = agents.filter((a) => !a.trendUp).length;
-
-  const metrics = [
-    { key: "all", icon: "Users", label: "Total Agents", value: String(agents.length) },
-    { key: "active", icon: "ActiveUser", label: "Active", value: String(activeCount), valueColor: "var(--utilities-content-content-green)", filterable: true },
-    { key: "all", icon: "ChartBars", label: "Average Score", value: `${avgScore}%`, valueColor: "var(--utilities-content-content-green)", trend: "4.2%", trendUp: true },
-    { key: "all", icon: "LiveChat", label: "Total Evaluations", value: String(totalEvals) },
-    { key: "trendDown", icon: "Trend", label: "Trending Down", value: String(trendDownCount), labelColor: "var(--utilities-content-content-red)", valueColor: "var(--utilities-content-content-red)", iconStyle: { filter: "brightness(0) saturate(100%) invert(40%) sepia(78%) saturate(1640%) hue-rotate(335deg) brightness(95%) contrast(97%)" }, danger: true, filterable: true },
-  ];
 
   const handleSort = (field) => {
     if (sortField === field) {
@@ -109,15 +90,17 @@ export default function ScoringAgentsContent() {
     const uniqueTeams = [...new Set(agents.map((a) => a.teams))].sort();
     const uniqueChannels = [...new Set(agents.map((a) => a.channelLabel))].sort();
     const uniqueAgents = [...new Set(agents.map((a) => a.name))].sort();
+    const uniqueStatuses = [...new Set(agents.map((a) => a.status))].sort();
     return [
       { key: "channels", label: "Channels", icon: "/icons/16px/Channel.svg", items: uniqueChannels },
       { key: "teams",    label: "Teams",    icon: "/icons/16px/Users.svg",   items: uniqueTeams },
       { key: "agents",   label: "Agents",   icon: "/icons/16px/User.svg",    items: uniqueAgents },
+      { key: "status",   label: "Status",   icon: "/icons/16px/CheckCircle.svg", items: uniqueStatuses },
     ];
   }, []);
 
   const filtered = useMemo(() => {
-    let list = agents.filter(METRIC_FILTERS[activeMetric] || METRIC_FILTERS.all);
+    let list = [...agents];
 
     if (search.trim()) {
       const q = search.toLowerCase();
@@ -145,6 +128,11 @@ export default function ScoringAgentsContent() {
       const arr = Array.isArray(value) ? value : [value];
       list = list.filter((a) => op === "is not" ? !arr.includes(a.name) : arr.includes(a.name));
     }
+    if (filterSelections.status?.value?.length) {
+      const { value, op } = filterSelections.status;
+      const arr = Array.isArray(value) ? value : [value];
+      list = list.filter((a) => op === "is not" ? !arr.includes(a.status) : arr.includes(a.status));
+    }
 
     if (dateFilter) {
       list = list.filter((a) => {
@@ -167,7 +155,7 @@ export default function ScoringAgentsContent() {
     }
 
     return list;
-  }, [search, sortField, sortDir, activeMetric, filterSelections, dateFilter]);
+  }, [search, sortField, sortDir, filterSelections, dateFilter]);
 
   return (
     <div className="sa-content">
@@ -237,31 +225,6 @@ export default function ScoringAgentsContent() {
         </div>
       )}
 
-      {/* Metrics */}
-      <div className="sa-metrics">
-        {metrics.map((m) => (
-          <div
-            className={`sa-metric-card${m.danger ? " sa-metric-danger" : ""}${m.filterable && activeMetric === m.key ? " sa-metric-active" : ""}`}
-            key={m.label}
-            onClick={m.filterable ? () => setActiveMetric(activeMetric === m.key ? "all" : m.key) : undefined}
-            style={{ cursor: m.filterable ? "pointer" : "default" }}
-          >
-            <div className="sa-metric-header">
-              <img src={`/icons/16px/${m.icon}.svg`} width={16} height={16} alt="" style={m.iconStyle || iconFilter} />
-              <span className="sa-metric-label" style={m.labelColor ? { color: m.labelColor } : undefined}>{m.label}</span>
-            </div>
-            <div className="sa-metric-value-row">
-              <span className="sa-metric-value" style={m.valueColor ? { color: m.valueColor } : undefined}>{m.value}</span>
-              {m.trend && (
-                <div className="sa-metric-trend">
-                  <span style={{ color: "var(--utilities-content-content-green)" }}>{m.trend}</span>
-                  <img src="/icons/16px/ArrowTopRight.svg" width={16} height={16} alt="" style={{ filter: "brightness(0) saturate(100%) invert(58%) sepia(52%) saturate(405%) hue-rotate(103deg) brightness(95%) contrast(89%)" }} />
-                </div>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
 
       {/* Table */}
       <div className="sa-table-wrap">
