@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useRef, useMemo } from "react";
 import Link from "next/link";
 import Tag from "../../../../components/Tag";
 import FilterChip from "../../../../components/FilterChip";
@@ -12,14 +12,30 @@ const iconFilter = { filter: "brightness(0) invert(0.53)" };
 const channelColor = { social: "blue", email: "orange", chat: "cyan", call: "green" };
 
 const sampleConversation = [
-  { side: "customer", text: "I'd like to speak with a human agent." },
-  { side: "agent", isAI: true, author: "AI Agent", text: "What would you like to do?" },
-  { side: "customer", text: "I'm having an issue with my account." },
-  { side: "agent", isAI: true, author: "AI Agent", text: "Thank you for your patience. Let me look into this for you." },
-  { side: "customer", text: "No, thank you!" },
-  { side: "agent", author: "Emma Rodriguez", text: "I understand your concern. Let me pull up your account details." },
-  { side: "customer", text: "My service isn't working properly." },
-  { side: "agent", author: "Emma Rodriguez", text: "I've escalated this to our specialist team. You should hear back within 24 hours." },
+  { side: "customer", text: "Hi, I'd like to speak with a human agent please.", time: "16:22" },
+  { side: "agent", isAI: true, author: "AI Agent", text: "Sure! Let me transfer you now. One moment please.", time: "16:22" },
+  { side: "agent", author: "Emma Rodriguez", text: "Hello! My name is Emma and I'll be assisting you today. How can I help?", time: "16:24" },
+  { side: "customer", text: "I'm having an issue with my account. I can't seem to access my billing section.", time: "16:24" },
+  { side: "agent", author: "Emma Rodriguez", text: "I'm sorry to hear that. Let me pull up your account details right away.", time: "16:25" },
+  { side: "customer", text: "Sure, my email is priya.sharma@email.com.", time: "16:25" },
+  { side: "agent", author: "Emma Rodriguez", text: "Thank you, Priya. I can see your account. It looks like there was a temporary lock on your billing section due to a recent security update. I've removed the lock now.", time: "16:26" },
+  { side: "customer", text: "Oh that makes sense. Can you also check if my last payment went through?", time: "16:27" },
+  { side: "agent", author: "Emma Rodriguez", text: "Of course! I can confirm your payment of €49.99 on March 10th was processed successfully. You should have received a confirmation email.", time: "16:28" },
+  { side: "customer", text: "Perfect, I see it now. Thank you!", time: "16:28" },
+  { side: "agent", author: "Emma Rodriguez", text: "You're welcome! Is there anything else I can help you with today?", time: "16:29" },
+  { side: "customer", text: "Actually yes — is there a way to update my payment method?", time: "16:29" },
+  { side: "agent", author: "Emma Rodriguez", text: "Absolutely. You can update your payment method in Settings → Billing → Payment Methods. Would you like me to walk you through it?", time: "16:30" },
+  { side: "customer", text: "No, I think I can find it. Thanks for your help, Emma!", time: "16:30" },
+  { side: "agent", author: "Emma Rodriguez", text: "Happy to help, Priya! If you need anything else, don't hesitate to reach out. Have a great day!", time: "16:31" },
+];
+
+/* Maps each criterion index → message indices it relates to */
+const DEFAULT_CRITERION_MESSAGES = [
+  [0, 1, 2],
+  [4, 6],
+  [6, 7, 8],
+  [10, 11, 12],
+  [13, 14],
 ];
 
 const AGENTS = {
@@ -39,7 +55,7 @@ const detailMetrics = [
   { icon: "Users", label: "Evaluated", value: "22", subtitle: "closed conversations" },
   { icon: "ChartBars", label: "Average Score", value: "80%", valueColor: "var(--utilities-content-content-green)", subtitle: "weighted average" },
   { icon: "Star", label: "Perfect", value: "0", subtitle: "closed conversations" },
-  { icon: "LiveChat", label: "Override", value: "0", subtitle: "Abandoned" },
+  { icon: "LiveChat", label: "Override", value: "0", subtitle: "abandoned conversations" },
   { icon: "Critical", label: "Violations", value: "2", labelColor: "var(--utilities-content-content-red)", valueColor: "var(--utilities-content-content-red)", subtitle: "critical criterion failed", subtitleColor: "var(--utilities-content-content-red)", noFilter: true, danger: true },
 ];
 
@@ -73,7 +89,7 @@ const evaluations = [
     ],
   },
   {
-    id: "02", name: "Sofia Martinez", avatar: "/avatars/Avatar 2.png", team: "Call center", channel: "Call center", channelIcon: "AnswerCall", score: 59, violations: null, date: "12/03/2026", time: "14:52:07",
+    id: "02", name: "Sofia Martinez", avatar: "/avatars/Avatar 2.png", team: "Call center", channel: "Call", channelIcon: "AnswerCall", score: 59, violations: null, date: "12/03/2026", time: "14:52:07",
     contactName: "Carlos Rivera", title: "Billing Dispute Resolution", channelTag: "social",
     description: "Customer contacted support regarding a billing discrepancy. The agent handled the interaction professionally and resolved the issue within the session.",
     criteria: [
@@ -85,7 +101,7 @@ const evaluations = [
     ],
   },
   {
-    id: "03", name: "Ahmed Mansour", avatar: "/avatars/Avatar 3.png", team: "Advanced support", channel: "Advanced support", channelIcon: "Globe", score: 98, violations: null, date: "05/03/2026", time: "11:30:45",
+    id: "03", name: "Ahmed Mansour", avatar: "/avatars/Avatar 3.png", team: "Advanced support", channel: "Chat", channelIcon: "LiveChat", score: 98, violations: null, date: "05/03/2026", time: "11:30:45",
     contactName: "Fatima Al-Rashid", title: "Product Return & Refund Request", channelTag: "email",
     description: "Customer requested a return and refund for a defective product. The agent guided the customer through the process and confirmed the refund timeline.",
     criteria: [
@@ -164,12 +180,12 @@ export default function AgentDetailContent({ slug }) {
   const [criteriaDefsOpen, setCriteriaDefsOpen] = useState(false);
   const [criteriaOpen, setCriteriaOpen] = useState(true);
   const [selectedEval, setSelectedEval] = useState(null);
-  const [expandedReasoning, setExpandedReasoning] = useState(null);
-  const [activeModalTab, setActiveModalTab] = useState("Evaluation results");
+  const [selectedCriterion, setSelectedCriterion] = useState(0);
   const [resultFilter, setResultFilter] = useState(null); // null | "Pass" | "Fail"
   const [filterSelections, setFilterSelections] = useState({});
   const [dateFilter, setDateFilter] = useState(null);
   const chatBottomRef = useRef(null);
+  const msgRefs = useRef([]);
 
   function parseDMY(str) {
     const [d, m, y] = str.split("/");
@@ -227,11 +243,14 @@ export default function AgentDetailContent({ slug }) {
 
   const hasFilters = filterCategories.some((cat) => filterSelections[cat.key]?.value?.length > 0);
 
-  useEffect(() => {
-    if (activeModalTab === "Conversation history" && chatBottomRef.current) {
-      chatBottomRef.current.scrollIntoView();
+  function handleSelectCriterion(i) {
+    setSelectedCriterion(i);
+    const indices = selectedEval?.criteria?.[i]?.messages || DEFAULT_CRITERION_MESSAGES[i] || [];
+    const first = indices[0];
+    if (first != null && msgRefs.current[first]) {
+      msgRefs.current[first].scrollIntoView({ behavior: "smooth", block: "center" });
     }
-  }, [activeModalTab, selectedEval]);
+  }
 
   const agentName = AGENTS[slug] || slug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
 
@@ -452,7 +471,7 @@ export default function AgentDetailContent({ slug }) {
                 </div>
 
                 {filteredEvaluations.map((e) => (
-                  <div className="sa-row sad-row-clickable" key={e.id} onClick={() => { setSelectedEval(e); setExpandedReasoning(null); setActiveModalTab("Evaluation results"); setResultFilter(null); }}>
+                  <div className="sa-row sad-row-clickable" key={e.id} onClick={() => { setSelectedEval(e); setSelectedCriterion(0); setResultFilter(null); }}>
                     <div className="sa-cell sad-col-id">
                       <span className="sa-cell-text" style={{ color: "var(--content-tertiary)" }}>{e.id}</span>
                     </div>
@@ -492,198 +511,175 @@ export default function AgentDetailContent({ slug }) {
 
       {/* Evaluation Detail Modal */}
       {selectedEval && (
-        <div className="sad-modal-overlay" onClick={() => setSelectedEval(null)}>
+        <div className="sad-modal-overlay" onClick={() => { setSelectedEval(null); setSelectedCriterion(0); setResultFilter(null); }}>
           <div className="sad-modal-stroke">
           <div className="sad-modal" onClick={(ev) => ev.stopPropagation()}>
-            {/* Header */}
-            <div className="sad-modal-header">
-              <div className="sad-modal-header-left">
-                <div className={`sad-modal-avatar${selectedEval.score >= 80 ? " sad-modal-avatar-green" : selectedEval.score >= 60 ? " sad-modal-avatar-orange" : " sad-modal-avatar-red"}`}>{selectedEval.score}</div>
-                <div className="sad-modal-header-info">
-                  <span className="sad-modal-title">{selectedEval.title}</span>
-                  <div className="sad-modal-subtitle-row">
-                    <span className="sad-modal-contact">{selectedEval.name}</span>
-                    <Tag color="grey" label={selectedEval.channelTag} size="sm" iconLeft={false} />
-                  </div>
+            {/* ── Left Panel ── */}
+            <div className="sad-modal-left">
+              {/* Top bar */}
+              <div className="sad-modal-topbar">
+                <div className="sad-modal-topbar-left">
+                  <img src={selectedEval.avatar} className="sad-modal-topbar-avatar" width={16} height={16} alt="" />
+                  <span className="sad-modal-topbar-name">{selectedEval.contactName}</span>
+                  <Tag color="grey" label={selectedEval.channelTag} size="sm" iconLeft={false} />
+                </div>
+                <div className="sad-modal-topbar-actions">
+                  <button className="btn btn-ghost btn-icon btn-sm" onClick={() => { setSelectedEval(null); setSelectedCriterion(0); setResultFilter(null); }}>
+                    <img src="/icons/16px/Collapse.svg" width={16} height={16} alt="" style={iconFilter} />
+                  </button>
                 </div>
               </div>
-              <div className="sad-modal-header-right">
-                <button className="btn btn-secondary btn-sm btn-icon" onClick={() => setSelectedEval(null)}>
-                  <img src="/icons/16px/Cross.svg" width={16} height={16} alt="Close" style={iconFilter} />
-                </button>
-              </div>
-            </div>
 
-            {/* Details */}
-            <div className="sad-modal-description">
-              <div className="sad-modal-details">
-                <div className="sad-modal-details-header">
-                  <div className="sad-modal-details-label">
-                    <img src="/icons/16px/Calendar.svg" width={16} height={16} alt="" style={iconFilter} />
-                    <span className="sad-modal-details-label-text">{selectedEval.date}</span>
-                  </div>
-                  <div className="sad-modal-details-label">
-                    <img src="/icons/16px/Clock.svg" width={16} height={16} alt="" style={iconFilter} />
-                    <span className="sad-modal-details-label-text">{selectedEval.time}</span>
-                  </div>
-                </div>
-                <div className="sad-modal-details-content">
-                  <p className="sad-modal-details-text">{selectedEval.description}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Violations card */}
-            {selectedEval.violations > 0 && (
-              <div className="sad-modal-violation">
-                <div className="sad-modal-violation-card">
-                  <div className="sad-modal-violation-header">
-                    <img src="/icons/16px/Critical.svg" width={16} height={16} alt="" />
-                    <span className="sad-modal-violation-title">Critical Violations</span>
-                  </div>
-                  <div className="sad-modal-violation-content">
-                    {(selectedEval.violationText || []).map((line, i) => (
-                      <p key={i} className="sad-modal-violation-text">{line}</p>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Tabs */}
-            <div className="sad-modal-tabs">
-              <button
-                className={`sad-modal-tab${activeModalTab === "Evaluation results" ? " sad-modal-tab-active" : ""}`}
-                onClick={() => setActiveModalTab("Evaluation results")}
-              >
-                <span>Evaluation results</span>
-                {activeModalTab === "Evaluation results" && <div className="sad-modal-tab-indicator" />}
-              </button>
-              <button
-                className={`sad-modal-tab${activeModalTab === "Conversation history" ? " sad-modal-tab-active" : ""}`}
-                onClick={() => setActiveModalTab("Conversation history")}
-              >
-                <span>Conversation history</span>
-                <span className="sad-modal-tab-badge">{selectedEval.criteria.length}</span>
-                {activeModalTab === "Conversation history" && <div className="sad-modal-tab-indicator" />}
-              </button>
-            </div>
-
-            {/* Tab content */}
-            {activeModalTab === "Evaluation results" ? (
-              <div className="sad-modal-table-wrap">
-                <div className="sad-modal-table-header">
-                  <div className="sad-modal-th sad-modal-col-criterion"><span className="sa-th-label">Criterion</span></div>
-                  <div className="sad-modal-th sad-modal-col-category"><span className="sa-th-label">Category</span></div>
-                  <div className="sad-modal-th sad-modal-col-result">
-                    <button
-                      className={`sad-modal-th-btn${resultFilter ? " sad-modal-th-btn-active" : ""}`}
-                      onClick={() => setResultFilter(f => f === null ? "Pass" : f === "Pass" ? "Fail" : null)}
-                    >
-                      <span className="sa-th-label">Result</span>
-                      <img
-                        src={`/icons/16px/${resultFilter === "Fail" ? "ArrowTop" : "ArrowBottom"}.svg`}
-                        width={16} height={16} alt=""
-                        style={resultFilter ? undefined : iconFilter}
-                      />
-                    </button>
-                  </div>
-                  <div className="sad-modal-th sad-modal-col-chevron" />
-                </div>
-                {selectedEval.criteria
-                  .filter(c => !resultFilter || c.result === resultFilter)
-                  .map((c, i) => (
-                  <div key={i} className={`sad-modal-row-group${expandedReasoning === i ? " sad-modal-row-expanded" : ""}`}>
-                    <div
-                      className="sad-modal-row"
-                      onClick={() => setExpandedReasoning((prev) => prev === i ? null : i)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <div className="sad-modal-cell sad-modal-col-criterion">
-                        <span className="sa-cell-text">{c.criterion}</span>
+              {/* Scrollable content */}
+              <div className="sad-modal-left-scroll">
+                {/* Details card */}
+                <div className="sad-modal-details-wrap">
+                  <div className="sad-modal-details">
+                    <div className="sad-modal-details-header">
+                      <div className="sad-modal-details-meta">
+                        <div className="sad-modal-details-label">
+                          <img src="/icons/16px/Calendar.svg" width={16} height={16} alt="" style={iconFilter} />
+                          <span className="sad-modal-details-label-text">{selectedEval.date}</span>
+                        </div>
+                        <div className="sad-modal-details-label">
+                          <img src="/icons/16px/Clock.svg" width={16} height={16} alt="" style={iconFilter} />
+                          <span className="sad-modal-details-label-text">{selectedEval.time}</span>
+                        </div>
                       </div>
-                      <div className="sad-modal-cell sad-modal-col-category">
-                        <Tag color="grey" label={c.category} size="sm" />
-                      </div>
-                      <div className="sad-modal-cell sad-modal-col-result">
-                        <Tag
-                          color={c.result === "Pass" ? "green" : "red"}
-                          label={c.result}
-                          size="sm"
-                          style="filled"
-                        />
-                      </div>
-                      <div className="sad-modal-cell sad-modal-col-chevron">
-                        <button
-                          className="btn btn-ghost btn-icon"
-                          onClick={(ev) => { ev.stopPropagation(); setExpandedReasoning((prev) => prev === i ? null : i); }}
-                        >
-                          <img
-                            src={`/icons/16px/${expandedReasoning === i ? "ChevronTop" : "ChevronBottom"}.svg`}
-                            width={16}
-                            height={16}
-                            alt=""
-                            style={iconFilter}
-                          />
-                        </button>
+                      <span className="sad-modal-details-id">conv-{selectedEval.id}b103e2-9a70-4037-9ac0-ffcf63bc73a7</span>
+                    </div>
+                    <div className="sad-modal-details-body">
+                      <div className="sad-modal-details-card">
+                        <p className="sad-modal-details-title">{selectedEval.title}</p>
+                        <p className="sad-modal-details-desc">{selectedEval.description}</p>
                       </div>
                     </div>
-                    {c.reasoning && expandedReasoning === i && (
-                      <div className="sad-modal-reasoning-wrap">
-                        <div className="sad-modal-connection-item">
-                          <div className="sad-modal-connection-note">
-                            <img src="/icons/16px/Info.svg" width={16} height={16} alt="" style={iconFilter} />
-                            <span className="sad-modal-connection-note-text">Agent followed the expected protocol correctly.</span>
-                          </div>
-                          <div className="sad-modal-connection-divider" />
-                          <div className="sad-modal-connection-content">
-                            <div className="sad-modal-connection-author">
-                              <img src={selectedEval.avatar} className="sad-modal-connection-avatar" width={16} height={16} alt="" />
-                              <span className="sad-modal-connection-author-name">{selectedEval.name}</span>
-                            </div>
-                            <p className="sad-modal-connection-message">{c.reasoning}</p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="sad-modal-chat-wrap">
-                {(selectedEval.conversation || sampleConversation).map((msg, i) => {
-                  if (msg.side === "customer") {
-                    return (
-                      <div key={i} className="sad-modal-chat-row sad-modal-chat-row-customer">
-                        <div className="sad-modal-chat-bubble sad-modal-chat-bubble-customer">
-                          <p className="sad-modal-chat-text">{msg.text}</p>
+                </div>
+
+                {/* Evaluation section */}
+                <div className="sad-modal-eval-wrap">
+                  <div className="sad-modal-eval">
+                    <div className="sad-modal-eval-title">
+                      <span className="sad-modal-eval-title-text">Evaluation</span>
+                    </div>
+                    <div className="sad-modal-eval-table-wrap">
+                      <div className="sad-modal-eval-table">
+                        <div className="sad-modal-eval-thead">
+                          <div className="sad-modal-eval-th sad-modal-eval-col-criterion"><span className="sa-th-label">Criterion</span></div>
+                          <div className="sad-modal-eval-th sad-modal-eval-col-category"><span className="sa-th-label">Category</span></div>
+                          <div className="sad-modal-eval-th sad-modal-eval-col-result">
+                            <button
+                              className={`sad-modal-th-btn${resultFilter ? " sad-modal-th-btn-active" : ""}`}
+                              onClick={() => setResultFilter(f => f === null ? "Pass" : f === "Pass" ? "Fail" : null)}
+                            >
+                              <span className="sa-th-label">Result</span>
+                              <img
+                                src={`/icons/16px/${resultFilter === "Fail" ? "ArrowTop" : "ArrowBottom"}.svg`}
+                                width={16} height={16} alt=""
+                                style={resultFilter ? undefined : iconFilter}
+                              />
+                            </button>
+                          </div>
+                          <div className="sad-modal-eval-th sad-modal-eval-col-reasoning"><span className="sa-th-label">Reasoning</span></div>
+                          <div className="sad-modal-eval-th sad-modal-eval-col-radio" />
                         </div>
-                        {msg.time && <span className="sad-modal-chat-time">{msg.time}</span>}
+                        {selectedEval.criteria
+                          .filter(c => !resultFilter || c.result === resultFilter)
+                          .map((c, i) => (
+                          <div
+                            key={i}
+                            className={`sad-modal-eval-row${selectedCriterion === i ? " sad-modal-eval-row-selected" : ""}`}
+                            onClick={() => handleSelectCriterion(i)}
+                            style={{ cursor: "pointer" }}
+                          >
+                            <div className="sad-modal-eval-cell sad-modal-eval-col-criterion">
+                              <span className="sa-cell-text">{c.criterion}</span>
+                            </div>
+                            <div className="sad-modal-eval-cell sad-modal-eval-col-category">
+                              <Tag color="grey" label={c.category} size="sm" />
+                            </div>
+                            <div className="sad-modal-eval-cell sad-modal-eval-col-result">
+                              <Tag
+                                color={c.result === "Pass" ? "green" : "red"}
+                                label={c.result}
+                                size="sm"
+                                style="filled"
+                              />
+                            </div>
+                            <div className="sad-modal-eval-cell sad-modal-eval-col-reasoning">
+                              <span className="sa-cell-text">{c.reasoning}</span>
+                            </div>
+                            <div className="sad-modal-eval-cell sad-modal-eval-col-radio">
+                              <div className={`sad-modal-radio${selectedCriterion === i ? " sad-modal-radio-on" : ""}`}>
+                                {selectedCriterion === i && <div className="sad-modal-radio-dot" />}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* ── Right Panel: Conversation ── */}
+            <div className="sad-modal-right">
+              <div className="sad-modal-topbar">
+                <div className="sad-modal-topbar-left">
+                  <span className="sad-modal-topbar-name">Conversation</span>
+                </div>
+                <div className="sad-modal-topbar-actions">
+                  <button className="btn btn-secondary btn-icon btn-sm" onClick={() => { setSelectedEval(null); setSelectedCriterion(0); setResultFilter(null); }}>
+                    <img src="/icons/16px/Cross.svg" width={16} height={16} alt="" style={iconFilter} />
+                  </button>
+                </div>
+              </div>
+              <div className="sad-modal-chat-wrap">
+                {(() => {
+                  const highlightedIndices = selectedEval.criteria[selectedCriterion]?.messages
+                    || DEFAULT_CRITERION_MESSAGES[selectedCriterion]
+                    || [];
+                  return (selectedEval.conversation || sampleConversation).map((msg, i) => {
+                    const highlighted = highlightedIndices.includes(i);
+                    const sideClass = msg.side === "customer" ? "sad-modal-chat-msg-customer" : "sad-modal-chat-msg-agent";
+                    const fadeClass = highlighted ? "sad-modal-chat-msg-highlighted" : "sad-modal-chat-msg-faded";
+                    if (msg.side === "customer") {
+                      return (
+                        <div key={i} ref={el => msgRefs.current[i] = el} className={`sad-modal-chat-msg ${sideClass} ${fadeClass}`}>
+                          <div className="sad-modal-chat-bubble sad-modal-chat-bubble-customer">
+                            <p className="sad-modal-chat-text">{msg.text}</p>
+                          </div>
+                          <div className="sad-modal-chat-status">
+                            {msg.time && <span className="sad-modal-chat-time">{msg.time}</span>}
+                          </div>
+                        </div>
+                      );
+                    }
+                    return (
+                      <div key={i} ref={el => msgRefs.current[i] = el} className={`sad-modal-chat-msg ${sideClass} ${fadeClass}`}>
+                        <div className="sad-modal-chat-bubble sad-modal-chat-bubble-agent">
+                          <div className="sad-modal-chat-author">
+                            <img
+                              src={msg.isAI ? "/images/Revolut_Logo.png" : selectedEval.avatar}
+                              className={`sad-modal-chat-avatar${msg.isAI ? "" : " sad-modal-chat-avatar-human"}`}
+                              width={16} height={16} alt=""
+                            />
+                            <span className="sad-modal-chat-author-name">{msg.isAI ? msg.author : selectedEval.name}</span>
+                          </div>
+                          <p className="sad-modal-chat-text sad-modal-chat-text-agent">{msg.text}</p>
+                        </div>
+                        <div className="sad-modal-chat-status sad-modal-chat-status-agent">
+                          {msg.time && <span className="sad-modal-chat-time">{msg.time}</span>}
+                        </div>
                       </div>
                     );
-                  }
-                  return (
-                    <div key={i} className="sad-modal-chat-row sad-modal-chat-row-agent">
-                      <div className="sad-modal-chat-bubble sad-modal-chat-bubble-agent">
-                        <div className="sad-modal-chat-author">
-                          <img
-                            src={msg.isAI ? "/images/Revolut_Logo.png" : selectedEval.avatar}
-                            className={`sad-modal-chat-avatar${msg.isAI ? "" : " sad-modal-chat-avatar-human"}`}
-                            width={16}
-                            height={16}
-                            alt=""
-                          />
-                          <span className="sad-modal-chat-author-name">{msg.isAI ? msg.author : selectedEval.name}</span>
-                        </div>
-                        <p className="sad-modal-chat-text sad-modal-chat-text-agent">{msg.text}</p>
-                      </div>
-                      {msg.time && <span className="sad-modal-chat-time sad-modal-chat-time-agent">{msg.time}</span>}
-                    </div>
-                  );
-                })}
+                  });
+                })()}
                 <div ref={chatBottomRef} />
               </div>
-            )}
+            </div>
           </div>
           </div>
         </div>

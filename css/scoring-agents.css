@@ -770,6 +770,8 @@
    Evaluation Detail Modal (sad-modal- prefix)
    ══════════════════════════════════════════════════════ */
 
+/* ── Overlay & Shell ── */
+
 .sad-modal-overlay {
   position: fixed;
   inset: 0;
@@ -783,151 +785,120 @@
 .sad-modal-stroke {
   position: relative;
   border-radius: 12px;
-  width: min(960px, calc(100vw - 32px));
-  height: min(622px, calc(100vh - 32px));
+  width: min(1280px, calc(100vw - 32px));
+  height: min(800px, calc(100vh - 32px));
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08), 0px -2px 40px rgba(0, 0, 0, 0.1);
 }
 
 .sad-modal {
-  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--stroke-primary);
+  background: var(--surface-popover, white);
+  overflow: hidden;
+  box-shadow: 0px -2px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* ── Two-panel layout ── */
+
+.sad-modal-left {
   display: flex;
   flex-direction: column;
-  width: 960px;
-  max-width: 100%;
-  height: 622px;
-  max-height: 100%;
-  border-radius: 10px;
-  border: 1px solid var(--stroke-primary);
-  background: var(--surface-primary);
-  overflow: hidden;
-}
-
-.sad-modal::after {
-  content: '';
-  position: absolute;
-  inset: 2px;
-  border-radius: 8px;
-  background: var(--surface-primary);
-  border: 1px solid var(--stroke-primary);
-  pointer-events: none;
-  z-index: -1;
-}
-
-/* Ensure children are above the pseudo-element */
-.sad-modal > * {
-  position: relative;
-  z-index: 1;
-}
-
-/* Inner wrapper to provide the white inset background */
-.sad-modal-header,
-.sad-modal-description,
-.sad-modal-violation,
-.sad-modal-tabs,
-.sad-modal-table-wrap {
+  flex: 1;
+  min-width: 0;
+  border-right: 1px solid var(--stroke-primary);
   background: var(--surface-primary);
 }
 
-/* Header */
-.sad-modal-header {
+.sad-modal-right {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin: 2px 2px 0;
-  border-radius: 8px 8px 0 0;
+  flex-direction: column;
+  width: 420px;
+  flex-shrink: 0;
 }
 
-.sad-modal-header-left {
+/* ── Top bar (shared by left & right panels) ── */
+
+.sad-modal-topbar {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 16px 16px 12px;
+  border-bottom: 1px solid var(--stroke-primary);
+  flex-shrink: 0;
+}
+
+.sad-modal-topbar-left {
+  display: flex;
   flex: 1;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px;
   min-width: 0;
 }
 
-.sad-modal-header-right {
-  display: flex;
-  align-items: center;
-  padding: 8px 8px 46px;
+.sad-modal-topbar-avatar {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 1px solid var(--stroke-primary);
+  object-fit: cover;
   flex-shrink: 0;
 }
 
-.sad-modal-avatar {
-  width: 42px;
-  height: 42px;
-  border-radius: 6px;
+.sad-modal-topbar-name {
+  font-family: var(--font-family);
   font-size: 14px;
-  font-weight: 600;
-  line-height: 42px;
-  text-align: center;
-  flex-shrink: 0;
-  box-shadow: inset 0 0 0 1px var(--stroke-primary);
-}
-
-.sad-modal-avatar-green {
-  background: #e6f7ef;
-  color: #2a6b4a;
-}
-
-.sad-modal-avatar-orange {
-  background: #fff3e0;
-  color: #9a5200;
-}
-
-.sad-modal-avatar-red {
-  background: #fdecea;
-  color: #9b1c1c;
-}
-
-.sad-modal-header-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.sad-modal-title {
-  font-size: 16px;
   font-weight: 500;
   line-height: 20px;
-  letter-spacing: -0.32px;
-  color: var(--content-primary);
+  letter-spacing: -0.28px;
+  color: var(--content-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.sad-modal-subtitle-row {
+.sad-modal-topbar-actions {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
+  padding: 10px;
+  flex-shrink: 0;
 }
 
-.sad-modal-contact {
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 20px;
-  letter-spacing: -0.28px;
-  color: var(--content-tertiary);
+/* ── Left panel scrollable area ── */
+
+.sad-modal-left-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
-/* Description / Details card */
-.sad-modal-description {
-  padding: 4px 16px 8px;
-  margin: 0 2px;
+/* ── Details card ── */
+
+.sad-modal-details-wrap {
+  padding: 16px;
 }
 
 .sad-modal-details {
   background: var(--surface-secondary, #fafafa);
-  border: 1px solid var(--stroke-primary, rgba(0, 0, 0, 0.04));
-  border-radius: 6px;
+  border: 1px solid var(--stroke-primary);
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
 }
 
 .sad-modal-details-header {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px 8px;
+}
+
+.sad-modal-details-meta {
+  display: flex;
   gap: 12px;
-  align-items: flex-start;
-  padding: 12px 12px 0;
+  align-items: center;
 }
 
 .sad-modal-details-label {
@@ -938,6 +909,7 @@
 }
 
 .sad-modal-details-label-text {
+  font-family: var(--font-family);
   font-size: 12px;
   font-weight: 400;
   line-height: 16px;
@@ -945,142 +917,103 @@
   white-space: nowrap;
 }
 
-.sad-modal-details-content {
-  padding: 6px 12px 10px;
-}
-
-.sad-modal-details-text {
+.sad-modal-details-id {
+  font-family: var(--font-family);
   font-size: 12px;
   font-weight: 400;
   line-height: 16px;
-  color: var(--content-quartenary, rgba(0, 0, 0, 0.4));
-  margin: 0;
+  color: var(--content-tertiary);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-/* Violations card */
-.sad-modal-violation {
-  padding: 4px 16px 8px;
-  margin: 0 2px;
-  background: var(--surface-primary);
+.sad-modal-details-body {
+  padding: 0 2px 2px;
 }
 
-.sad-modal-violation-card {
-  background: rgba(255, 230, 230, 0.4);
-  border: 1px solid #ffe6e6;
-  border-radius: 8px;
-}
-
-.sad-modal-violation-header {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 12px;
-}
-
-.sad-modal-violation-title {
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
-  letter-spacing: -0.28px;
-  color: var(--utilities-content-content-red, #d14c4d);
-}
-
-.sad-modal-violation-content {
-  padding: 0 12px 10px;
+.sad-modal-details-card {
+  background: var(--surface-primary, white);
+  border: 1px solid var(--stroke-primary);
+  border-radius: 6px;
+  padding: 10px 12px;
   display: flex;
   flex-direction: column;
 }
 
-.sad-modal-violation-text {
+.sad-modal-details-title {
+  font-family: var(--font-family);
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 20px;
   letter-spacing: -0.28px;
-  color: var(--content-secondary);
+  color: var(--content-primary);
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* Tabs */
-.sad-modal-tabs {
-  display: flex;
-  gap: 16px;
-  padding: 8px 16px 0;
-  margin: 0 2px;
-  box-shadow: inset 0 -1px 0 var(--stroke-primary);
-}
-
-.sad-modal-tab {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 0 12px;
-  border: none;
-  background: none;
-  cursor: pointer;
+.sad-modal-details-desc {
   font-family: var(--font-family);
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
   letter-spacing: -0.28px;
-  color: rgba(0, 0, 0, 0.5);
+  color: var(--content-tertiary);
+  margin: 0;
 }
 
-.sad-modal-tab-active {
+/* ── Evaluation section ── */
+
+.sad-modal-eval-wrap {
+  padding: 0 16px 16px;
+}
+
+.sad-modal-eval {
+  background: var(--surface-secondary, #fafafa);
+  border: 1px solid var(--stroke-primary);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sad-modal-eval-title {
+  padding: 12px 16px;
+}
+
+.sad-modal-eval-title-text {
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.28px;
   color: var(--content-primary);
 }
 
-.sad-modal-tab-indicator {
-  position: absolute;
-  bottom: 0;
-  left: -1px;
-  right: -1px;
-  height: 1px;
-  border-radius: 2px;
-  background: var(--stroke-accent, #4061d8);
+.sad-modal-eval-table-wrap {
+  padding: 0 2px 2px;
 }
 
-.sad-modal-tab-badge {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 4px;
-  border-radius: 4px;
+.sad-modal-eval-table {
+  background: var(--surface-primary, white);
   border: 1px solid var(--stroke-primary);
-  background: var(--surface-tint, rgba(0, 0, 0, 0.04));
-  font-size: 10px;
-  font-weight: 600;
-  line-height: 12px;
-  color: var(--content-tertiary);
+  border-radius: 6px;
+  overflow: hidden;
 }
 
-/* Criteria Table */
-.sad-modal-table-wrap {
-  flex: 1;
-  overflow-y: auto;
-  margin: 0 2px 2px;
-  border-radius: 0 0 8px 8px;
-}
-
-.sad-modal-table-header {
+/* Table header */
+.sad-modal-eval-thead {
   display: flex;
   border-bottom: 1px solid var(--stroke-primary);
-  padding-top: 8px;
-  position: sticky;
-  top: 0;
-  background: var(--surface-primary);
-  z-index: 1;
 }
 
-.sad-modal-th {
-  padding: 6px;
+.sad-modal-eval-th {
+  padding: 6px 6px 6px 10px;
   display: flex;
   align-items: center;
 }
 
-.sad-modal-th .sa-th-label {
+.sad-modal-eval-th .sa-th-label {
   padding: 6px 4px;
   font-weight: 400;
 }
@@ -1108,165 +1041,148 @@
   color: var(--content-primary);
 }
 
-.sad-modal-col-criterion {
-  flex: 1;
-}
+/* Column widths */
+.sad-modal-eval-col-criterion { flex: 1; min-width: 0; }
+.sad-modal-eval-col-category  { width: 140px; flex-shrink: 0; }
+.sad-modal-eval-col-result    { width: 140px; flex-shrink: 0; }
+.sad-modal-eval-col-reasoning { width: 300px; flex-shrink: 0; }
+.sad-modal-eval-col-radio     { width: 48px; flex-shrink: 0; }
 
-.sad-modal-col-criterion.sad-modal-th {
-  padding-left: 12px;
-}
-
-.sad-modal-col-category {
-  width: 240px;
-  flex-shrink: 0;
-}
-
-.sad-modal-col-result {
-  width: 240px;
-  flex-shrink: 0;
-}
-
-.sad-modal-col-chevron {
-  width: 48px;
-  flex-shrink: 0;
+/* Table rows */
+.sad-modal-eval-row {
   display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.sad-modal-row-group {
   border-bottom: 1px solid var(--stroke-primary);
-  background: var(--surface-primary);
 }
 
-.sad-modal-row-group:last-child {
+.sad-modal-eval-row:last-child {
   border-bottom: none;
 }
 
-.sad-modal-row-expanded {
-  background: var(--surface-primaryhover);
+.sad-modal-eval-row-selected {
+  background: var(--utilities-surface-blueminimal, rgba(230, 235, 255, 0.4));
 }
 
-.sad-modal-row-group:hover {
-  background: var(--surface-primaryhover);
-}
-
-.sad-modal-row {
-  display: flex;
-}
-
-.sad-modal-cell {
+.sad-modal-eval-cell {
   display: flex;
   align-items: center;
   padding: 14px 16px;
 }
 
-.sad-modal-col-criterion.sad-modal-cell {
-  padding-left: 16px;
+.sad-modal-eval-col-reasoning.sad-modal-eval-cell {
+  align-items: flex-start;
 }
 
-.sad-modal-col-chevron.sad-modal-cell {
-  padding: 10px;
+.sad-modal-eval-col-reasoning .sa-cell-text {
+  display: block;
+  width: 100%;
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* Radio button */
+.sad-modal-eval-col-radio.sad-modal-eval-cell {
+  padding: 16px;
   justify-content: center;
 }
 
-/* Expanded connection item */
-.sad-modal-reasoning-wrap {
-  padding: 0 16px 16px;
-}
-
-.sad-modal-connection-item {
-  border: 1px solid var(--stroke-primary);
-  border-radius: 6px;
-  background: var(--surface-primary);
-  overflow: hidden;
-}
-
-.sad-modal-connection-note {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 12px;
-}
-
-.sad-modal-connection-note-text {
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 16px;
-  color: rgba(0, 0, 0, 0.5);
-  white-space: nowrap;
-}
-
-.sad-modal-connection-divider {
-  height: 1px;
-  background: var(--stroke-primary);
-}
-
-.sad-modal-connection-content {
-  display: flex;
-  flex-direction: column;
-}
-
-.sad-modal-connection-author {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 12px 6px;
-}
-
-.sad-modal-connection-avatar {
+.sad-modal-radio {
   width: 16px;
   height: 16px;
-  border-radius: 999px;
-  border: 1px solid var(--stroke-primary);
-  object-fit: cover;
+  border-radius: 99px;
+  border: 1px solid var(--stroke-secondarystrong, rgba(0, 0, 0, 0.08));
+  position: relative;
   flex-shrink: 0;
 }
 
-.sad-modal-connection-author-name {
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 16px;
-  color: var(--content-primary);
+.sad-modal-radio-on {
+  border-color: var(--stroke-accent, #4061d8);
 }
 
-.sad-modal-connection-message {
-  padding: 6px 12px 8px;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 20px;
-  letter-spacing: -0.28px;
-  color: var(--content-primary);
-  margin: 0;
+.sad-modal-radio-dot {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 99px;
+  background: var(--stroke-accent, #4061d8);
 }
 
-/* ── Conversation history chat ── */
+/* ── Conversation panel (right) ── */
 
 .sad-modal-chat-wrap {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 12px 20px;
+  padding: 12px 16px;
   font-family: var(--font-family);
-  background: var(--surface-primary);
-  margin: 0;
-  border-radius: 0 0 8px 8px;
 }
 
-.sad-modal-chat-row {
+.sad-modal-chat-msg {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.sad-modal-chat-row-customer {
+.sad-modal-chat-msg-customer {
   align-items: flex-start;
 }
 
-.sad-modal-chat-row-agent {
+.sad-modal-chat-msg-agent {
   align-items: flex-end;
+}
+
+/* Status row: always occupies 16px, time hidden until hover */
+.sad-modal-chat-status {
+  display: flex;
+  align-items: center;
+  height: 16px;
+  max-width: 480px;
+  width: 100%;
+  padding: 0 4px;
+}
+
+.sad-modal-chat-status-agent {
+  justify-content: flex-end;
+}
+
+.sad-modal-chat-time {
+  font-family: var(--font-family);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--content-tertiary);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.sad-modal-chat-msg:hover .sad-modal-chat-time {
+  opacity: 1;
+}
+
+/* Faded / highlighted states */
+.sad-modal-chat-msg-faded {
+  opacity: 0.4;
+}
+
+.sad-modal-chat-msg-highlighted {
+  opacity: 1;
+}
+
+.sad-modal-chat-msg-highlighted .sad-modal-chat-bubble {
+  outline: 1px solid var(--surface-accent, #4061d8);
+  outline-offset: 2px;
+}
+
+.sad-modal-chat-msg-customer.sad-modal-chat-msg-highlighted .sad-modal-chat-bubble {
+  border-radius: 10px 10px 10px 6px;
+}
+
+.sad-modal-chat-msg-agent.sad-modal-chat-msg-highlighted .sad-modal-chat-bubble {
+  border-radius: 10px 10px 6px 10px;
 }
 
 .sad-modal-chat-bubble {
@@ -1278,7 +1194,7 @@
 .sad-modal-chat-bubble-customer {
   background: var(--surface-tint, rgba(0, 0, 0, 0.04));
   border-radius: 8px 8px 8px 4px;
-  padding: 10px;
+  padding: 10px 10px 8px;
 }
 
 .sad-modal-chat-bubble-agent {
@@ -1286,7 +1202,6 @@
   border-radius: 8px 8px 4px 8px;
   border: 1px solid var(--stroke-primary);
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.04);
-  padding: 0 0 8px;
 }
 
 .sad-modal-chat-author {
@@ -1330,33 +1245,5 @@
 
 .sad-modal-chat-text-agent {
   color: white;
-  padding: 0 10px;
-}
-
-.sad-modal-chat-time {
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 16px;
-  color: rgba(0, 0, 0, 0.5);
-  padding: 0 4px;
-}
-
-.sad-modal-chat-time-agent {
-  text-align: right;
-}
-
-.sad-modal-chat-status {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 8px 16px 28px;
-}
-
-.sad-modal-chat-status-text {
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 20px;
-  letter-spacing: -0.28px;
-  color: var(--content-secondary);
+  padding: 4px 10px 8px;
 }
