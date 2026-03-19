@@ -10,7 +10,7 @@ function computeAlign(el, estimatedWidth = 260) {
   return window.innerWidth - rect.right >= estimatedWidth ? "left" : "right";
 }
 
-export function FiltersPopover({ filterSelections, onSelect, onReset, filterCategories, children }) {
+export function FiltersPopover({ filterSelections, onSelect, onReset, filterCategories, children, hideReset }) {
   const [isOpen, setIsOpen] = useState(false);
   const [align, setAlign] = useState("right");
   const [activeCategory, setActiveCategory] = useState(null);
@@ -79,7 +79,7 @@ export function FiltersPopover({ filterSelections, onSelect, onReset, filterCate
                   badge: filterSelections[cat.key]?.value?.length > 0 ? filterSelections[cat.key].value.length : null,
                 }))]
             }
-            bottomActions={hasFilters}
+            bottomActions={hasFilters && !hideReset}
             onSearch={(q) => { setFilterQuery(q); setActiveCategory(null); }}
             onItemHover={(item, _si, _ii, e) => {
               if (filterQuery.trim()) return;

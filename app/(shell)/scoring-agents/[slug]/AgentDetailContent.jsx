@@ -54,32 +54,6 @@ const AGENTS = {
   "knowledge-base-validator": "Knowledge Base Validator",
 };
 
-/* Metrics derived from the 7 evaluations below: avg 84%, 0 perfect, 0 override, 2 with violations */
-const detailMetrics = [
-  { icon: "Users", label: "Evaluated", value: "7", subtitle: "closed conversations" },
-  { icon: "ChartBars", label: "Average Score", value: "84%", valueColor: "var(--utilities-content-content-green)", subtitle: "weighted average" },
-  { icon: "Star", label: "Perfect", value: "0", subtitle: "closed conversations" },
-  { icon: "LiveChat", label: "Override", value: "0", subtitle: "abandoned conversations" },
-  { icon: "Critical", label: "Violations", value: "2", labelColor: "var(--utilities-content-content-red)", valueColor: "var(--utilities-content-content-red)", subtitle: "critical criterion failed", subtitleColor: "var(--utilities-content-content-red)", noFilter: true, danger: true },
-];
-
-/* Pass rates across all 7 evaluations (5 criteria each = 35 checks) */
-const criterionRates = [
-  { label: "Empathy & Active Listening", ratio: "7/7", pct: 100, color: "var(--utilities-content-content-green)" },
-  { label: "Empathy Display",           ratio: "7/7", pct: 100, color: "var(--utilities-content-content-green)" },
-  { label: "Issue Resolution",          ratio: "6/7", pct: 86,  color: "var(--utilities-content-content-green)" },
-  { label: "Response Time",             ratio: "6/7", pct: 86,  color: "var(--utilities-content-content-green)" },
-  { label: "Escalation Handling",       ratio: "5/7", pct: 71,  color: "var(--utilities-content-content-orange)" },
-];
-
-/* Score distribution: 98,59,98,86,74,88,85 → 5 in 81-100, 1 in 61-80, 1 in 41-60 */
-const scoreDistribution = [
-  { range: "81–100%", count: 5, color: "green" },
-  { range: "61–80%",  count: 1, color: "orange" },
-  { range: "41–60%",  count: 1, color: "red" },
-  { range: "21–40%",  count: 0, color: "red" },
-  { range: "1–20%",   count: 0, color: "red" },
-];
 
 const evaluations = [
   {
@@ -95,7 +69,7 @@ const evaluations = [
     ],
   },
   {
-    id: "02", name: "Sofia Martinez", avatar: "/avatars/Avatar 2.png", team: "Call center", channel: "Call", channelIcon: "AnswerCall", score: 59, violations: null, date: "12/03/2026", time: "14:52:07",
+    id: "02", name: "Sofia Martinez", avatar: "/avatars/Avatar 2.png", team: "Call Center", channel: "Calls", channelIcon: "AnswerCall", score: 59, violations: null, date: "12/03/2026", time: "14:52:07",
     contactName: "Carlos Rivera", contactAvatar: "/avatars/Avatar 9.png", title: "Billing Dispute Resolution", channelTag: "social",
     description: "Customer contacted support regarding a billing discrepancy. The agent handled the interaction professionally and resolved the issue within the session.",
     criteria: [
@@ -107,7 +81,7 @@ const evaluations = [
     ],
   },
   {
-    id: "03", name: "Ahmed Mansour", avatar: "/avatars/Avatar 3.png", team: "Advanced support", channel: "Chat", channelIcon: "LiveChat", score: 98, violations: null, date: "05/03/2026", time: "11:30:45",
+    id: "03", name: "Ahmed Mansour", avatar: "/avatars/Avatar 3.png", team: "Advanced Support", channel: "Chat", channelIcon: "LiveChat", score: 98, violations: null, date: "05/03/2026", time: "11:30:45",
     contactName: "Fatima Al-Rashid", contactAvatar: "/avatars/Avatar 10.png", title: "Product Return & Refund Request", channelTag: "email",
     description: "Customer requested a return and refund for a defective product. The agent guided the customer through the process and confirmed the refund timeline.",
     criteria: [
@@ -119,7 +93,7 @@ const evaluations = [
     ],
   },
   {
-    id: "04", name: "Yuki Tanaka", avatar: "/avatars/Avatar 4.png", team: "Social media", channel: "Social media", channelIcon: "Globe", score: 86, violations: 1, date: "22/02/2026", time: "16:08:33", violationText: ["Agent failed to document the escalation case correctly, leaving the technical team with incomplete information.", '"Case notes were missing required fields at the point of escalation transfer."'],
+    id: "04", name: "Yuki Tanaka", avatar: "/avatars/Avatar 4.png", team: "Social Media", channel: "Social Media", channelIcon: "Globe", score: 86, violations: 1, date: "22/02/2026", time: "16:08:33", violationText: ["Agent failed to document the escalation case correctly, leaving the technical team with incomplete information.", '"Case notes were missing required fields at the point of escalation transfer."'],
     contactName: "Liam O'Connor", contactAvatar: "/avatars/Avatar 11.png", title: "Service Outage Complaint", channelTag: "chat",
     description: "Customer reported a service outage affecting their account. The agent acknowledged the issue and escalated to the technical team but failed to follow up within the promised timeframe.",
     criteria: [
@@ -155,7 +129,7 @@ const evaluations = [
     ],
   },
   {
-    id: "07", name: "Omar Khalid", avatar: "/avatars/Avatar 7.png", team: "Social media", channel: "Email", channelIcon: "Email", score: 85, violations: 2, date: "15/11/2025", time: "17:03:41", violationText: ["Agent deviated from established compliance protocol during interaction.", '"Transcript segment shows non-compliant response pattern detected in two separate exchanges."'],
+    id: "07", name: "Omar Khalid", avatar: "/avatars/Avatar 7.png", team: "Social Media", channel: "Email", channelIcon: "Email", score: 85, violations: 2, date: "15/11/2025", time: "17:03:41", violationText: ["Agent deviated from established compliance protocol during interaction.", '"Transcript segment shows non-compliant response pattern detected in two separate exchanges."'],
     contactName: "Anna Kowalski", contactAvatar: "/avatars/Avatar 14.png", title: "Delivery Delay Investigation", channelTag: "email",
     description: "Customer reported a delayed delivery. The agent investigated and found a logistics issue but failed to provide a resolution or compensation within the interaction.",
     criteria: [
@@ -247,6 +221,53 @@ export default function AgentDetailContent({ slug }) {
     });
   }, [filterSelections, dateFilter]);
 
+  const detailMetrics = useMemo(() => {
+    const count = filteredEvaluations.length;
+    const avg = count ? Math.round(filteredEvaluations.reduce((s, e) => s + e.score, 0) / count) : 0;
+    const perfect = filteredEvaluations.filter((e) => e.score === 100).length;
+    const violationCount = filteredEvaluations.filter((e) => e.violations > 0).length;
+    const avgColor = avg >= 80 ? "var(--utilities-content-content-green)" : avg >= 60 ? "var(--utilities-content-content-orange)" : "var(--utilities-content-content-red)";
+    return [
+      { icon: "Users", label: "Evaluated", value: String(count), subtitle: "closed conversations" },
+      { icon: "ChartBars", label: "Average Score", value: `${avg}%`, valueColor: avgColor, subtitle: "weighted average" },
+      { icon: "Star", label: "Perfect", value: String(perfect), subtitle: "closed conversations" },
+      { icon: "LiveChat", label: "Override", value: "0", subtitle: "abandoned conversations" },
+      { icon: "Critical", label: "Violations", value: String(violationCount), labelColor: "var(--utilities-content-content-red)", valueColor: "var(--utilities-content-content-red)", subtitle: "critical criterion failed", subtitleColor: "var(--utilities-content-content-red)", noFilter: true, danger: true },
+    ];
+  }, [filteredEvaluations]);
+
+  const criterionRates = useMemo(() => {
+    const totals = {};
+    filteredEvaluations.forEach((e) => {
+      e.criteria.forEach((c) => {
+        if (!totals[c.criterion]) totals[c.criterion] = { pass: 0, total: 0 };
+        totals[c.criterion].total++;
+        if (c.result === "Pass") totals[c.criterion].pass++;
+      });
+    });
+    return Object.entries(totals)
+      .map(([label, { pass, total }]) => {
+        const pct = total ? Math.round((pass / total) * 100) : 0;
+        const color = pct >= 80 ? "var(--utilities-content-content-green)" : pct >= 60 ? "var(--utilities-content-content-orange)" : "var(--utilities-content-content-red)";
+        return { label, ratio: `${pass}/${total}`, pct, color };
+      })
+      .sort((a, b) => b.pct - a.pct);
+  }, [filteredEvaluations]);
+
+  const scoreDistribution = useMemo(() => {
+    const ranges = [
+      { range: "81–100%", min: 81, max: 100, color: "green" },
+      { range: "61–80%",  min: 61, max: 80,  color: "orange" },
+      { range: "41–60%",  min: 41, max: 60,  color: "red" },
+      { range: "21–40%",  min: 21, max: 40,  color: "red" },
+      { range: "1–20%",   min: 1,  max: 20,  color: "red" },
+    ];
+    return ranges.map((r) => ({
+      ...r,
+      count: filteredEvaluations.filter((e) => e.score >= r.min && e.score <= r.max).length,
+    }));
+  }, [filteredEvaluations]);
+
   const hasFilters = filterCategories.some((cat) => filterSelections[cat.key]?.value?.length > 0);
 
   function handleSelectCriterion(i) {
@@ -321,7 +342,7 @@ export default function AgentDetailContent({ slug }) {
                 />
               </FiltersPopover>
             ))}
-            <FiltersPopover filterSelections={filterSelections} onSelect={handleFilterSelect} onReset={handleFilterReset} filterCategories={filterCategories}>
+            <FiltersPopover filterSelections={filterSelections} onSelect={handleFilterSelect} onReset={handleFilterReset} filterCategories={filterCategories} hideReset>
               <button className="sa-add-filter-btn">
                 <img src="/icons/16px/Plus.svg" width={12} height={12} alt="" style={iconFilter} />
                 <span>Add filter</span>
@@ -479,8 +500,8 @@ export default function AgentDetailContent({ slug }) {
                 <div className="sa-table-header">
                   <div className="sa-th sad-col-id"><span className="sa-th-label">ID</span></div>
                   <div className="sa-th sad-col-flex"><span className="sa-th-label">Agent Name</span></div>
-                  <div className="sa-th sad-col-flex"><span className="sa-th-label">Team</span></div>
                   <div className="sa-th sad-col-flex"><span className="sa-th-label">Channel</span></div>
+                  <div className="sa-th sad-col-flex"><span className="sa-th-label">Team</span></div>
                   <div className="sa-th sad-col-148"><span className="sa-th-label">Score</span></div>
                   <div className="sa-th sad-col-148"><span className="sa-th-label">Violations</span></div>
                   <div className="sa-th sad-col-140"><span className="sa-th-label">Date</span></div>
@@ -495,13 +516,16 @@ export default function AgentDetailContent({ slug }) {
                       <span className="sa-cell-text">{e.name}</span>
                     </div>
                     <div className="sa-cell sad-col-flex">
-                      <span className="sa-cell-text">{e.team}</span>
+                      <div className="sa-channel">
+                        <img src={`/icons/16px/${e.channelIcon}.svg`} width={16} height={16} alt="" style={iconFilter} />
+                        <span className="sa-cell-text">{e.channel}</span>
+                      </div>
                     </div>
                     <div className="sa-cell sad-col-flex">
-                      <span className="sa-cell-text">{e.channel}</span>
+                      <span className="sa-cell-text">{e.team}</span>
                     </div>
                     <div className="sa-cell sad-col-148">
-                      <span className="sa-cell-text" style={{ color: e.score >= 80 ? "var(--utilities-content-content-green)" : e.score >= 70 ? "var(--utilities-content-content-orange)" : "var(--utilities-content-content-red)" }}>{e.score}</span>
+                      <span className="sa-cell-text" style={{ color: e.score >= 80 ? "var(--utilities-content-content-green)" : e.score >= 60 ? "var(--utilities-content-content-orange)" : "var(--utilities-content-content-red)" }}>{e.score}</span>
                     </div>
                     <div className="sa-cell sad-col-148">
                       {e.violations ? (

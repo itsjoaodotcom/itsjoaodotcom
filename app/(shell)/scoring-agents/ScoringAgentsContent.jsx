@@ -11,19 +11,19 @@ import { FiltersButton, FiltersPopover } from "../../../components/FiltersPopove
 const iconFilter = { filter: "brightness(0) invert(0.53)" };
 
 const agents = [
-  { name: "Chat Quality Monitor",      channel: "LiveChat",    channelLabel: "Chat Support",  teams: "Chat Support",      extra: 2, score: 96, evaluations: 142, trend: 4.2, trendUp: true,  status: "Active", lastRun: "15/03/2026" },
-  { name: "Call Center QA Analyst",    channel: "Globe",       channelLabel: "Social Media",  teams: "Call Center",       extra: 2, score: 94, evaluations: 128, trend: 2.8, trendUp: true,  status: "Active", lastRun: "12/03/2026" },
-  { name: "Social Media QA Agent",     channel: "Globe",       channelLabel: "Social Media",  teams: "Advanced Support",  extra: 2, score: 91, evaluations: 98,  trend: 1.5, trendUp: true,  status: "Active", lastRun: "05/03/2026" },
-  { name: "Chat Compliance Auditor",   channel: "Email",       channelLabel: "Email",         teams: "Social Media",      extra: 2, score: 89, evaluations: 86,  trend: 3.1, trendUp: true,  status: "Draft",  lastRun: "01/03/2026" },
-  { name: "Chat Escalation Reviewer",  channel: "AnswerCall",  channelLabel: "Call Center",   teams: "Chat Support",      extra: 2, score: 88, evaluations: 74,  trend: 0.8, trendUp: true,  status: "Active", lastRun: "22/02/2026" },
-  { name: "Call Scoring Analyst",      channel: "Email",       channelLabel: "Email",         teams: "Social Media",      extra: 2, score: 85, evaluations: 112, trend: 1.2, trendUp: false, status: "Draft",  lastRun: "15/02/2026" },
-  { name: "Email SLA Monitor",         channel: "LiveChat",    channelLabel: "Chat Support",  teams: "Call Center",       extra: 2, score: 82, evaluations: 95,  trend: 2,   trendUp: true,  status: "Active", lastRun: "05/01/2026" },
-  { name: "Social Engagement Auditor", channel: "Email",       channelLabel: "Email",         teams: "Advanced Support",  extra: 2, score: 77, evaluations: 64,  trend: 3.5, trendUp: false, status: "Active", lastRun: "15/12/2025" },
-  { name: "Chat CSAT Tracker",         channel: "LiveChat",    channelLabel: "Chat Support",  teams: "Chat Support",      extra: 2, score: 68, evaluations: 58,  trend: 5.2, trendUp: false, status: "Active", lastRun: "20/12/2025" },
-  { name: "Email Response Evaluator",  channel: "AnswerCall",  channelLabel: "Call Center",   teams: "Chat Support",      extra: 2, score: 63, evaluations: 42,  trend: 8.1, trendUp: false, status: "Active", lastRun: "10/11/2025" },
-  { name: "Compliance Risk Monitor",   channel: "LiveChat",    channelLabel: "Chat Support",  teams: "Advanced Support",  extra: 2, score: 96, evaluations: 142, trend: 4.2, trendUp: true,  status: "Active", lastRun: "14/03/2026" },
-  { name: "Tone & Empathy Auditor",    channel: "Globe",       channelLabel: "Social Media",  teams: "Call Center",       extra: 2, score: 94, evaluations: 128, trend: 2.8, trendUp: true,  status: "Active", lastRun: "25/02/2026" },
-  { name: "Knowledge Base Validator",  channel: "Globe",       channelLabel: "Social Media",  teams: "Social Media",      extra: 2, score: 91, evaluations: 98,  trend: 1.5, trendUp: true,  status: "Active", lastRun: "18/01/2026" },
+  { name: "Chat Quality Monitor",      channel: "LiveChat",    channelLabel: "Chat",         team: "Chat",             score: 96, evaluations: 142, trend: 4.2, trendUp: true,  status: "Active", lastRun: "15/03/2026" },
+  { name: "Call Center QA Analyst",    channel: "AnswerCall",  channelLabel: "Calls",        team: "Call Center",      score: 94, evaluations: 128, trend: 2.8, trendUp: true,  status: "Active", lastRun: "12/03/2026" },
+  { name: "Social Media QA Agent",     channel: "Globe",       channelLabel: "Social Media", team: "Advanced Support", score: 91, evaluations: 98,  trend: 1.5, trendUp: true,  status: "Active", lastRun: "05/03/2026" },
+  { name: "Chat Compliance Auditor",   channel: "Email",       channelLabel: "Email",        team: "Social Media",     score: 89, evaluations: 86,  trend: 3.1, trendUp: true,  status: "Draft",  lastRun: "01/03/2026" },
+  { name: "Chat Escalation Reviewer",  channel: "LiveChat",    channelLabel: "Chat",         team: "Chat",             score: 88, evaluations: 74,  trend: 0.8, trendUp: true,  status: "Active", lastRun: "22/02/2026" },
+  { name: "Call Scoring Analyst",      channel: "AnswerCall",  channelLabel: "Calls",        team: "Social Media",     score: 85, evaluations: 112, trend: 1.2, trendUp: false, status: "Draft",  lastRun: "15/02/2026" },
+  { name: "Email SLA Monitor",         channel: "Email",       channelLabel: "Email",        team: "Call Center",      score: 82, evaluations: 95,  trend: 2,   trendUp: true,  status: "Active", lastRun: "05/01/2026" },
+  { name: "Social Engagement Auditor", channel: "Globe",       channelLabel: "Social Media", team: "Advanced Support", score: 77, evaluations: 64,  trend: 3.5, trendUp: false, status: "Active", lastRun: "15/12/2025" },
+  { name: "Chat CSAT Tracker",         channel: "LiveChat",    channelLabel: "Chat",         team: "Chat",             score: 68, evaluations: 58,  trend: 5.2, trendUp: false, status: "Active", lastRun: "20/12/2025" },
+  { name: "Email Response Evaluator",  channel: "Email",       channelLabel: "Email",        team: "Chat",             score: 63, evaluations: 42,  trend: 8.1, trendUp: false, status: "Active", lastRun: "10/11/2025" },
+  { name: "Compliance Risk Monitor",   channel: "LiveChat",    channelLabel: "Chat",         team: "Advanced Support", score: 96, evaluations: 142, trend: 4.2, trendUp: true,  status: "Active", lastRun: "14/03/2026" },
+  { name: "Tone & Empathy Auditor",    channel: "Globe",       channelLabel: "Social Media", team: "Call Center",      score: 94, evaluations: 128, trend: 2.8, trendUp: true,  status: "Active", lastRun: "25/02/2026" },
+  { name: "Knowledge Base Validator",  channel: "AnswerCall",  channelLabel: "Calls",        team: "Social Media",     score: 91, evaluations: 98,  trend: 1.5, trendUp: true,  status: "Active", lastRun: "18/01/2026" },
 ];
 
 function parseDMY(str) {
@@ -87,13 +87,13 @@ export default function ScoringAgentsContent() {
   };
 
   const filterCategories = useMemo(() => {
-    const uniqueTeams = [...new Set(agents.map((a) => a.teams))].sort();
+    const uniqueTeams = [...new Set(agents.map((a) => a.team))].sort();
     const uniqueChannels = [...new Set(agents.map((a) => a.channelLabel))].sort();
     const uniqueAgents = [...new Set(agents.map((a) => a.name))].sort();
     const uniqueStatuses = [...new Set(agents.map((a) => a.status))].sort();
     return [
       { key: "channels", label: "Channels", icon: "/icons/16px/Channel.svg", items: uniqueChannels },
-      { key: "teams",    label: "Teams",    icon: "/icons/16px/Users.svg",   items: uniqueTeams },
+      { key: "teams",    label: "Team",     icon: "/icons/16px/Users.svg",   items: uniqueTeams },
       { key: "agents",   label: "Agents",   icon: "/icons/16px/User.svg",    items: uniqueAgents },
       { key: "status",   label: "Status",   icon: "/icons/16px/CheckCircle.svg", items: uniqueStatuses },
     ];
@@ -108,7 +108,7 @@ export default function ScoringAgentsContent() {
         (a) =>
           a.name.toLowerCase().includes(q) ||
           a.channelLabel.toLowerCase().includes(q) ||
-          a.teams.toLowerCase().includes(q) ||
+          a.team.toLowerCase().includes(q) ||
           a.status.toLowerCase().includes(q)
       );
     }
@@ -121,7 +121,7 @@ export default function ScoringAgentsContent() {
     if (filterSelections.teams?.value?.length) {
       const { value, op } = filterSelections.teams;
       const arr = Array.isArray(value) ? value : [value];
-      list = list.filter((a) => op === "is not" ? !arr.includes(a.teams) : arr.includes(a.teams));
+      list = list.filter((a) => op === "is not" ? !arr.includes(a.team) : arr.includes(a.team));
     }
     if (filterSelections.agents?.value?.length) {
       const { value, op } = filterSelections.agents;
@@ -209,7 +209,7 @@ export default function ScoringAgentsContent() {
                   onValueToggle={(v) => handleFilterSelect(cat.key, v)}
                 />
               ))}
-            <FiltersPopover filterSelections={filterSelections} onSelect={handleFilterSelect} onReset={handleFilterReset} filterCategories={filterCategories}>
+            <FiltersPopover filterSelections={filterSelections} onSelect={handleFilterSelect} onReset={handleFilterReset} filterCategories={filterCategories} hideReset>
               <button className="sa-add-filter-btn">
                 <img src="/icons/16px/Plus.svg" width={12} height={12} alt="" style={iconFilter} />
                 <span>Add filter</span>
@@ -239,7 +239,7 @@ export default function ScoringAgentsContent() {
             <span className="sa-th-label">Channel</span>
           </div>
           <div className="sa-th sa-col-fixed-180">
-            <span className="sa-th-label">Teams</span>
+            <span className="sa-th-label">Team</span>
           </div>
           <div className="sa-th sa-col-fixed-120">
             <button className="btn btn-ghost" onClick={() => handleSort("score")}>
@@ -280,19 +280,9 @@ export default function ScoringAgentsContent() {
               </div>
             </div>
 
-            {/* Teams */}
+            {/* Team */}
             <div className="sa-cell sa-col-fixed-180">
-              <div className="sa-teams">
-                <span className="sa-cell-text">{a.teams}</span>
-                {a.extra > 0 && (
-                  <Tag
-                    size="sm"
-                    label={`+${a.extra}`}
-                    iconLeft={false}
-                    icon12Left={<img src="/icons/12px/Plus.svg" width={12} height={12} alt="" style={iconFilter} />}
-                  />
-                )}
-              </div>
+              <span className="sa-cell-text">{a.team}</span>
             </div>
 
             {/* Score */}
