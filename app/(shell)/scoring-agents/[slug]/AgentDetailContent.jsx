@@ -81,11 +81,11 @@ const evaluations = [
     contactName: "Priya Sharma", title: "Account Access & Verification Issue", channelTag: "social",
     description: "Customer contacted support regarding a account inquiry. They were transferred to Ahmed Mansour who handled the interaction via social. The conversation included 4 evaluated criteria points.",
     criteria: [
-      { criterion: "Response Time", category: "Communication", result: "Pass", reasoning: "Agent responded within the first 30 seconds of the customer initiating the chat, well within the 60-second SLA threshold. The greeting was prompt and professional." },
-      { criterion: "Empathy Display", category: "Process", result: "Pass", reasoning: "Agent acknowledged the customer's frustration and used empathetic language throughout the conversation, reflecting active listening and care." },
-      { criterion: "Escalation Handling", category: "Compliance", result: "Pass", reasoning: "When the issue exceeded the agent's scope, escalation was initiated correctly and the customer was informed of next steps in a timely manner." },
-      { criterion: "Issue Resolution", category: "Compliance", result: "Fail", reasoning: "The agent failed to confirm that the issue was fully resolved before closing the conversation. No follow-up action was scheduled." },
-      { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", reasoning: "Agent mirrored the customer's concerns and asked clarifying questions to ensure full understanding before providing a solution." },
+      { criterion: "Response Time", category: "Communication", result: "Pass", reasoning: "Responded within 30 seconds, well within SLA." },
+      { criterion: "Empathy Display", category: "Process", result: "Pass", reasoning: "Used empathetic language and active listening." },
+      { criterion: "Escalation Handling", category: "Compliance", result: "Pass", reasoning: "Escalated correctly when issue exceeded scope." },
+      { criterion: "Issue Resolution", category: "Compliance", result: "Fail", reasoning: "Failed to confirm resolution before closing." },
+      { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", reasoning: "Mirrored concerns and asked clarifying questions." },
     ],
   },
   {
@@ -93,11 +93,11 @@ const evaluations = [
     contactName: "Carlos Rivera", title: "Billing Dispute Resolution", channelTag: "social",
     description: "Customer contacted support regarding a billing discrepancy. The agent handled the interaction professionally and resolved the issue within the session.",
     criteria: [
-      { criterion: "Response Time", category: "Communication", result: "Pass", reasoning: "Agent picked up the call within the expected SLA window and immediately identified the customer in the system." },
-      { criterion: "Empathy Display", category: "Process", result: "Pass", reasoning: "The agent validated the customer's concern about the billing error and expressed genuine understanding before beginning resolution steps." },
-      { criterion: "Escalation Handling", category: "Compliance", result: "Pass", reasoning: "No escalation was required; the agent resolved the billing dispute within their authority level without unnecessary transfers." },
-      { criterion: "Issue Resolution", category: "Compliance", result: "Pass", reasoning: "The billing discrepancy was identified, corrected, and confirmed with the customer before ending the call. A confirmation email was sent." },
-      { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", reasoning: "Agent listened without interrupting, reflected back the customer's concern accurately, and provided a clear resolution path." },
+      { criterion: "Response Time", category: "Communication", result: "Pass", reasoning: "Picked up within SLA window." },
+      { criterion: "Empathy Display", category: "Process", result: "Pass", reasoning: "Validated concern before starting resolution." },
+      { criterion: "Escalation Handling", category: "Compliance", result: "Pass", reasoning: "Resolved within authority level." },
+      { criterion: "Issue Resolution", category: "Compliance", result: "Pass", reasoning: "Corrected discrepancy and sent confirmation." },
+      { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", reasoning: "Listened without interrupting." },
     ],
   },
   {
@@ -105,11 +105,11 @@ const evaluations = [
     contactName: "Fatima Al-Rashid", title: "Product Return & Refund Request", channelTag: "email",
     description: "Customer requested a return and refund for a defective product. The agent guided the customer through the process and confirmed the refund timeline.",
     criteria: [
-      { criterion: "Response Time", category: "Communication", result: "Pass", reasoning: "Email response was sent within 2 hours of receipt, meeting the advanced support SLA of 4 hours for product return requests." },
-      { criterion: "Empathy Display", category: "Process", result: "Pass", reasoning: "The agent expressed regret for the defective product experience and offered a direct apology before outlining the resolution." },
-      { criterion: "Escalation Handling", category: "Compliance", result: "Pass", reasoning: "The return was processed at the agent's level without requiring escalation. Correct internal procedures were followed." },
-      { criterion: "Issue Resolution", category: "Compliance", result: "Pass", reasoning: "Refund was initiated and the customer received a confirmation with the expected credit timeline of 5–7 business days." },
-      { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", reasoning: "Agent demonstrated thorough understanding of the customer's situation and tailored the response to address all specific concerns raised." },
+      { criterion: "Response Time", category: "Communication", result: "Pass", reasoning: "Replied within 2 hours, under 4-hour SLA." },
+      { criterion: "Empathy Display", category: "Process", result: "Pass", reasoning: "Apologised for the defective product." },
+      { criterion: "Escalation Handling", category: "Compliance", result: "Pass", reasoning: "Processed at agent level, no escalation needed." },
+      { criterion: "Issue Resolution", category: "Compliance", result: "Pass", reasoning: "Refund initiated with 5–7 day timeline." },
+      { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", reasoning: "Addressed all specific concerns raised." },
     ],
   },
   {
@@ -117,11 +117,11 @@ const evaluations = [
     contactName: "Liam O'Connor", title: "Service Outage Complaint", channelTag: "chat",
     description: "Customer reported a service outage affecting their account. The agent acknowledged the issue and escalated to the technical team but failed to follow up within the promised timeframe.",
     criteria: [
-      { criterion: "Response Time", category: "Communication", result: "Pass", reasoning: "Initial response was sent within 45 minutes of the outage report, complying with the critical issue SLA of 1 hour." },
-      { criterion: "Empathy Display", category: "Process", result: "Pass", reasoning: "The agent acknowledged the business impact of the outage and communicated urgency in their language and tone appropriately." },
-      { criterion: "Escalation Handling", category: "Compliance", result: "Fail", reasoning: "Escalation was initiated but the agent failed to document the case correctly, resulting in the technical team receiving incomplete information." },
-      { criterion: "Issue Resolution", category: "Compliance", result: "Pass", reasoning: "Although follow-up was delayed, the outage was eventually resolved and the customer received an explanation of the root cause." },
-      { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", reasoning: "Agent listened attentively to all impacted areas described by the customer and communicated clearly that the issue was being escalated with priority." },
+      { criterion: "Response Time", category: "Communication", result: "Pass", reasoning: "Responded within 45 minutes of report." },
+      { criterion: "Empathy Display", category: "Process", result: "Pass", reasoning: "Acknowledged business impact appropriately." },
+      { criterion: "Escalation Handling", category: "Compliance", result: "Fail", reasoning: "Documentation incomplete at escalation." },
+      { criterion: "Issue Resolution", category: "Compliance", result: "Pass", reasoning: "Outage resolved, root cause explained." },
+      { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", reasoning: "Communicated priority clearly." },
     ],
   },
   {
@@ -129,11 +129,11 @@ const evaluations = [
     contactName: "Sarah Chen", title: "Subscription Upgrade Inquiry", channelTag: "call",
     description: "Customer called to inquire about upgrading their subscription plan. The agent provided clear information about the available options and pricing.",
     criteria: [
-      { criterion: "Response Time", category: "Communication", result: "Pass", reasoning: "Call was answered on the second ring and the agent was prepared with the customer's account information before the conversation began." },
-      { criterion: "Empathy Display", category: "Process", result: "Pass", reasoning: "The agent matched the customer's enthusiasm about upgrading and used positive reinforcement when discussing plan benefits." },
-      { criterion: "Escalation Handling", category: "Compliance", result: "Pass", reasoning: "No escalation was needed. All upgrade-related questions were answered within the agent's knowledge and authority." },
-      { criterion: "Issue Resolution", category: "Compliance", result: "Pass", reasoning: "The upgrade was completed during the call, the customer confirmed satisfaction, and a confirmation email was dispatched immediately." },
-      { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", reasoning: "Agent identified the customer's primary motivation for upgrading (storage needs) and guided the conversation to the most relevant plan." },
+      { criterion: "Response Time", category: "Communication", result: "Pass", reasoning: "Answered on second ring." },
+      { criterion: "Empathy Display", category: "Process", result: "Pass", reasoning: "Matched customer's enthusiasm." },
+      { criterion: "Escalation Handling", category: "Compliance", result: "Pass", reasoning: "No escalation needed." },
+      { criterion: "Issue Resolution", category: "Compliance", result: "Pass", reasoning: "Upgrade completed during call." },
+      { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", reasoning: "Identified primary motivation for upgrade." },
     ],
   },
   {
@@ -141,11 +141,11 @@ const evaluations = [
     contactName: "David Park", title: "Password Reset Assistance", channelTag: "chat",
     description: "Customer needed help resetting their account password. The agent walked the customer through the reset process and verified the account was accessible.",
     criteria: [
-      { criterion: "Response Time", category: "Communication", result: "Pass", reasoning: "Agent responded to the chat within 20 seconds and immediately confirmed they could assist with the password reset." },
-      { criterion: "Empathy Display", category: "Process", result: "Pass", reasoning: "The agent reassured the customer that account access would be restored quickly, reducing anxiety about the locked account." },
-      { criterion: "Escalation Handling", category: "Compliance", result: "Pass", reasoning: "The issue was resolved entirely within the chat session. No escalation was required or initiated." },
-      { criterion: "Issue Resolution", category: "Compliance", result: "Pass", reasoning: "Password reset was completed step-by-step with the customer confirming successful login before the session was closed." },
-      { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", reasoning: "Agent adapted the instructions to the customer's technical level, confirming understanding at each step before proceeding." },
+      { criterion: "Response Time", category: "Communication", result: "Pass", reasoning: "Responded within 20 seconds." },
+      { criterion: "Empathy Display", category: "Process", result: "Pass", reasoning: "Reassured quick account restoration." },
+      { criterion: "Escalation Handling", category: "Compliance", result: "Pass", reasoning: "Resolved within chat session." },
+      { criterion: "Issue Resolution", category: "Compliance", result: "Pass", reasoning: "Password reset confirmed step-by-step." },
+      { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", reasoning: "Adapted to customer's technical level." },
     ],
   },
   {
@@ -153,11 +153,11 @@ const evaluations = [
     contactName: "Anna Kowalski", title: "Delivery Delay Investigation", channelTag: "email",
     description: "Customer reported a delayed delivery. The agent investigated and found a logistics issue but failed to provide a resolution or compensation within the interaction.",
     criteria: [
-      { criterion: "Response Time", category: "Communication", result: "Fail", reasoning: "The initial response exceeded the 4-hour SLA by 2 hours. No automated acknowledgement was sent to manage customer expectations during the delay." },
-      { criterion: "Empathy Display", category: "Process", result: "Pass", reasoning: "The agent expressed understanding of the inconvenience caused by the delay and acknowledged the impact on the customer's plans." },
-      { criterion: "Escalation Handling", category: "Compliance", result: "Fail", reasoning: "The logistics issue required escalation to the fulfilment team, but no escalation was created. The case was closed without resolution." },
-      { criterion: "Issue Resolution", category: "Compliance", result: "Pass", reasoning: "While full resolution was not achieved in this session, the agent provided accurate status information and an estimated delivery date." },
-      { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", reasoning: "The agent acknowledged the full scope of the issue as described by the customer and did not dismiss any of the raised concerns." },
+      { criterion: "Response Time", category: "Communication", result: "Fail", reasoning: "Exceeded 4-hour SLA by 2 hours." },
+      { criterion: "Empathy Display", category: "Process", result: "Pass", reasoning: "Acknowledged inconvenience caused." },
+      { criterion: "Escalation Handling", category: "Compliance", result: "Fail", reasoning: "No escalation created, case closed prematurely." },
+      { criterion: "Issue Resolution", category: "Compliance", result: "Pass", reasoning: "Provided status info and estimated delivery." },
+      { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", reasoning: "Did not dismiss any raised concerns." },
     ],
   },
 ];
@@ -184,6 +184,7 @@ export default function AgentDetailContent({ slug }) {
   const [resultFilter, setResultFilter] = useState(null); // null | "Pass" | "Fail"
   const [filterSelections, setFilterSelections] = useState({});
   const [dateFilter, setDateFilter] = useState(null);
+  const [chatOpen, setChatOpen] = useState(true);
   const chatBottomRef = useRef(null);
   const msgRefs = useRef([]);
 
@@ -244,6 +245,10 @@ export default function AgentDetailContent({ slug }) {
   const hasFilters = filterCategories.some((cat) => filterSelections[cat.key]?.value?.length > 0);
 
   function handleSelectCriterion(i) {
+    if (selectedCriterion === i) {
+      setSelectedCriterion(null);
+      return;
+    }
     setSelectedCriterion(i);
     const indices = selectedEval?.criteria?.[i]?.messages || DEFAULT_CRITERION_MESSAGES[i] || [];
     const first = indices[0];
@@ -524,8 +529,8 @@ export default function AgentDetailContent({ slug }) {
                   <Tag color="grey" label={selectedEval.channelTag} size="sm" iconLeft={false} />
                 </div>
                 <div className="sad-modal-topbar-actions">
-                  <button className="btn btn-ghost btn-icon btn-sm" onClick={() => { setSelectedEval(null); setSelectedCriterion(0); setResultFilter(null); }}>
-                    <img src="/icons/16px/Collapse.svg" width={16} height={16} alt="" style={iconFilter} />
+                  <button className="btn btn-ghost btn-icon btn-sm" onClick={(e) => { e.stopPropagation(); setChatOpen((v) => !v); }}>
+                    <img src={`/icons/16px/${chatOpen ? "Collapse" : "LiveChat"}.svg`} width={16} height={16} alt="" style={iconFilter} />
                   </button>
                 </div>
               </div>
@@ -625,7 +630,7 @@ export default function AgentDetailContent({ slug }) {
             </div>
 
             {/* ── Right Panel: Conversation ── */}
-            <div className="sad-modal-right">
+            {chatOpen && <div className="sad-modal-right">
               <div className="sad-modal-topbar">
                 <div className="sad-modal-topbar-left">
                   <span className="sad-modal-topbar-name">Conversation</span>
@@ -638,13 +643,14 @@ export default function AgentDetailContent({ slug }) {
               </div>
               <div className="sad-modal-chat-wrap">
                 {(() => {
-                  const highlightedIndices = selectedEval.criteria[selectedCriterion]?.messages
-                    || DEFAULT_CRITERION_MESSAGES[selectedCriterion]
-                    || [];
+                  const hasSelection = selectedCriterion != null;
+                  const highlightedIndices = hasSelection
+                    ? (selectedEval.criteria[selectedCriterion]?.messages || DEFAULT_CRITERION_MESSAGES[selectedCriterion] || [])
+                    : [];
                   return (selectedEval.conversation || sampleConversation).map((msg, i) => {
-                    const highlighted = highlightedIndices.includes(i);
+                    const highlighted = !hasSelection || highlightedIndices.includes(i);
                     const sideClass = msg.side === "customer" ? "sad-modal-chat-msg-customer" : "sad-modal-chat-msg-agent";
-                    const fadeClass = highlighted ? "sad-modal-chat-msg-highlighted" : "sad-modal-chat-msg-faded";
+                    const fadeClass = !hasSelection ? "" : (highlighted ? "sad-modal-chat-msg-highlighted" : "sad-modal-chat-msg-faded");
                     if (msg.side === "customer") {
                       return (
                         <div key={i} ref={el => msgRefs.current[i] = el} className={`sad-modal-chat-msg ${sideClass} ${fadeClass}`}>
@@ -679,7 +685,7 @@ export default function AgentDetailContent({ slug }) {
                 })()}
                 <div ref={chatBottomRef} />
               </div>
-            </div>
+            </div>}
           </div>
           </div>
         </div>
