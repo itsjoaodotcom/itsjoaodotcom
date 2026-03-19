@@ -185,6 +185,7 @@ export default function AgentDetailContent({ slug }) {
   const [filterSelections, setFilterSelections] = useState({});
   const [dateFilter, setDateFilter] = useState(null);
   const [chatOpen, setChatOpen] = useState(true);
+  const [copiedTooltip, setCopiedTooltip] = useState(null);
   const chatBottomRef = useRef(null);
   const msgRefs = useRef([]);
 
@@ -517,7 +518,7 @@ export default function AgentDetailContent({ slug }) {
       {/* Evaluation Detail Modal */}
       {selectedEval && (
         <div className="sad-modal-overlay" onClick={() => { setSelectedEval(null); setSelectedCriterion(0); setResultFilter(null); }}>
-          <div className="sad-modal-stroke">
+          <div className={`sad-modal-stroke${!chatOpen ? " sad-modal-collapsed" : ""}`}>
           <div className="sad-modal" onClick={(ev) => ev.stopPropagation()}>
             {/* ── Left Panel ── */}
             <div className="sad-modal-left">
@@ -551,7 +552,16 @@ export default function AgentDetailContent({ slug }) {
                           <span className="sad-modal-details-label-text">{selectedEval.time}</span>
                         </div>
                       </div>
-                      <span className="sad-modal-details-id">conv-{selectedEval.id}b103e2-9a70-4037-9ac0-ffcf63bc73a7</span>
+                      <span
+                        className="sad-modal-details-id"
+                        onClick={(e) => {
+                          navigator.clipboard.writeText(`conv-${selectedEval.id}b103e2-9a70-4037-9ac0-ffcf63bc73a7`);
+                          setCopiedTooltip({ x: e.clientX, y: e.clientY });
+                          setTimeout(() => setCopiedTooltip(null), 1500);
+                        }}
+                      >
+                        conv-{selectedEval.id}b103e2-9a70-4037-9ac0-ffcf63bc73a7
+                      </span>
                     </div>
                     <div className="sad-modal-details-body">
                       <div className="sad-modal-details-card">
@@ -602,7 +612,7 @@ export default function AgentDetailContent({ slug }) {
                               <span className="sa-cell-text">{c.criterion}</span>
                             </div>
                             <div className="sad-modal-eval-cell sad-modal-eval-col-category">
-                              <Tag color="grey" label={c.category} size="sm" />
+                              <Tag color="grey" label={c.category} size="sm" iconLeft={false} />
                             </div>
                             <div className="sad-modal-eval-cell sad-modal-eval-col-result">
                               <Tag
@@ -630,7 +640,8 @@ export default function AgentDetailContent({ slug }) {
             </div>
 
             {/* ── Right Panel: Conversation ── */}
-            {chatOpen && <div className="sad-modal-right">
+            <div className={`sad-modal-right${!chatOpen ? " sad-modal-right-collapsed" : ""}`}>
+              <div className="sad-modal-right-inner">
               <div className="sad-modal-topbar">
                 <div className="sad-modal-topbar-left">
                   <span className="sad-modal-topbar-name">Conversation</span>
@@ -685,7 +696,9 @@ export default function AgentDetailContent({ slug }) {
                 })()}
                 <div ref={chatBottomRef} />
               </div>
-            </div>}
+              </div>
+            </div>
+            {copiedTooltip && <span className="sad-modal-tooltip" style={{ left: copiedTooltip.x, top: copiedTooltip.y + 10 }}>Copied</span>}
           </div>
           </div>
         </div>

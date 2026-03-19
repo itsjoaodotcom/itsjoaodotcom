@@ -785,14 +785,19 @@
 .sad-modal-stroke {
   position: relative;
   border-radius: 12px;
-  width: min(1280px, calc(100vw - 32px));
-  height: min(800px, calc(100vh - 32px));
+  width: min(1280px, calc(100vw - 80px));
+  height: min(800px, calc(100vh - 80px));
+  margin: 40px;
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08), 0px -2px 40px rgba(0, 0, 0, 0.1);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sad-modal-stroke.sad-modal-collapsed {
+  width: min(860px, calc(100vw - 80px));
 }
 
 .sad-modal {
   display: flex;
-  width: 100%;
   height: 100%;
   border-radius: 8px;
   border: 1px solid var(--stroke-primary);
@@ -813,10 +818,23 @@
 }
 
 .sad-modal-right {
+  flex-shrink: 0;
+  width: 420px;
+  overflow: hidden;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sad-modal-right-inner {
   display: flex;
   flex-direction: column;
   width: 420px;
-  flex-shrink: 0;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.sad-modal-right.sad-modal-right-collapsed {
+  width: 0;
 }
 
 /* ── Top bar (shared by left & right panels) ── */
@@ -833,7 +851,7 @@
   flex: 1;
   align-items: center;
   gap: 6px;
-  padding: 10px 12px;
+  padding: 12px 16px;
   min-width: 0;
 }
 
@@ -925,6 +943,30 @@
   color: var(--content-tertiary);
   white-space: nowrap;
   flex-shrink: 0;
+  cursor: pointer;
+}
+
+.sad-modal-details-id:hover {
+  color: var(--content-secondary);
+}
+
+.sad-modal-tooltip {
+  position: fixed;
+  transform: translateX(-50%);
+  background: var(--surface-tooltip, #010103);
+  border: 1px solid var(--stroke-ontooltip, rgba(255, 255, 255, 0.1));
+  border-radius: 5px;
+  padding: 4px 8px;
+  font-family: var(--font-family);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--content-ontooltip, #fafafa);
+  white-space: nowrap;
+  text-align: center;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.04);
+  pointer-events: none;
+  z-index: 200;
 }
 
 .sad-modal-details-body {
@@ -1042,10 +1084,10 @@
 }
 
 /* Column widths */
-.sad-modal-eval-col-criterion { flex: 1; min-width: 0; }
+.sad-modal-eval-col-criterion { width: 200px; flex-shrink: 0; }
 .sad-modal-eval-col-category  { width: 140px; flex-shrink: 0; }
 .sad-modal-eval-col-result    { width: 140px; flex-shrink: 0; }
-.sad-modal-eval-col-reasoning { width: 300px; flex-shrink: 0; }
+.sad-modal-eval-col-reasoning { flex: 1; min-width: 0; }
 .sad-modal-eval-col-radio     { width: 48px; flex-shrink: 0; }
 
 /* Table rows */
@@ -1064,7 +1106,7 @@
 
 .sad-modal-eval-cell {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   padding: 14px 16px;
 }
 
