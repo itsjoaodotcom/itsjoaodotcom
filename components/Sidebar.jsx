@@ -189,6 +189,7 @@ function SidebarInbox({ collapsed, onCollapse, activeView, onViewChange }) {
       <div className="snav-divider"></div>
 
       <div className="snav-links mid">
+        <SnavItem icon="Grid" label="My dashboard" href="/dashboard" />
         <SnavItem icon="AI" label="AI Assistant" />
         <SnavItem icon="Micro" label="Voice Assist" />
       </div>
@@ -235,6 +236,7 @@ function SidebarOverview({ collapsed, onCollapse }) {
         <NavGroup icon="ActiveUser" label="Contacts">
           <ContactsSubitems />
         </NavGroup>
+        <SnavItem icon="Grid" label="My dashboard" href="/dashboard" />
         <SnavItem icon="AI" label="AI Assistant" />
         <SnavItem icon="Micro" label="Voice Assist" />
       </div>
