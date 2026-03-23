@@ -184,7 +184,7 @@ export default function ScoringAgentsContent() {
             filterCategories={filterCategories}
           />
           <DateRangeButton onChange={setDateFilter} />
-          <button className="btn btn-accent">
+          <button className="btn btn-accent" onClick={() => router.push("/scoring-agents/new")}>
             <img src="/icons/16px/Plus.svg" width={16} height={16} alt="" style={{ filter: "brightness(0) invert(1)" }} />
             <span className="btn-label">Add QA Agent</span>
           </button>
