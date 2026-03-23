@@ -1,0 +1,79 @@
+/*
+ * toggle.css — Toggle component (Design System)
+ *
+ * States: default | hover | focus | disabled
+ * Variants: on | off
+ */
+
+/* ─── Base ────────────────────────────────────────────── */
+
+.toggle {
+  position: relative;
+  width: 24px;
+  height: 16px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  transition: background 0.15s;
+}
+
+/* ─── Off states ──────────────────────────────────────── */
+
+.toggle-off {
+  background: var(--surface-tintstrong, rgba(0, 0, 0, 0.1));
+}
+
+.toggle-off:hover {
+  background: var(--surface-tintstronghover, rgba(0, 0, 0, 0.16));
+}
+
+.toggle-off:focus-visible {
+  background: var(--surface-tintstrong, rgba(0, 0, 0, 0.1));
+  box-shadow: 0 0 0 1px var(--surface-accent, #4061d8);
+}
+
+/* ─── On states ───────────────────────────────────────── */
+
+.toggle-on {
+  background: var(--button-accent, #4061d8);
+}
+
+.toggle-on:hover {
+  background: var(--button-accenthover, #344fb2);
+}
+
+.toggle-on:focus-visible {
+  background: var(--button-accent, #4061d8);
+  box-shadow: 0 0 0 1px var(--surface-accent, #4061d8);
+}
+
+/* ─── Disabled ────────────────────────────────────────── */
+
+.toggle-disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* ─── Knob ────────────────────────────────────────────── */
+
+.toggle-knob {
+  position: absolute;
+  top: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: left 0.15s;
+}
+
+.toggle-off .toggle-knob {
+  left: 2px;
+}
+
+.toggle-on .toggle-knob {
+  left: 10px;
+}

@@ -297,3 +297,16 @@
 .popover-phone-input::placeholder {
   color: var(--content-quartenary);
 }
+
+/* ─── Empty state ─────────────────────────────────────── */
+
+.popover-empty {
+  padding: 10px 14px;
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-tertiary);
+  -webkit-font-smoothing: antialiased;
+}

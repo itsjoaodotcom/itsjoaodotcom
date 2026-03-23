@@ -15,6 +15,7 @@ export default function Popover({
   selectedLabels = [],
   bottomActions = false,
   scrollLoader = false,
+  emptyMessage = null,
   onSearch,
   onItemClick,
   onItemHover,
@@ -82,6 +83,10 @@ export default function Popover({
           </div>
           );
         })}
+
+        {sections.length === 0 && emptyMessage && (
+          <div className="popover-empty">{emptyMessage}</div>
+        )}
 
         {actionItems.length > 0 && (
           <>
