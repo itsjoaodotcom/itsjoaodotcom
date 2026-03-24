@@ -481,11 +481,11 @@ export default function AgentDetailContent({ slug }) {
           </div>
         </div>
 
-        {/* Recent Evaluations */}
+        {/* Evaluations */}
         <div className="sad-recent-evals">
           <div className="sad-recent-evals-header">
             <div className="sad-recent-evals-header-left">
-              <span className="sad-recent-evals-title">Recent Evaluations</span>
+              <span className="sad-recent-evals-title">Evaluations</span>
             </div>
             <div className="sad-recent-evals-header-right">
               <button className="btn btn-ghost btn-icon" onClick={() => setCriteriaOpen((o) => !o)}>
