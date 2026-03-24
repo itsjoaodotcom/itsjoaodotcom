@@ -291,10 +291,16 @@ export default function AgentDetailContent({ slug }) {
   return (
     <div className="sa-content">
       {/* Breadcrumb */}
-      <div className="sa-breadcrumb">
-        <Link href="/scoring-agents" className="sad-breadcrumb-link">Scoring agents</Link>
-        <img src="/icons/16px/Slash.svg" width={16} height={16} alt="" style={iconFilter} />
-        <span className="sad-breadcrumb-current">{agentName}</span>
+      <div className="sa-breadcrumb" style={{ justifyContent: "space-between" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Link href="/scoring-agents" className="sad-breadcrumb-link">Scoring agents</Link>
+          <img src="/icons/16px/Slash.svg" width={16} height={16} alt="" style={iconFilter} />
+          <span className="sad-breadcrumb-current">{agentName}</span>
+        </div>
+        <button className="btn btn-secondary btn-sm" onClick={() => router.push(`/scoring-agents/${slug}/edit`)}>
+          <img src="/icons/16px/Edit.svg" width={16} height={16} alt="" style={iconFilter} />
+          <span className="btn-label">Edit agent</span>
+        </button>
       </div>
 
       {/* Tabs */}

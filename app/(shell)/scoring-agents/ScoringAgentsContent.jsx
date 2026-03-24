@@ -6,25 +6,11 @@ import Tag from "../../../components/Tag";
 import FilterChip from "../../../components/FilterChip";
 import DateRangeButton from "../../../components/DateRangeButton";
 import { FiltersButton, FiltersPopover } from "../../../components/FiltersPopover";
-
+import { useShell } from "../../../components/ShellContext";
 
 const iconFilter = { filter: "brightness(0) invert(0.53)" };
 
-const agents = [
-  { name: "Chat Quality Monitor",      channel: "LiveChat",    channelLabel: "Chat",         team: "Chat",             score: 96, evaluations: 142, trend: 4.2, trendUp: true,  status: "Active", lastRun: "15/03/2026" },
-  { name: "Call Center QA Analyst",    channel: "AnswerCall",  channelLabel: "Calls",        team: "Call Center",      score: 94, evaluations: 128, trend: 2.8, trendUp: true,  status: "Active", lastRun: "12/03/2026" },
-  { name: "Social Media QA Agent",     channel: "Globe",       channelLabel: "Social Media", team: "Advanced Support", score: 91, evaluations: 98,  trend: 1.5, trendUp: true,  status: "Active", lastRun: "05/03/2026" },
-  { name: "Chat Compliance Auditor",   channel: "Email",       channelLabel: "Email",        team: "Social Media",     score: 89, evaluations: 86,  trend: 3.1, trendUp: true,  status: "Draft",  lastRun: "01/03/2026" },
-  { name: "Chat Escalation Reviewer",  channel: "LiveChat",    channelLabel: "Chat",         team: "Chat",             score: 88, evaluations: 74,  trend: 0.8, trendUp: true,  status: "Active", lastRun: "22/02/2026" },
-  { name: "Call Scoring Analyst",      channel: "AnswerCall",  channelLabel: "Calls",        team: "Social Media",     score: 85, evaluations: 112, trend: 1.2, trendUp: false, status: "Draft",  lastRun: "15/02/2026" },
-  { name: "Email SLA Monitor",         channel: "Email",       channelLabel: "Email",        team: "Call Center",      score: 82, evaluations: 95,  trend: 2,   trendUp: true,  status: "Active", lastRun: "05/01/2026" },
-  { name: "Social Engagement Auditor", channel: "Globe",       channelLabel: "Social Media", team: "Advanced Support", score: 77, evaluations: 64,  trend: 3.5, trendUp: false, status: "Active", lastRun: "15/12/2025" },
-  { name: "Chat CSAT Tracker",         channel: "LiveChat",    channelLabel: "Chat",         team: "Chat",             score: 68, evaluations: 58,  trend: 5.2, trendUp: false, status: "Active", lastRun: "20/12/2025" },
-  { name: "Email Response Evaluator",  channel: "Email",       channelLabel: "Email",        team: "Chat",             score: 63, evaluations: 42,  trend: 8.1, trendUp: false, status: "Active", lastRun: "10/11/2025" },
-  { name: "Compliance Risk Monitor",   channel: "LiveChat",    channelLabel: "Chat",         team: "Advanced Support", score: 96, evaluations: 142, trend: 4.2, trendUp: true,  status: "Active", lastRun: "14/03/2026" },
-  { name: "Tone & Empathy Auditor",    channel: "Globe",       channelLabel: "Social Media", team: "Call Center",      score: 94, evaluations: 128, trend: 2.8, trendUp: true,  status: "Active", lastRun: "25/02/2026" },
-  { name: "Knowledge Base Validator",  channel: "AnswerCall",  channelLabel: "Calls",        team: "Social Media",     score: 91, evaluations: 98,  trend: 1.5, trendUp: true,  status: "Active", lastRun: "18/01/2026" },
-];
+/* agents come from ShellContext */
 
 function parseDMY(str) {
   const [d, m, y] = str.split("/");
@@ -46,6 +32,7 @@ function scoreColor(score) {
 
 export default function ScoringAgentsContent() {
   const router = useRouter();
+  const { agents } = useShell();
   const [search, setSearch] = useState("");
   const [sortField, setSortField] = useState(null);
   const [sortDir, setSortDir] = useState("asc");

@@ -7,6 +7,7 @@ import Popover from "../../../../components/Popover";
 import Tag from "../../../../components/Tag";
 import Input from "../../../../components/Input";
 import Toggle from "../../../../components/Toggle";
+import { useShell } from "../../../../components/ShellContext";
 
 const iconFilter = { filter: "brightness(0) invert(0.53)" };
 const iconTab = { filter: "brightness(0) invert(0.5)", width: 16, height: 16 };
@@ -19,8 +20,9 @@ const tabs = [
   { key: "settings",  label: "Settings",         icon: "/icons/16px/Settings.svg" },
 ];
 
-export default function NewAgentContent() {
+export default function NewAgentContent({ editId } = {}) {
   const router = useRouter();
+  const { addAgent, updateAgent, getAgentById } = useShell();
   const [activeTab, setActiveTab] = useState("details");
   const [agentName, setAgentName] = useState("");
   const [channel, setChannel] = useState("Chat");
@@ -73,6 +75,26 @@ export default function NewAgentContent() {
   const [scoringModel, setScoringModel] = useState("Weighted (Points per criterion)");
   const [modelOpen, setModelOpen] = useState(false);
   const modelRef = useRef(null);
+  const [scorecardName, setScorecardName] = useState("");
+  const [outputLang, setOutputLang] = useState("English");
+
+  /* Load form data when editing an existing agent */
+  useEffect(() => {
+    if (!editId) return;
+    const agent = getAgentById(editId);
+    if (!agent?._form) return;
+    const f = agent._form;
+    if (f.agentName) setAgentName(f.agentName);
+    if (f.channel) setChannel(f.channel);
+    if (f.frequency) setFrequency(f.frequency);
+    if (f.description) setDescription(f.description);
+    if (f.autoEval !== undefined) setAutoEval(f.autoEval);
+    if (f.kbToggles) setKbToggles(f.kbToggles);
+    if (f.categories) setCategories(f.categories);
+    if (f.scorecardName) setScorecardName(f.scorecardName);
+    if (f.scoringModel) setScoringModel(f.scoringModel);
+    if (f.outputLang) setOutputLang(f.outputLang);
+  }, [editId, getAgentById]);
 
   useEffect(() => {
     function onDown(e) {
@@ -113,7 +135,7 @@ export default function NewAgentContent() {
       <div className="sa-breadcrumb">
         <Link href="/scoring-agents" className="sad-breadcrumb-link">Agents QA</Link>
         <img src="/icons/16px/Slash.svg" width={16} height={16} alt="" style={iconFilter} />
-        <span className="sad-breadcrumb-current">New Agent QA</span>
+        <span className="sad-breadcrumb-current">{editId ? "Edit Agent QA" : "New Agent QA"}</span>
       </div>
 
       <div className="na-body">
@@ -125,8 +147,8 @@ export default function NewAgentContent() {
           </button>
 
           <div>
-            <h1 className="na-title">Add Agent QA</h1>
-            <p className="na-subtitle">Configure a new QA agent with evaluation settings</p>
+            <h1 className="na-title">{editId ? "Edit Agent QA" : "Add Agent QA"}</h1>
+            <p className="na-subtitle">{editId ? "Update your QA agent configuration" : "Configure a new QA agent with evaluation settings"}</p>
           </div>
         </div>
 
@@ -526,7 +548,11 @@ export default function NewAgentContent() {
 
       {/* Actions bar */}
       <div className="na-actions">
-        <button className="btn btn-ghost btn-sm">
+        <button className="btn btn-ghost btn-sm" onClick={() => {
+          const formData = { agentName, channel, frequency, description, autoEval, kbToggles, categories, scorecardName, scoringModel, outputLang, isDraft: true };
+          if (editId) { updateAgent(editId, formData); } else { addAgent(formData); }
+          router.push("/scoring-agents");
+        }}>
           <img src="/icons/16px/NoteEdit.svg" width={16} height={16} alt="" style={iconFilter} />
           <span className="btn-label">Save as a draft</span>
         </button>
@@ -535,8 +561,12 @@ export default function NewAgentContent() {
           <button className="btn btn-secondary btn-sm" onClick={() => router.push("/scoring-agents")}>
             <span className="btn-label">Cancel</span>
           </button>
-          <button className="btn btn-accent btn-sm">
-            <span className="btn-label">Save and active</span>
+          <button className="btn btn-accent btn-sm" onClick={() => {
+            const formData = { agentName, channel, frequency, description, autoEval, kbToggles, categories, scorecardName, scoringModel, outputLang, isDraft: false };
+            if (editId) { updateAgent(editId, formData); } else { addAgent(formData); }
+            router.push("/scoring-agents");
+          }}>
+            <span className="btn-label">{editId ? "Save changes" : "Save and active"}</span>
           </button>
         </div>
       </div>
