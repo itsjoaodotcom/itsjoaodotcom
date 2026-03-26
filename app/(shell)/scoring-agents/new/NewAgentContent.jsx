@@ -22,7 +22,11 @@ const tabs = [
 
 export default function NewAgentContent({ editId } = {}) {
   const router = useRouter();
-  const { addAgent, updateAgent, getAgentById } = useShell();
+  const { addAgent, updateAgent, getAgentById, agents: qaAgents } = useShell();
+  const [openQaDropdown, setOpenQaDropdown] = useState(null);
+  const [qaAgentAssignments, setQaAgentAssignments] = useState({}); /* { qaAgentId: [agentName, ...] } */
+  const qaDropdownRefs = useRef({});
+  const [isActive, setIsActive] = useState(true);
   const [activeTab, setActiveTab] = useState("details");
   const [agentName, setAgentName] = useState("");
   const [channel, setChannel] = useState("Chat");
@@ -34,7 +38,7 @@ export default function NewAgentContent({ editId } = {}) {
   const [description, setDescription] = useState("");
 
   const kbCollections = [
-    { key: "all",        label: "All content",        detail: "Select all available collections (5 collections)" },
+    { key: "all",        label: "All content",        detail: "5 collections" },
     { key: "workflows",  label: "Workflows",           detail: "1 article" },
     { key: "product",    label: "Product Knowledge",    detail: "1 article" },
     { key: "refund",     label: "Refund Policy",        detail: "1 article" },
@@ -62,12 +66,27 @@ export default function NewAgentContent({ editId } = {}) {
   const [permissions, setPermissions] = useState([]);
   const [editingPermIndex, setEditingPermIndex] = useState(null);
   const [reportToggles, setReportToggles] = useState({ dailySummary: false, weeklyReport: false, scoreDrop: false, criticalAlerts: false });
+  const [notifyEmails, setNotifyEmails] = useState([]);
+  const [emailInput, setEmailInput] = useState("");
+  const [emailError, setEmailError] = useState(false);
+  const [emailFocused, setEmailFocused] = useState(false);
+  const emailInputRef = useRef(null);
   const [permModalOpen, setPermModalOpen] = useState(false);
-  const [permUsers, setPermUsers] = useState([]);
-  const [permUserOpen, setPermUserOpen] = useState(false);
-  const permUserRef = useRef(null);
-  const [permEdit, setPermEdit] = useState(false);
+  const [permViewUsers, setPermViewUsers] = useState([]);
+  const [permEditUsers, setPermEditUsers] = useState([]);
+  const [permViewOpen, setPermViewOpen] = useState(false);
+  const [permEditOpen, setPermEditOpen] = useState(false);
+  const [permViewSearch, setPermViewSearch] = useState("");
+  const [permEditSearch, setPermEditSearch] = useState("");
+  const permViewRef = useRef(null);
+  const permEditRef = useRef(null);
+  const permViewInputRef = useRef(null);
+  const permEditInputRef = useRef(null);
   const [selectedAgents, setSelectedAgents] = useState({});
+  const [agentSearchOpen, setAgentSearchOpen] = useState(false);
+  const [agentSearch, setAgentSearch] = useState("");
+  const agentSearchRef = useRef(null);
+  const agentSearchInputRef = useRef(null);
   const [critZeroIfViolated, setCritZeroIfViolated] = useState(true);
   const [language, setLanguage] = useState("English");
   const [langOpen, setLangOpen] = useState(false);
@@ -82,18 +101,19 @@ export default function NewAgentContent({ editId } = {}) {
   useEffect(() => {
     if (!editId) return;
     const agent = getAgentById(editId);
-    if (!agent?._form) return;
+    if (!agent) return;
+    /* Load from saved form data if available, otherwise from agent fields */
     const f = agent._form;
-    if (f.agentName) setAgentName(f.agentName);
-    if (f.channel) setChannel(f.channel);
-    if (f.frequency) setFrequency(f.frequency);
-    if (f.description) setDescription(f.description);
-    if (f.autoEval !== undefined) setAutoEval(f.autoEval);
-    if (f.kbToggles) setKbToggles(f.kbToggles);
-    if (f.categories) setCategories(f.categories);
-    if (f.scorecardName) setScorecardName(f.scorecardName);
-    if (f.scoringModel) setScoringModel(f.scoringModel);
-    if (f.outputLang) setOutputLang(f.outputLang);
+    setAgentName(f?.agentName || agent.name || "");
+    setChannel(f?.channel || agent.channelLabel || "Chat");
+    if (f?.frequency) setFrequency(f.frequency);
+    if (f?.description) setDescription(f.description);
+    if (f?.autoEval !== undefined) setAutoEval(f.autoEval);
+    if (f?.kbToggles) setKbToggles(f.kbToggles);
+    if (f?.categories) setCategories(f.categories);
+    if (f?.scorecardName) setScorecardName(f.scorecardName);
+    if (f?.scoringModel) setScoringModel(f.scoringModel);
+    if (f?.outputLang) setOutputLang(f.outputLang);
   }, [editId, getAgentById]);
 
   useEffect(() => {
@@ -103,11 +123,17 @@ export default function NewAgentContent({ editId } = {}) {
       if (langRef.current && !langRef.current.contains(e.target)) setLangOpen(false);
       if (modelRef.current && !modelRef.current.contains(e.target)) setModelOpen(false);
       if (critStrategyRef.current && !critStrategyRef.current.contains(e.target)) setCritStrategyOpen(false);
-      if (permUserRef.current && !permUserRef.current.contains(e.target)) setPermUserOpen(false);
+      if (permViewRef.current && !permViewRef.current.contains(e.target)) setPermViewOpen(false);
+      if (permEditRef.current && !permEditRef.current.contains(e.target)) setPermEditOpen(false);
+      if (agentSearchRef.current && !agentSearchRef.current.contains(e.target)) setAgentSearchOpen(false);
+      if (openQaDropdown) {
+        const ref = qaDropdownRefs.current[openQaDropdown];
+        if (ref && !ref.contains(e.target)) setOpenQaDropdown(null);
+      }
     }
     document.addEventListener("mousedown", onDown);
     return () => document.removeEventListener("mousedown", onDown);
-  }, []);
+  }, [openQaDropdown]);
 
   const channelOptions = ["Chat", "Email", "Calls", "Social Media"];
   const frequencyOptions = ["All Conversations", "Random 25%", "Random 50%", "Flagged Only"];
@@ -115,18 +141,19 @@ export default function NewAgentContent({ editId } = {}) {
   const scoringModelOptions = ["Binary (Pass/Fail per dimension)", "Weighted (Points per criterion)", "Hybrid (Points + Compliance)"];
   const strategyOptions = ["Behavioral", "Compliance", "Technical", "Process"];
   const settingsAgents = [
-    { name: "Sarah Al-Rashid",  detail: "Chat Support · chat",       avatar: "/avatars/Avatar 01.png" },
-    { name: "James Mitchell",   detail: "Chat Support · chat",       avatar: "/avatars/Avatar 2.png" },
-    { name: "Fatima Noor",       detail: "Call Center · call",        avatar: "/avatars/Avatar 3.png" },
-    { name: "David Chen",        detail: "Advanced Support · email",  avatar: "/avatars/Avatar 4.png" },
-    { name: "Layla Hassan",      detail: "Social Media · social",     avatar: "/avatars/Avatar 5.png" },
-    { name: "Omar Khalil",       detail: "Chat Support · chat",       avatar: "/avatars/Avatar 6.png" },
-    { name: "Emma Rodriguez",    detail: "Call Center · call",        avatar: "/avatars/Avatar 7.png" },
-    { name: "Ahmed Mansour",     detail: "Advanced Support · email",  avatar: "/avatars/Avatar 8.png" },
-    { name: "Priya Sharma",      detail: "Social Media · social",     avatar: "/avatars/Avatar 9.png" },
-    { name: "Nadia El-Amin",     detail: "Chat Support · chat",       avatar: "/avatars/Avatar 10.png" },
+    { name: "Sarah Al-Rashid",  team: "Chat",             detail: "Chat · chat",             avatar: "/avatars/Avatar 01.png" },
+    { name: "James Mitchell",   team: "Chat",             detail: "Chat · chat",             avatar: "/avatars/Avatar 2.png" },
+    { name: "Fatima Noor",       team: "Call Center",      detail: "Call Center · call",      avatar: "/avatars/Avatar 3.png" },
+    { name: "David Chen",        team: "Advanced Support", detail: "Advanced Support · email", avatar: "/avatars/Avatar 4.png" },
+    { name: "Layla Hassan",      team: "Social Media",     detail: "Social Media · social",   avatar: "/avatars/Avatar 5.png" },
+    { name: "Omar Khalil",       team: "Chat",             detail: "Chat · chat",             avatar: "/avatars/Avatar 6.png" },
+    { name: "Emma Rodriguez",    team: "Call Center",      detail: "Call Center · call",      avatar: "/avatars/Avatar 7.png" },
+    { name: "Ahmed Mansour",     team: "Advanced Support", detail: "Advanced Support · email", avatar: "/avatars/Avatar 8.png" },
+    { name: "Priya Sharma",      team: "Social Media",     detail: "Social Media · social",   avatar: "/avatars/Avatar 9.png" },
+    { name: "Nadia El-Amin",     team: "Chat",             detail: "Chat · chat",             avatar: "/avatars/Avatar 10.png" },
   ];
-  const checkedAgents = settingsAgents.filter((a) => selectedAgents[a.name]);
+  const allAssignedNames = [...new Set(Object.values(qaAgentAssignments).flat())];
+  const checkedAgents = settingsAgents.filter((a) => allAssignedNames.includes(a.name));
   const checkedAgentNames = checkedAgents.map((a) => a.name);
 
   return (
@@ -415,46 +442,76 @@ export default function NewAgentContent({ editId } = {}) {
           <div style={{ display: "flex", flexDirection: "column", gap: 20, maxWidth: 880, width: "100%" }}>
             <div className="na-section">
               <div className="na-section-header">Teams &amp; Agents Assignment</div>
-              <div className="na-section-body" style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                {/* Teams */}
-                <div className="na-settings-card">
-                  <div className="na-settings-subheader">Teams</div>
-                  <div className="na-settings-grid">
+              <div className="na-section-body">
+                <div className="na-section-card" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                  {/* Team dropdowns */}
+                  <div className="na-settings-grid" style={{ gap: 12 }}>
                     {[
-                      { name: "Daily Summary Email", detail: "8 agents · email" },
-                      { name: "Chat Support",        detail: "12 agents · chat" },
-                      { name: "Social Media",        detail: "6 agents · social" },
-                      { name: "Call Center",          detail: "8 agents · call" },
-                    ].map((t) => (
-                      <label key={t.name} className="na-checkbox-row">
-                        <input type="checkbox" className="na-checkbox" />
-                        <div className="na-checkbox-text">
-                          <span className="na-checkbox-label">{t.name}</span>
-                          <span className="na-checkbox-detail">{t.detail}</span>
+                      { id: "chat", name: "Chat" },
+                      { id: "social", name: "Social Media" },
+                      { id: "call", name: "Call Center" },
+                      { id: "advanced", name: "Advanced Support" },
+                    ].map((qa) => {
+                      const teamAgents = settingsAgents.filter((a) => a.team === qa.name);
+                      const assigned = qaAgentAssignments[qa.id] || [];
+                      const toggleAssign = (name) => {
+                        setQaAgentAssignments((prev) => {
+                          const current = prev[qa.id] || [];
+                          const next = current.includes(name) ? current.filter((n) => n !== name) : [...current, name];
+                          return { ...prev, [qa.id]: next };
+                        });
+                      };
+                      const allSelected = teamAgents.length > 0 && teamAgents.every((a) => assigned.includes(a.name));
+                      return (
+                        <div key={qa.id} style={{ position: "relative" }} ref={(el) => { qaDropdownRefs.current[qa.id] = el; }}>
+                          <div className={`na-team-dropdown${openQaDropdown === qa.id ? " na-team-dropdown-active" : ""}`} onClick={() => setOpenQaDropdown((prev) => prev === qa.id ? null : qa.id)}>
+                            <div className="na-team-dropdown-content">
+                              <span className="na-team-dropdown-name">{qa.name}</span>
+                              <span className="na-team-dropdown-badge">{teamAgents.length}</span>
+                              {assigned.length > 0 && (
+                                <span style={{ marginLeft: "auto" }}>
+                                  <Tag size="sm" label={assigned.length === teamAgents.length ? "All selected" : `${assigned.length} selected`} iconLeft={false} color="blue" style="filled" />
+                                </span>
+                              )}
+                            </div>
+                            <div className="na-team-dropdown-chevron">
+                              <img src={`/icons/16px/${openQaDropdown === qa.id ? "ChevronTop" : "ChevronBottom"}.svg`} width={16} height={16} alt="" style={iconFilter} />
+                            </div>
+                          </div>
+                          {openQaDropdown === qa.id && (
+                            <div className="na-chips-popover">
+                              <div className="na-chips-option" onMouseDown={(e) => {
+                                e.preventDefault();
+                                setQaAgentAssignments((prev) => ({
+                                  ...prev,
+                                  [qa.id]: allSelected ? [] : teamAgents.map((a) => a.name),
+                                }));
+                              }}>
+                                <div className="na-chips-option-left">
+                                  <span style={{ fontWeight: 500 }}>Select all</span>
+                                </div>
+                                <div className={`na-chips-checkbox${allSelected ? " na-chips-checkbox-checked" : ""}`}>
+                                  {allSelected && <img src="/icons/12px/Check.svg" width={12} height={12} alt="" style={{ filter: "brightness(0) invert(1)" }} />}
+                                </div>
+                              </div>
+                              {teamAgents.map((a) => (
+                                <div key={a.name} className="na-chips-option" onMouseDown={(e) => { e.preventDefault(); toggleAssign(a.name); }}>
+                                  <div className="na-chips-option-left">
+                                    <img src={a.avatar} width={16} height={16} alt="" className="na-perm-avatar" />
+                                    <span>{a.name}</span>
+                                  </div>
+                                  <div className={`na-chips-checkbox${assigned.includes(a.name) ? " na-chips-checkbox-checked" : ""}`}>
+                                    {assigned.includes(a.name) && <img src="/icons/12px/Check.svg" width={12} height={12} alt="" style={{ filter: "brightness(0) invert(1)" }} />}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
-                      </label>
-                    ))}
+                      );
+                    })}
                   </div>
-                </div>
-                {/* Agents */}
-                <div className="na-settings-card">
-                  <div className="na-settings-subheader">Agents</div>
-                  <div className="na-settings-grid">
-                    {settingsAgents.map((a) => (
-                      <label key={a.name} className="na-checkbox-row">
-                        <input
-                          type="checkbox"
-                          className="na-checkbox"
-                          checked={!!selectedAgents[a.name]}
-                          onChange={() => setSelectedAgents((prev) => ({ ...prev, [a.name]: !prev[a.name] }))}
-                        />
-                        <div className="na-checkbox-text">
-                          <span className="na-checkbox-label">{a.name}</span>
-                          <span className="na-checkbox-detail">{a.detail}</span>
-                        </div>
-                      </label>
-                    ))}
-                  </div>
+
                 </div>
               </div>
             </div>
@@ -479,21 +536,81 @@ export default function NewAgentContent({ editId } = {}) {
                       </div>
                     ))}
                   </div>
-                  <Input
-                    label="Emails to be notified"
-                    placeholder="e.g. qa-lead@company.com, manager@company.com"
-                    caption="Separate multiple emails with commas"
-                  />
+                  <div className="input-field">
+                    <label className="input-label">Emails to be notified</label>
+                    <div
+                      className={`na-chips-input${emailFocused ? " na-chips-input-active" : ""}${emailError ? " na-chips-input-error" : ""}`}
+                      onClick={() => { setEmailFocused(true); setTimeout(() => emailInputRef.current?.focus(), 0); }}
+                    >
+                      <div className="na-chips-items">
+                        {notifyEmails.map((email, i) => (
+                          <div key={i} className="na-chip-email">
+                            <span>{email}</span>
+                            <button className="na-chip-email-remove" onClick={(e) => { e.stopPropagation(); setNotifyEmails((prev) => prev.filter((_, j) => j !== i)); }}>
+                              <img src="/icons/12px/Cross.svg" width={12} height={12} alt="" style={iconFilter} />
+                            </button>
+                          </div>
+                        ))}
+                        <input
+                          ref={emailInputRef}
+                          className="na-chips-search"
+                          placeholder={notifyEmails.length === 0 ? "e.g. qa-lead@company.com" : ""}
+                          value={emailInput}
+                          onChange={(e) => { setEmailInput(e.target.value); setEmailError(false); }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === ",") {
+                              e.preventDefault();
+                              const val = emailInput.trim().replace(/,$/, "");
+                              if (!val) return;
+                              if (!val.includes("@")) { setEmailError(true); return; }
+                              setNotifyEmails((prev) => [...prev, val]);
+                              setEmailInput("");
+                              setEmailError(false);
+                            }
+                            if (e.key === "Backspace" && !emailInput && notifyEmails.length > 0) {
+                              setNotifyEmails((prev) => prev.slice(0, -1));
+                            }
+                          }}
+                          onFocus={() => setEmailFocused(true)}
+                          onBlur={() => {
+                            setEmailFocused(false);
+                            const val = emailInput.trim();
+                            if (val && val.includes("@")) {
+                              setNotifyEmails((prev) => [...prev, val]);
+                              setEmailInput("");
+                              setEmailError(false);
+                            } else if (val && !val.includes("@")) {
+                              setEmailError(true);
+                            }
+                          }}
+                        />
+                      </div>
+                      <button className="na-chips-enter" type="button" style={{ visibility: emailFocused ? "visible" : "hidden" }} onMouseDown={(e) => {
+                        e.preventDefault();
+                        const val = emailInput.trim();
+                        if (!val) return;
+                        if (!val.includes("@")) { setEmailError(true); return; }
+                        setNotifyEmails((prev) => [...prev, val]);
+                        setEmailInput("");
+                        setEmailError(false);
+                      }}>
+                        <span className="na-chips-enter-icon"><img src="/icons/12px/Enter.svg" width={12} height={12} alt="" style={iconFilter} /></span>
+                      </button>
+                    </div>
+                    <p className={`input-caption${emailError ? " input-caption-error" : ""}`}>
+                      {emailError ? "Please enter a valid email address" : "Press Enter to add each email"}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
 
             <div className="na-section">
               <div className="na-section-header-row">
-                <div className="na-section-header">Permissions</div>
+                <div className="na-section-header">Permissions to edit</div>
                 {permissions.length > 0 && (
                   <div style={{ padding: 8 }}>
-                    <button className="btn btn-secondary btn-sm" onClick={() => { setEditingPermIndex(null); setPermUsers([]); setPermEdit(false); setPermModalOpen(true); }}>
+                    <button className="btn btn-secondary btn-sm" onClick={() => { setEditingPermIndex(null); setPermEditUsers([]); setPermEditSearch(""); setPermModalOpen(true); }}>
                       <img src="/icons/16px/Plus.svg" width={16} height={16} alt="" style={iconFilter} />
                       <span className="btn-label">Add permission</span>
                     </button>
@@ -506,7 +623,7 @@ export default function NewAgentContent({ editId } = {}) {
                     <div className="na-empty-state">
                       <img src="/illustrations/Permissions.svg" alt="" />
                       <p className="na-empty-text">No permissions configured</p>
-                      <button className="btn btn-accent btn-sm" onClick={() => { setEditingPermIndex(null); setPermUsers([]); setPermEdit(false); setPermModalOpen(true); }}>
+                      <button className="btn btn-accent btn-sm" onClick={() => { setEditingPermIndex(null); setPermEditUsers([]); setPermEditSearch(""); setPermModalOpen(true); }}>
                         <img src="/icons/16px/Plus.svg" width={16} height={16} alt="" style={{ filter: "brightness(0) invert(1)" }} />
                         <span className="btn-label">Add permission</span>
                       </button>
@@ -517,19 +634,12 @@ export default function NewAgentContent({ editId } = {}) {
                     {permissions.map((perm, i) => (
                       <div key={i} className="na-perm-row" style={{ cursor: "pointer" }} onClick={() => {
                         setEditingPermIndex(i);
-                        setPermUsers([perm.name]);
-                        setPermEdit(perm.canEdit);
+                        setPermEditUsers(permissions.map((p) => p.name));
                         setPermModalOpen(true);
                       }}>
                         <div className="na-perm-info">
                           <img src={perm.avatar} width={16} height={16} alt="" className="na-perm-avatar" />
                           <span className="na-perm-name">{perm.name}</span>
-                          <Tag
-                            size="sm"
-                            label={perm.canEdit ? "Can edit" : "Can view"}
-                            iconLeft={true}
-                            icon12Left={<img src={`/icons/12px/${perm.canEdit ? "Edit" : "Eye open"}.svg`} width={12} height={12} alt="" style={iconFilter} />}
-                          />
                         </div>
                         <div className="na-cat-actions">
                           <button className="btn btn-ghost btn-sm btn-icon" onClick={(e) => { e.stopPropagation(); setPermissions((prev) => prev.filter((_, j) => j !== i)); }}>
@@ -548,26 +658,24 @@ export default function NewAgentContent({ editId } = {}) {
 
       {/* Actions bar */}
       <div className="na-actions">
-        <button className="btn btn-ghost btn-sm" onClick={() => {
-          const formData = { agentName, channel, frequency, description, autoEval, kbToggles, categories, scorecardName, scoringModel, outputLang, isDraft: true };
-          if (editId) { updateAgent(editId, formData); } else { addAgent(formData); }
-          router.push("/scoring-agents");
-        }}>
-          <img src="/icons/16px/NoteEdit.svg" width={16} height={16} alt="" style={iconFilter} />
-          <span className="btn-label">Save as a draft</span>
-        </button>
-        <div className="na-actions-divider" />
-        <div className="na-actions-right">
-          <button className="btn btn-secondary btn-sm" onClick={() => router.push("/scoring-agents")}>
-            <span className="btn-label">Cancel</span>
-          </button>
-          <button className="btn btn-accent btn-sm" onClick={() => {
-            const formData = { agentName, channel, frequency, description, autoEval, kbToggles, categories, scorecardName, scoringModel, outputLang, isDraft: false };
+        <div className="na-actions-group">
+          <div className="na-actions-toggle">
+            <Toggle on={isActive} onChange={setIsActive} />
+            <span className="na-actions-toggle-label">Active</span>
+          </div>
+          <div className="na-actions-divider" />
+          <div className="na-actions-right">
+            <button className="btn btn-secondary" onClick={() => router.push("/scoring-agents")}>
+              <span className="btn-label">Cancel</span>
+            </button>
+            <button className="btn btn-accent" onClick={() => {
+            const formData = { agentName, channel, frequency, description, autoEval, kbToggles, categories, scorecardName, scoringModel, outputLang, isDraft: !isActive };
             if (editId) { updateAgent(editId, formData); } else { addAgent(formData); }
             router.push("/scoring-agents");
           }}>
-            <span className="btn-label">{editId ? "Save changes" : "Save and active"}</span>
+            <span className="btn-label">Save</span>
           </button>
+          </div>
         </div>
       </div>
 
@@ -714,72 +822,99 @@ export default function NewAgentContent({ editId } = {}) {
       {/* Add permission modal */}
       {permModalOpen && (
         <div className="na-modal-overlay" onClick={() => setPermModalOpen(false)}>
-          <div className="na-modal" onClick={(e) => e.stopPropagation()}>
+          <div className="na-modal" style={{ height: "auto" }} onClick={(e) => e.stopPropagation()}>
             <div className="na-modal-header">
-              <span className="na-modal-title">{editingPermIndex !== null ? "Edit permission" : "Add permission"}</span>
+              <span className="na-modal-title">{editingPermIndex !== null ? "Edit permission to edit" : "Add permission to edit"}</span>
               <button className="btn btn-ghost btn-sm btn-icon" onClick={() => setPermModalOpen(false)}>
                 <img src="/icons/16px/Cross.svg" width={16} height={16} alt="" style={iconFilter} />
               </button>
             </div>
-            <div className="na-modal-body">
-              <div ref={permUserRef} style={{ position: "relative" }}>
-                <Input
-                  label="Select users"
-                  placeholder="Select users..."
-                  value={permUsers.join(", ")}
-                  readOnly
-                  onMouseDown={(e) => { e.stopPropagation(); setPermUserOpen((v) => !v); }}
-                  button={<button className="btn btn-ghost btn-sm btn-icon" type="button"><img src={`/icons/16px/${permUserOpen ? "ChevronTop" : "ChevronBottom"}.svg`} width={16} height={16} alt="" style={iconFilter} /></button>}
-                />
-                {permUserOpen && (
-                  <div style={{ position: "absolute", top: "calc(100% + 4px)", left: 0, zIndex: 200 }}>
-                    <Popover
-                      content="users"
-                      placeholder="Search agents..."
-                      checkbox
-                      selectedLabels={permUsers}
-                      sections={(() => {
-                        const existingNames = permissions.filter((_, j) => j !== editingPermIndex).map((p) => p.name);
-                        const available = checkedAgents.filter((a) => !existingNames.includes(a.name));
-                        return available.length > 0 ? [available.map((a) => ({ label: a.name, avatar: a.avatar }))] : [];
-                      })()}
-                      emptyMessage="No agents found"
-                      onItemClick={(item) => {
-                        setPermUsers((prev) =>
-                          prev.includes(item.label)
-                            ? prev.filter((n) => n !== item.label)
-                            : [...prev, item.label]
-                        );
-                      }}
-                    />
+            <div className="na-modal-body" style={{ gap: 16 }}>
+              {/* Select who can edit */}
+              {(() => {
+                const availableEdit = checkedAgents;
+                const filteredEdit = permEditSearch ? availableEdit.filter((a) => a.name.toLowerCase().includes(permEditSearch.toLowerCase())) : availableEdit;
+                const toggleEdit = (name) => setPermEditUsers((prev) => prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]);
+                const addFirstEdit = () => {
+                  const first = filteredEdit.find((a) => !permEditUsers.includes(a.name));
+                  if (first) { toggleEdit(first.name); setPermEditSearch(""); }
+                };
+                return (
+                  <div ref={permEditRef} style={{ position: "relative" }} className="input-field">
+                    <label className="input-label">Select who can edit</label>
+                    <div
+                      className={`na-chips-input${permEditOpen ? " na-chips-input-active" : ""}`}
+                      onClick={() => { setPermEditOpen(true); setTimeout(() => permEditInputRef.current?.focus(), 0); }}
+                    >
+                      <div className="na-chips-items">
+                        {permEditUsers.map((name) => {
+                          const agent = settingsAgents.find((a) => a.name === name);
+                          return (
+                            <div key={name} className="na-chip-user">
+                              <img src={agent?.avatar || "/avatars/Avatar 01.png"} width={16} height={16} alt="" className="na-perm-avatar" />
+                              <span>{name}</span>
+                            </div>
+                          );
+                        })}
+                        <input
+                          ref={permEditInputRef}
+                          className="na-chips-search"
+                          placeholder={permEditUsers.length === 0 ? "Select agents..." : ""}
+                          value={permEditSearch}
+                          onChange={(e) => { setPermEditSearch(e.target.value); if (!permEditOpen) setPermEditOpen(true); }}
+                          onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addFirstEdit(); } if (e.key === "Backspace" && !permEditSearch && permEditUsers.length > 0) { setPermEditUsers((prev) => prev.slice(0, -1)); } }}
+                          onFocus={() => setPermEditOpen(true)}
+                        />
+                      </div>
+                      {permEditOpen && (
+                        <button className="na-chips-enter" type="button" onMouseDown={(e) => { e.preventDefault(); addFirstEdit(); }}>
+                          <span className="na-chips-enter-icon"><img src="/icons/12px/Enter.svg" width={12} height={12} alt="" style={iconFilter} /></span>
+                        </button>
+                      )}
+                    </div>
+                    {permEditOpen && (
+                      <div className="na-chips-popover">
+                        {filteredEdit.length > 0 ? filteredEdit.map((a) => (
+                          <div key={a.name} className="na-chips-option" onMouseDown={(e) => { e.preventDefault(); toggleEdit(a.name); setPermEditSearch(""); }}>
+                            <div className="na-chips-option-left">
+                              <img src={a.avatar} width={16} height={16} alt="" className="na-perm-avatar" />
+                              <span>{a.name}</span>
+                            </div>
+                            <div className={`na-chips-checkbox${permEditUsers.includes(a.name) ? " na-chips-checkbox-checked" : ""}`}>
+                              {permEditUsers.includes(a.name) && <img src="/icons/12px/Check.svg" width={12} height={12} alt="" style={{ filter: "brightness(0) invert(1)" }} />}
+                            </div>
+                          </div>
+                        )) : (
+                          <div className="na-chips-empty">No agents found</div>
+                        )}
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-              <div className="na-toggle-row">
-                <Toggle on={permEdit} onChange={setPermEdit} />
-                <span className="na-toggle-label">Can edit agent settings</span>
-              </div>
+                );
+              })()}
             </div>
             <div className="na-modal-actions">
-              <button className="btn btn-ghost btn-sm" onClick={() => setPermModalOpen(false)}>
+              <button className="btn btn-secondary btn-sm" onClick={() => setPermModalOpen(false)}>
                 <span className="btn-label">Cancel</span>
               </button>
-              <button className="btn btn-accent btn-sm" onClick={() => {
-                if (permUsers.length > 0) {
+              <button
+                className="btn btn-accent btn-sm"
+                style={{ opacity: permEditUsers.length === 0 ? 0.3 : 1 }}
+                disabled={permEditUsers.length === 0}
+                onClick={() => {
+                  const newPerms = permEditUsers.map((name) => {
+                    const agent = settingsAgents.find((a) => a.name === name);
+                    return { name, avatar: agent?.avatar || "/avatars/Avatar 01.png", canEdit: true };
+                  });
                   if (editingPermIndex !== null) {
-                    const agent = settingsAgents.find((a) => a.name === permUsers[0]);
-                    setPermissions((prev) => prev.map((p, j) => j === editingPermIndex ? { name: permUsers[0], avatar: agent?.avatar || "/avatars/Avatar 01.png", canEdit: permEdit } : p));
+                    setPermissions(newPerms);
                   } else {
-                    const newPerms = permUsers.map((name) => {
-                      const agent = settingsAgents.find((a) => a.name === name);
-                      return { name, avatar: agent?.avatar || "/avatars/Avatar 01.png", canEdit: permEdit };
-                    });
                     setPermissions((prev) => [...prev, ...newPerms]);
                   }
-                }
-                setEditingPermIndex(null);
-                setPermModalOpen(false);
-              }}>
+                  setEditingPermIndex(null);
+                  setPermModalOpen(false);
+                }}
+              >
                 <span className="btn-label">{editingPermIndex !== null ? "Save permission" : "Add permission"}</span>
               </button>
             </div>

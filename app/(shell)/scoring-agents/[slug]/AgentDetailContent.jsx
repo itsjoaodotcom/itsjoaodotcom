@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Tag from "../../../../components/Tag";
 import FilterChip from "../../../../components/FilterChip";
@@ -66,6 +67,9 @@ const evaluations = [
       { criterion: "Escalation Handling", category: "Compliance", result: "Pass", score: 88, reasoning: "Escalated correctly when issue exceeded scope." },
       { criterion: "Issue Resolution", category: "Compliance", result: "Fail", score: 34, reasoning: "Failed to confirm resolution before closing." },
       { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", score: 95, reasoning: "Mirrored concerns and asked clarifying questions." },
+      { criterion: "Closing Protocol", category: "Process", result: "Pass", score: 90, reasoning: "Properly summarized and confirmed next steps." },
+      { criterion: "Knowledge Accuracy", category: "Technical", result: "Fail", score: 42, reasoning: "Provided outdated product information." },
+      { criterion: "Compliance Check", category: "Compliance", result: "Fail", score: 30, reasoning: "Missed required identity verification step." },
     ],
   },
   {
@@ -73,11 +77,14 @@ const evaluations = [
     contactName: "Carlos Rivera", contactAvatar: "/avatars/Avatar 9.png", title: "Billing Dispute Resolution", channelTag: "social",
     description: "Customer contacted support regarding a billing discrepancy. The agent handled the interaction professionally and resolved the issue within the session.",
     criteria: [
-      { criterion: "Response Time", category: "Communication", result: "Pass", score: 72, reasoning: "Picked up within SLA window." },
+      { criterion: "Response Time", category: "Communication", result: "Fail", score: 32, reasoning: "Took over 2 minutes to respond initially." },
       { criterion: "Empathy Display", category: "Process", result: "Pass", score: 65, reasoning: "Validated concern before starting resolution." },
-      { criterion: "Escalation Handling", category: "Compliance", result: "Pass", score: 58, reasoning: "Resolved within authority level." },
+      { criterion: "Escalation Handling", category: "Compliance", result: "Fail", score: 38, reasoning: "Should have escalated to billing specialist." },
       { criterion: "Issue Resolution", category: "Compliance", result: "Pass", score: 44, reasoning: "Corrected discrepancy and sent confirmation." },
-      { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", score: 55, reasoning: "Listened without interrupting." },
+      { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Fail", score: 35, reasoning: "Interrupted customer multiple times." },
+      { criterion: "Closing Protocol", category: "Process", result: "Fail", score: 28, reasoning: "Did not summarize actions taken." },
+      { criterion: "Knowledge Accuracy", category: "Technical", result: "Pass", score: 70, reasoning: "Billing info was correct." },
+      { criterion: "Compliance Check", category: "Compliance", result: "Pass", score: 75, reasoning: "Verified identity before making changes." },
     ],
   },
   {
@@ -90,6 +97,9 @@ const evaluations = [
       { criterion: "Escalation Handling", category: "Compliance", result: "Pass", score: 100, reasoning: "Processed at agent level, no escalation needed." },
       { criterion: "Issue Resolution", category: "Compliance", result: "Pass", score: 97, reasoning: "Refund initiated with 5–7 day timeline." },
       { criterion: "Empathy & Active Listening", category: "Behavioral", result: "Pass", score: 99, reasoning: "Addressed all specific concerns raised." },
+      { criterion: "Closing Protocol", category: "Process", result: "Pass", score: 95, reasoning: "Clear summary and follow-up timeline given." },
+      { criterion: "Knowledge Accuracy", category: "Technical", result: "Pass", score: 92, reasoning: "Refund policy quoted accurately." },
+      { criterion: "Compliance Check", category: "Compliance", result: "Fail", score: 40, reasoning: "Did not verify order number before processing." },
     ],
   },
   {
@@ -154,12 +164,29 @@ const tabs = ["Evaluations", "Agents Report", "Teams Report", "History"];
 const tabIcons = { "Evaluations": "Reports", "Agents Report": "Users", "Teams Report": "Reports" };
 
 export default function AgentDetailContent({ slug }) {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("Evaluations");
   const [criteriaDefsOpen, setCriteriaDefsOpen] = useState(false);
   const [criteriaOpen, setCriteriaOpen] = useState(true);
   const [selectedEval, setSelectedEval] = useState(null);
   const [selectedCriterion, setSelectedCriterion] = useState(0);
   const [resultFilter, setResultFilter] = useState(null); // null | "Pass" | "Fail"
+  const [scoreInfoOpen, setScoreInfoOpen] = useState(false);
+  const [criterionExpanded, setCriterionExpanded] = useState(false);
+  const scoreInfoRef = useRef(null);
+  const [scoreEditMode, setScoreEditMode] = useState(false);
+  const scoreDefaults = { critical: 75, belowStandard: 85, onTrack: 92, highPerforming: 97, bestInClass: 97 };
+  const [scoreEditValues, setScoreEditValues] = useState(scoreDefaults);
+  const scoreEditChanged = JSON.stringify(scoreEditValues) !== JSON.stringify(scoreDefaults);
+
+  useEffect(() => {
+    if (!scoreInfoOpen) return;
+    function onDown(e) {
+      if (scoreInfoRef.current && !scoreInfoRef.current.contains(e.target)) setScoreInfoOpen(false);
+    }
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [scoreInfoOpen]);
   const [filterSelections, setFilterSelections] = useState({});
   const [dateFilter, setDateFilter] = useState(null);
   const [chatOpen, setChatOpen] = useState(true);
@@ -231,7 +258,7 @@ export default function AgentDetailContent({ slug }) {
       { icon: "Users", label: "Evaluated", value: String(count), subtitle: "closed conversations" },
       { icon: "ChartBars", label: "Average Score", value: `${avg}%`, valueColor: avgColor, subtitle: "weighted average" },
       { icon: "Star", label: "Perfect", value: String(perfect), subtitle: "closed conversations" },
-      { icon: "LiveChat", label: "Override", value: "0", subtitle: "abandoned conversations" },
+      { icon: "LiveChat", label: "Abandoned", value: "0", subtitle: "abandoned conversations" },
       { icon: "Critical", label: "Violations", value: String(violationCount), labelColor: "var(--utilities-content-content-red)", valueColor: "var(--utilities-content-content-red)", subtitle: "critical criterion failed", subtitleColor: "var(--utilities-content-content-red)", noFilter: true, danger: true },
     ];
   }, [filteredEvaluations]);
@@ -256,16 +283,17 @@ export default function AgentDetailContent({ slug }) {
 
   const scoreDistribution = useMemo(() => {
     const ranges = [
-      { range: "81–100%", min: 81, max: 100, color: "green" },
-      { range: "61–80%",  min: 61, max: 80,  color: "orange" },
-      { range: "41–60%",  min: 41, max: 60,  color: "red" },
-      { range: "21–40%",  min: 21, max: 40,  color: "red" },
-      { range: "1–20%",   min: 1,  max: 20,  color: "red" },
+      { label: "Critical",          min: 0,  max: 20,  color: "red" },
+      { label: "Below Standard",    min: 21, max: 50,  color: "orange" },
+      { label: "On track",          min: 51, max: 75,  color: "cyan" },
+      { label: "High performing",   min: 76, max: 90,  color: "blue" },
+      { label: "Best-in-Class",     min: 91, max: 100, color: "darkgreen" },
     ];
-    return ranges.map((r) => ({
-      ...r,
-      count: filteredEvaluations.filter((e) => e.score >= r.min && e.score <= r.max).length,
-    }));
+    const total = filteredEvaluations.length || 1;
+    return ranges.map((r) => {
+      const count = filteredEvaluations.filter((e) => e.score >= r.min && e.score <= r.max).length;
+      return { ...r, count, pct: Math.round((count / total) * 100) };
+    });
   }, [filteredEvaluations]);
 
   const hasFilters = filterCategories.some((cat) => filterSelections[cat.key]?.value?.length > 0);
@@ -291,16 +319,10 @@ export default function AgentDetailContent({ slug }) {
   return (
     <div className="sa-content">
       {/* Breadcrumb */}
-      <div className="sa-breadcrumb" style={{ justifyContent: "space-between" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <Link href="/scoring-agents" className="sad-breadcrumb-link">Scoring agents</Link>
-          <img src="/icons/16px/Slash.svg" width={16} height={16} alt="" style={iconFilter} />
-          <span className="sad-breadcrumb-current">{agentName}</span>
-        </div>
-        <button className="btn btn-secondary btn-sm" onClick={() => router.push(`/scoring-agents/${slug}/edit`)}>
-          <img src="/icons/16px/Edit.svg" width={16} height={16} alt="" style={iconFilter} />
-          <span className="btn-label">Edit agent</span>
-        </button>
+      <div className="sa-breadcrumb">
+        <Link href="/scoring-agents" className="sad-breadcrumb-link">Scoring agents</Link>
+        <img src="/icons/16px/Slash.svg" width={16} height={16} alt="" style={iconFilter} />
+        <span className="sad-breadcrumb-current">{agentName}</span>
       </div>
 
       {/* Tabs */}
@@ -321,8 +343,15 @@ export default function AgentDetailContent({ slug }) {
           ))}
         </div>
         <div className="sad-tabs-actions">
+          <button className="btn btn-ghost btn-sm btn-icon">
+            <img src="/icons/16px/Search.svg" width={16} height={16} alt="" style={iconFilter} />
+          </button>
           <FiltersButton filterSelections={filterSelections} onSelect={handleFilterSelect} onReset={handleFilterReset} filterCategories={filterCategories} />
           <DateRangeButton onChange={setDateFilter} />
+          <button className="btn btn-secondary" onClick={() => router.push(`/scoring-agents/${slug}/edit`)}>
+            <img src="/icons/16px/Edit.svg" width={16} height={16} alt="" style={iconFilter} />
+            <span className="btn-label">Edit agent</span>
+          </button>
         </div>
       </div>
 
@@ -385,7 +414,7 @@ export default function AgentDetailContent({ slug }) {
         {/* Charts */}
         <div className="sad-charts">
           {/* Criterion Pass Rates */}
-          <div className="sad-chart-card">
+          <div className="sad-chart-card sad-chart-card-viewmore">
             <div className="sad-chart-header">
               <div className="sad-chart-title">
                 <span>Criterion Pass Rates</span>
@@ -394,7 +423,7 @@ export default function AgentDetailContent({ slug }) {
             </div>
             <div className="sad-chart-content-wrap">
               <div className="sad-chart-container">
-                {criterionRates.map((c) => (
+                {(criterionExpanded ? criterionRates : criterionRates.slice(0, 5)).map((c) => (
                   <div className="sad-bar-item" key={c.label}>
                     <div className="sad-bar-label-row">
                       <span className="sad-bar-label">{c.label}</span>
@@ -408,6 +437,14 @@ export default function AgentDetailContent({ slug }) {
                 ))}
               </div>
             </div>
+            {criterionRates.length > 5 && (
+              <div className={`sad-viewmore-wrap${criterionExpanded ? " sad-viewmore-visible" : ""}`}>
+                <button className="btn btn-secondary btn-sm" onClick={() => setCriterionExpanded((v) => !v)}>
+                  <span className="btn-label">{criterionExpanded ? "View less" : "View more"}</span>
+                  <img src={`/icons/16px/${criterionExpanded ? "ArrowTop" : "ArrowBottom"}.svg`} width={16} height={16} alt="" style={iconFilter} />
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Score Distribution */}
@@ -415,28 +452,106 @@ export default function AgentDetailContent({ slug }) {
             <div className="sad-chart-header">
               <div className="sad-chart-title">
                 <span>Score Distribution</span>
-                <img src="/icons/16px/Info.svg" width={16} height={16} alt="" style={iconFilter} />
+                <div className="sad-info-wrap" ref={scoreInfoRef}>
+                  <button className="btn btn-ghost btn-sm btn-icon" onClick={() => setScoreInfoOpen((v) => !v)}>
+                    <img src="/icons/16px/Info.svg" width={16} height={16} alt="" style={iconFilter} />
+                  </button>
+                  {scoreInfoOpen && (
+                    <div className="sad-info-tooltip">
+                      This view groups conversations by quality level based on their evaluation score. Instantly see whats the performance distribution and which conversations need a closer look.
+                    </div>
+                  )}
+                </div>
               </div>
-              <span className="sad-chart-subtitle">Conversations</span>
+              {scoreEditMode ? (
+                <div className="sad-score-edit-header-actions">
+                  {scoreEditChanged && (
+                    <button className="btn btn-ghost btn-sm" onClick={() => setScoreEditValues(scoreDefaults)}>
+                      <img src="/icons/16px/Retry.svg" width={16} height={16} alt="" style={iconFilter} />
+                      <span className="btn-label">Reset</span>
+                    </button>
+                  )}
+                  <button className="btn btn-secondary btn-sm" onClick={() => setScoreEditMode(false)}>
+                    <span className="btn-label">Cancel</span>
+                  </button>
+                  <button className="btn btn-accent btn-sm" style={{ opacity: scoreEditChanged ? 1 : 0.3 }} disabled={!scoreEditChanged} onClick={() => setScoreEditMode(false)}>
+                    <span className="btn-label">Save</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="sad-chart-subtitle-wrap">
+                  <span className="sad-chart-subtitle">Conversations</span>
+                  <div className="sad-edit-hover-wrap">
+                    <div className="sad-edit-hover-gradient" />
+                    <button className="btn btn-secondary btn-sm sad-edit-hover-btn" onClick={() => setScoreEditMode(true)}>
+                      <img src="/icons/16px/Edit.svg" width={16} height={16} alt="" style={iconFilter} />
+                      <span className="btn-label">Edit</span>
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
-            <div className="sad-chart-content-wrap">
-              <div className="sad-chart-container">
-                {(() => {
-                  const maxCount = Math.max(...scoreDistribution.map((d) => d.count), 1);
-                  return scoreDistribution.map((d) => (
-                    <div className="sad-bar-item" key={d.range}>
-                      <div className="sad-bar-label-row">
-                        <span className="sad-bar-label">{d.range}</span>
-                        <span className="sad-dist-count">{d.count}</span>
+            {!scoreEditMode ? (
+              <div className="sad-chart-content-wrap">
+                <div className="sad-chart-container">
+                  {(() => {
+                    const maxCount = Math.max(...scoreDistribution.map((d) => d.count), 1);
+                    return scoreDistribution.map((d) => (
+                      <div className="sad-bar-item" key={d.label}>
+                        <div className="sad-bar-label-row">
+                          <span className="sad-bar-label">
+                            {d.label} <span className="sad-bar-pct">{d.pct}%</span>
+                          </span>
+                          <span className="sad-dist-count">{d.count}</span>
+                        </div>
+                        <div className="sad-bar-track">
+                          {d.count > 0 && <div className={`sad-bar-fill sad-dist-fill-${d.color}`} style={{ width: `${(d.count / maxCount) * 100}%` }} />}
+                        </div>
                       </div>
-                      <div className="sad-bar-track">
-                        {d.count > 0 && <div className={`sad-bar-fill sad-dist-fill-${d.color}`} style={{ width: `${(d.count / maxCount) * 100}%` }} />}
+                    ));
+                  })()}
+                </div>
+              </div>
+            ) : (
+              <div className="sad-score-edit">
+                <div className="sad-score-edit-inner">
+                  {[
+                    { key: "critical",        label: "Critical",        color: "red" },
+                    { key: "belowStandard",   label: "Bellow Standard", color: "orange" },
+                    { key: "onTrack",          label: "On track",        color: "cyan" },
+                    { key: "highPerforming",  label: "High performing", color: "blue" },
+                    { key: "bestInClass",      label: "Best-in-Class",   color: "darkgreen" },
+                  ].map((item) => (
+                    <div className="sad-score-edit-row" key={item.key}>
+                      <div className="sad-score-edit-left">
+                        <span className={`sad-score-edit-dot sad-score-edit-dot-${item.color}`} />
+                        <span className="sad-score-edit-label">{item.label}</span>
+                      </div>
+                      <div className="sad-score-edit-right">
+                        <input
+                          className="sad-score-edit-input"
+                          type="text"
+                          value={`${scoreEditValues[item.key]}%`}
+                          onChange={(e) => {
+                            const raw = e.target.value.replace(/[^0-9]/g, "");
+                            const num = Math.min(100, Math.max(0, Number(raw) || 0));
+                            setScoreEditValues((prev) => ({ ...prev, [item.key]: num }));
+                          }}
+                        />
+                        <div className="sad-score-edit-arrows">
+                          <button className="btn btn-ghost btn-micro btn-icon" onClick={() => setScoreEditValues((prev) => ({ ...prev, [item.key]: Math.max(0, prev[item.key] - 1) }))}>
+                            <img src="/icons/16px/ChevronLeft.svg" width={16} height={16} alt="" style={iconFilter} />
+                          </button>
+                          <button className="btn btn-ghost btn-micro btn-icon" onClick={() => setScoreEditValues((prev) => ({ ...prev, [item.key]: Math.min(100, prev[item.key] + 1) }))}>
+                            <img src="/icons/16px/ChevronRight.svg" width={16} height={16} alt="" style={iconFilter} />
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  ));
-                })()}
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
