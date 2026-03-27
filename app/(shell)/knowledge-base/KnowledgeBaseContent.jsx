@@ -163,16 +163,39 @@ const ARTICLE = {
 };
 
 const CONFLICTS = [
-  { label: "Account security guidelines v3.2", color: "var(--utilities-content-content-blue)" },
-  { label: "Two-factor authentication protocol", color: "var(--utilities-content-content-orange)" },
+  { label: "Account security guidelines v3.2", status: "resolved" },
+  { label: "Two-factor authentication protocol", status: "error" },
 ];
 
 const DUPLICATES = [
-  { label: "Customer Service Documentation Standards" },
-  { label: "Browser compatibility guide" },
-  { label: "Account security guidelines v3.2" },
-  { label: "Account security guidelines v3.2" },
+  { label: "Customer Service Documentation Standards", status: "resolved" },
+  { label: "Browser compatibility guide", status: "pending" },
+  { label: "Account security guidelines v3.2", status: "pending" },
+  { label: "Account security guidelines v3.2", status: "pending" },
 ];
+
+function ConflictStatusIcon({ status }) {
+  if (status === "resolved") return (
+    <svg width="16" height="16" viewBox="0 0 16 16" style={{ overflow: "visible" }}>
+      <circle cx="8" cy="8" r="6" style={{ fill: "var(--content-accent)" }} />
+      <circle cx="8" cy="8" r="5.5" stroke="var(--stroke-secondarystrong)" strokeWidth="1" style={{ fill: "none" }} />
+      <path d="M5.33 8L7 9.67L10.67 6" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" style={{ fill: "none" }} />
+    </svg>
+  );
+  if (status === "error") return (
+    <svg width="16" height="16" viewBox="0 0 16 16" style={{ overflow: "visible" }}>
+      <circle cx="8" cy="8" r="6" style={{ fill: "var(--utilities-content-content-orange)" }} />
+      <circle cx="8" cy="8" r="5.5" stroke="var(--stroke-secondarystrong)" strokeWidth="1" style={{ fill: "none" }} />
+      <path d="M6 6L10 10M10 6L6 10" stroke="white" strokeWidth="1.2" strokeLinecap="round" style={{ fill: "none" }} />
+    </svg>
+  );
+  // Incomplete - dashed circle
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" style={{ overflow: "visible" }}>
+      <circle cx="8" cy="8" r="5.5" stroke="var(--stroke-secondarystrong)" strokeWidth="1" strokeDasharray="2.5 2.5" style={{ fill: "none" }} />
+    </svg>
+  );
+}
 
 function CopilotEmptySvg() {
   return (
@@ -1243,51 +1266,71 @@ export default function KnowledgeBaseContent() {
         </div>
 
         {/* Conflicts tab */}
-        <div style={{ display: activeTab === "conflicts" ? "flex" : "none", flex: 1, flexDirection: "column", overflowY: "auto" }}>
-          {/* Progress */}
-          <div className="kb-conflicts-progress">
-            <div className="kb-conflicts-progress-header">
-              <span className="kb-conflicts-progress-label">Conflicts detection</span>
-              <span className="kb-conflicts-progress-count">1/6 Resolved</span>
-            </div>
-            <div className="kb-conflicts-progress-bar">
-              <div className="kb-progress-segment kb-progress-green" style={{ flex: 1 }} />
-              <div className="kb-progress-segment kb-progress-blue" style={{ flex: 2 }} />
-              <div className="kb-progress-segment kb-progress-orange" style={{ flex: 1 }} />
-              <div className="kb-progress-segment kb-progress-red" style={{ flex: 2 }} />
+        <div className="kb-conflicts-panel" style={{ display: activeTab === "conflicts" ? "flex" : "none" }}>
+          {/* Progress card */}
+          <div>
+            <div className="kb-progress-card">
+              <div className="kb-progress-header">
+                <span className="kb-progress-label">Conflicts detection</span>
+                <span className="kb-progress-count">1/6 Resolved</span>
+              </div>
+              <div className="kb-progress-bar">
+                <div className="kb-progress-segment kb-progress-blue" />
+                <div className="kb-progress-segment kb-progress-orange" />
+                <div className="kb-progress-segment kb-progress-blue" />
+                <div className="kb-progress-segment kb-progress-grey" />
+                <div className="kb-progress-segment kb-progress-grey" />
+                <div className="kb-progress-segment kb-progress-grey" />
+              </div>
             </div>
           </div>
 
           {/* Conflicts list */}
-          <div className="kb-conflicts-section">
-            <div className="kb-conflicts-section-header">
-              <span className="kb-conflicts-dot" style={{ background: "var(--utilities-content-content-red)" }} />
-              <span className="kb-conflicts-section-title">Conflicts</span>
-              <span className="kb-conflicts-section-count">2</span>
-            </div>
-            {CONFLICTS.map((item, i) => (
-              <div className="kb-conflicts-item" key={i}>
-                <span className="kb-conflicts-item-dot" style={{ background: item.color }} />
-                <span className="kb-conflicts-item-label">{item.label}</span>
-                <img src="/icons/16px/ChevronRight.svg" width={16} height={16} alt="" style={iconFilter} />
+          <div>
+            <div className="kb-clist">
+              <div className="kb-clist-header">
+                <div className="kb-clist-title">
+                  <span className="tag tag-red tag-sm">
+                    <span className="tag-dot"><svg width="7" height="7" viewBox="0 0 7 7" fill="none"><rect width="7" height="7" rx="3.5" fill="currentColor" /></svg></span>
+                    <span className="tag-label">Conflicts</span>
+                  </span>
+                </div>
+                <span className="kb-clist-badge">2</span>
               </div>
-            ))}
+              <div className="kb-clist-items">
+                {CONFLICTS.map((item, i) => (
+                  <div className="kb-citem" key={i}>
+                    <div className="kb-citem-icon"><ConflictStatusIcon status={item.status} /></div>
+                    <span className="kb-citem-label">{item.label}</span>
+                    <div className="kb-citem-chevron"><img src="/icons/16px/ChevronRight.svg" width={16} height={16} alt="" style={iconFilter} /></div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Duplicates list */}
-          <div className="kb-conflicts-section">
-            <div className="kb-conflicts-section-header">
-              <span className="kb-conflicts-dot" style={{ background: "var(--utilities-content-content-blue)" }} />
-              <span className="kb-conflicts-section-title">Duplicates</span>
-              <span className="kb-conflicts-section-count">4</span>
-            </div>
-            {DUPLICATES.map((item, i) => (
-              <div className="kb-conflicts-item" key={i}>
-                <span className="kb-conflicts-item-dot" style={{ background: "var(--utilities-content-content-blue)" }} />
-                <span className="kb-conflicts-item-label">{item.label}</span>
-                <img src="/icons/16px/ChevronRight.svg" width={16} height={16} alt="" style={iconFilter} />
+          <div>
+            <div className="kb-clist">
+              <div className="kb-clist-header">
+                <div className="kb-clist-title">
+                  <span className="tag tag-blue tag-sm">
+                    <span className="tag-dot"><svg width="7" height="7" viewBox="0 0 7 7" fill="none"><rect width="7" height="7" rx="3.5" fill="currentColor" /></svg></span>
+                    <span className="tag-label">Duplicates</span>
+                  </span>
+                </div>
+                <span className="kb-clist-badge">4</span>
               </div>
-            ))}
+              <div className="kb-clist-items">
+                {DUPLICATES.map((item, i) => (
+                  <div className="kb-citem" key={i}>
+                    <div className="kb-citem-icon"><ConflictStatusIcon status={item.status} /></div>
+                    <span className="kb-citem-label">{item.label}</span>
+                    <div className="kb-citem-chevron"><img src="/icons/16px/ChevronRight.svg" width={16} height={16} alt="" style={iconFilter} /></div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
