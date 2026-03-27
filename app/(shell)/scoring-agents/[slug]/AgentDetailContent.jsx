@@ -173,6 +173,7 @@ export default function AgentDetailContent({ slug }) {
   const [resultFilter, setResultFilter] = useState(null); // null | "Pass" | "Fail"
   const [scoreInfoOpen, setScoreInfoOpen] = useState(false);
   const [criterionExpanded, setCriterionExpanded] = useState(false);
+  const [evalsExpanded, setEvalsExpanded] = useState(false);
   const scoreInfoRef = useRef(null);
   const [scoreEditMode, setScoreEditMode] = useState(false);
   const scoreDefaults = { critical: 75, belowStandard: 85, onTrack: 92, highPerforming: 97, bestInClass: 97 };
@@ -616,6 +617,7 @@ export default function AgentDetailContent({ slug }) {
           </div>
           <div className={`sad-collapse${criteriaOpen ? " sad-collapse-open" : ""}`}>
             <div className="sad-collapse-inner">
+            <div className="sad-chart-card-viewmore">
             <div className="sad-chart-content-wrap">
               <div className="sad-chart-container">
                 <div className="sa-table-header">
@@ -628,7 +630,7 @@ export default function AgentDetailContent({ slug }) {
                   <div className="sa-th sad-col-140"><span className="sa-th-label">Date</span></div>
                 </div>
 
-                {filteredEvaluations.map((e) => (
+                {(evalsExpanded ? filteredEvaluations : filteredEvaluations.slice(0, 5)).map((e) => (
                   <div className="sa-row sad-row-clickable" key={e.id} onClick={() => { setSelectedEval(e); setSelectedCriterion(0); setResultFilter(null); }}>
                     <div className="sa-cell sad-col-id">
                       <span className="sa-cell-text" style={{ color: "var(--content-tertiary)" }}>{e.id}</span>
@@ -664,6 +666,15 @@ export default function AgentDetailContent({ slug }) {
                   </div>
                 ))}
               </div>
+            </div>
+            {filteredEvaluations.length > 5 && (
+              <div className="sad-viewmore-wrap">
+                <button className="btn btn-secondary btn-sm" onClick={() => setEvalsExpanded((v) => !v)}>
+                  <span className="btn-label">{evalsExpanded ? "View less" : "View all"}</span>
+                  <img src={`/icons/16px/${evalsExpanded ? "ArrowTop" : "ArrowBottom"}.svg`} width={16} height={16} alt="" style={iconFilter} />
+                </button>
+              </div>
+            )}
             </div>
             </div>
           </div>
