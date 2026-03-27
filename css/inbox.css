@@ -343,9 +343,9 @@ body {
   z-index: 10;
 }
 
-/* Hide dialog + copilot when nothing is selected */
-.content:not(.has-selection) .dialog,
-.content:not(.has-selection) .copilot {
+/* Hide dialog + copilot when nothing is selected (only when inbox-sidebar is present) */
+.content:not(.has-selection):has(.inbox-sidebar) .dialog,
+.content:not(.has-selection):has(.inbox-sidebar) .copilot {
   display: none;
 }
 

@@ -158,9 +158,11 @@ function AgentsQaSubitems() {
 }
 
 function AiHubSubitems() {
+  const pathname = usePathname();
+
   return (
     <>
-      <SnavSubitem icon="Documentation" label="Knowledge Base" />
+      <SnavSubitem icon="Documentation" label="Knowledge Base" href="/knowledge-base" active={pathname.startsWith("/knowledge-base")} />
       <SnavSubitem icon="Agent" label="Agent Assist" />
       <SnavSubitem icon="Workflows" label="AI Automation Agent" />
     </>
@@ -197,7 +199,7 @@ function SidebarInbox({ collapsed, onCollapse, activeView, onViewChange }) {
       <div className="snav-divider"></div>
 
       <div className="snav-links mid">
-        <NavGroup icon="AIHub" label="AI Hub">
+        <NavGroup icon="AIHub" label="AI Hub" hrefs={["/knowledge-base"]}>
           <AiHubSubitems />
         </NavGroup>
       </div>
@@ -244,7 +246,7 @@ function SidebarOverview({ collapsed, onCollapse }) {
       <div className="snav-divider"></div>
 
       <div className="snav-links mid">
-        <NavGroup icon="AIHub" label="AI Hub">
+        <NavGroup icon="AIHub" label="AI Hub" hrefs={["/knowledge-base"]}>
           <AiHubSubitems />
         </NavGroup>
       </div>
