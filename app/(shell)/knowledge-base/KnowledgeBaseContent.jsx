@@ -1295,13 +1295,15 @@ export default function KnowledgeBaseContent() {
                     <span className="tag-label">Conflicts</span>
                   </span>
                 </div>
-                <span className="kb-clist-badge">2</span>
+                <div className="kb-clist-actions"><span className="kb-clist-badge">2</span></div>
               </div>
               <div className="kb-clist-items">
                 {CONFLICTS.map((item, i) => (
                   <div className="kb-citem" key={i}>
-                    <div className="kb-citem-icon"><ConflictStatusIcon status={item.status} /></div>
-                    <span className="kb-citem-label">{item.label}</span>
+                    <div className="kb-citem-content">
+                      <div className="kb-citem-icon"><ConflictStatusIcon status={item.status} /></div>
+                      <span className="kb-citem-label">{item.label}</span>
+                    </div>
                     <div className="kb-citem-chevron"><img src="/icons/16px/ChevronRight.svg" width={16} height={16} alt="" style={iconFilter} /></div>
                   </div>
                 ))}
@@ -1319,13 +1321,15 @@ export default function KnowledgeBaseContent() {
                     <span className="tag-label">Duplicates</span>
                   </span>
                 </div>
-                <span className="kb-clist-badge">4</span>
+                <div className="kb-clist-actions"><span className="kb-clist-badge">4</span></div>
               </div>
               <div className="kb-clist-items">
                 {DUPLICATES.map((item, i) => (
                   <div className="kb-citem" key={i}>
-                    <div className="kb-citem-icon"><ConflictStatusIcon status={item.status} /></div>
-                    <span className="kb-citem-label">{item.label}</span>
+                    <div className="kb-citem-content">
+                      <div className="kb-citem-icon"><ConflictStatusIcon status={item.status} /></div>
+                      <span className="kb-citem-label">{item.label}</span>
+                    </div>
                     <div className="kb-citem-chevron"><img src="/icons/16px/ChevronRight.svg" width={16} height={16} alt="" style={iconFilter} /></div>
                   </div>
                 ))}

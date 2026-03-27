@@ -391,6 +391,12 @@
   align-items: center;
 }
 
+.kb-clist-actions {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
 .kb-clist-badge {
   display: flex;
   align-items: center;
@@ -406,7 +412,6 @@
   line-height: 12px;
   color: var(--content-tertiary);
   text-align: center;
-  margin-right: 10px;
 }
 
 .kb-clist-items {
@@ -419,9 +424,8 @@
 .kb-citem {
   display: flex;
   align-items: center;
-  height: 36px;
-  padding: 8px 10px;
-  gap: 4px;
+  min-height: 36px;
+  padding: 0;
   background: var(--surface-primary);
   border: 1px solid var(--stroke-primary);
   border-radius: 6px;
@@ -433,6 +437,16 @@
   background: var(--surface-primaryhover);
 }
 
+.kb-citem-content {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  gap: 4px;
+  height: 36px;
+  padding: 8px 10px;
+}
+
 .kb-citem-icon {
   width: 16px;
   height: 16px;
@@ -442,6 +456,7 @@
 
 .kb-citem-label {
   flex: 1;
+  min-width: 0;
   font-size: 14px;
   line-height: 20px;
   letter-spacing: -0.28px;
@@ -453,6 +468,9 @@
 
 .kb-citem-chevron {
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 10px;
 }
 
 .kb-citem-chevron img {
