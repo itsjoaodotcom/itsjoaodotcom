@@ -398,7 +398,7 @@
   gap: 12px;
   padding: 0 20px 20px;
   flex-shrink: 0;
-  align-items: flex-start;
+  align-items: stretch;
 }
 
 .sad-chart-card {
@@ -408,6 +408,8 @@
   background: var(--surface-secondary);
   border: 1px solid var(--stroke-primary);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .sad-chart-header {

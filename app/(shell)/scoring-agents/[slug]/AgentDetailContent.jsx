@@ -160,6 +160,16 @@ const criteriaDefinitions = [
   { criterion: "Empathy & Active Listening",strategy: "sentiment",   strategyColor: "purple", weight: "20%",            definition: "Agent mirrors the customer's concerns, asks clarifying questions, and confirms understanding before providing solutions. No dismissing or interrupting." },
 ];
 
+const agentsReportData = [
+  { name: "Sarah Al-Rashid", avatar: "/avatars/Avatar 01.png", channel: "Chat Support", channelIcon: "LiveChat", score: 96, trend: 4.2, trendUp: true, evaluations: 142 },
+  { name: "Fatima Noor", avatar: "/avatars/Avatar 2.png", channel: "Social media", channelIcon: "Globe", score: 94, trend: 2.8, trendUp: true, evaluations: 128 },
+  { name: "Layla Hassan", avatar: "/avatars/Avatar 3.png", channel: "Social media", channelIcon: "Globe", score: 91, trend: 1.5, trendUp: false, evaluations: 98 },
+  { name: "Emma Rodriguez", avatar: "/avatars/Avatar 4.png", channel: "Email", channelIcon: "Email", score: 89, trend: 3.1, trendUp: true, evaluations: 86 },
+  { name: "Priya Sharma", avatar: "/avatars/Avatar 5.png", channel: "Call center", channelIcon: "AnswerCall", score: 88, trend: 0.8, trendUp: true, evaluations: 74 },
+  { name: "James Mitchell", avatar: "/avatars/Avatar 6.png", channel: "Email", channelIcon: "Email", score: 85, trend: 1.2, trendUp: false, evaluations: 112 },
+  { name: "David Chen", avatar: "/avatars/Avatar 7.png", channel: "Chat Support", channelIcon: "LiveChat", score: 82, trend: 2, trendUp: true, evaluations: 95 },
+];
+
 const tabs = ["Evaluations", "Agents Report", "Teams Report", "History"];
 const tabIcons = { "Evaluations": "Reports", "Agents Report": "Users", "Teams Report": "Reports" };
 
@@ -174,6 +184,7 @@ export default function AgentDetailContent({ slug }) {
   const [scoreInfoOpen, setScoreInfoOpen] = useState(false);
   const [criterionExpanded, setCriterionExpanded] = useState(false);
   const [evalsExpanded, setEvalsExpanded] = useState(false);
+  const [selectedAgent, setSelectedAgent] = useState(null);
   const scoreInfoRef = useRef(null);
   const [scoreEditMode, setScoreEditMode] = useState(false);
   const scoreDefaults = { critical: 75, belowStandard: 85, onTrack: 92, highPerforming: 97, bestInClass: 97 };
@@ -395,7 +406,7 @@ export default function AgentDetailContent({ slug }) {
       )}
 
       {/* Scrollable content */}
-      <div className="sad-scroll">
+      <div className="sad-scroll" style={{ display: activeTab === "Evaluations" ? "" : "none" }}>
         {/* Metrics */}
         <div className="sa-metrics">
           {detailMetrics.map((m) => (
@@ -680,6 +691,297 @@ export default function AgentDetailContent({ slug }) {
           </div>
         </div>
       </div>
+
+      {/* Agents Report tab */}
+      <div className="sad-scroll" style={{ display: activeTab === "Agents Report" ? "" : "none" }}>
+        {/* Metrics - reuses sa-metrics / sa-metric-card */}
+        <div className="sa-metrics">
+          {[
+            { icon: "Star", label: "Your score", value: "69%", valueColor: "var(--utilities-content-content-orange)" },
+            { icon: "Users", label: "Team Avg", value: "82%", valueColor: "var(--utilities-content-content-green)" },
+            { icon: "Reports", label: "Evaluations", value: "10" },
+            { icon: "ChartBars", label: "Trend", value: "+4.2%", valueColor: "var(--utilities-content-content-green)" },
+          ].map((m) => (
+            <div className="sa-metric-card" key={m.label}>
+              <div className="sa-metric-header">
+                <img src={`/icons/16px/${m.icon}.svg`} width={16} height={16} alt="" style={iconFilter} />
+                <span className="sa-metric-label">{m.label}</span>
+              </div>
+              <div className="sa-metric-value-row">
+                <span className="sa-metric-value" style={m.valueColor ? { color: m.valueColor } : undefined}>{m.value}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Agents table - reuses same table pattern as Evaluations */}
+        <div style={{ padding: "0 20px 20px" }}>
+          <div className="sa-table-header">
+            <div className="sa-th sad-col-flex"><span className="sa-th-label">Name</span> <img src="/icons/12px/ArrowBottom.svg" width={12} height={12} alt="" style={iconFilter} /></div>
+            <div className="sa-th sad-col-flex"><span className="sa-th-label">Channel</span></div>
+            <div className="sa-th sad-col-148"><span className="sa-th-label">Score</span> <img src="/icons/12px/ArrowBottom.svg" width={12} height={12} alt="" style={iconFilter} /></div>
+            <div className="sa-th sad-col-148"><span className="sa-th-label">Trend</span> <img src="/icons/12px/ArrowBottom.svg" width={12} height={12} alt="" style={iconFilter} /></div>
+            <div className="sa-th sad-col-140"><span className="sa-th-label">Evaluations</span> <img src="/icons/12px/ArrowBottom.svg" width={12} height={12} alt="" style={iconFilter} /></div>
+          </div>
+
+          {agentsReportData.map((a) => (
+            <div className="sa-row sad-row-clickable" key={a.name} onClick={() => setSelectedAgent(a)}>
+              <div className="sa-cell sad-col-flex">
+                <div className="sa-channel">
+                  <img src={a.avatar} width={20} height={20} alt="" style={{ borderRadius: 999, border: "1px solid var(--stroke-primary)" }} />
+                  <span className="sa-cell-text">{a.name}</span>
+                </div>
+              </div>
+              <div className="sa-cell sad-col-flex">
+                <div className="sa-channel">
+                  <img src={`/icons/16px/${a.channelIcon}.svg`} width={16} height={16} alt="" style={iconFilter} />
+                  <span className="sa-cell-text">{a.channel}</span>
+                </div>
+              </div>
+              <div className="sa-cell sad-col-148">
+                <span className="sa-cell-text" style={{ color: a.score >= 80 ? "var(--utilities-content-content-green)" : a.score >= 60 ? "var(--utilities-content-content-orange)" : "var(--utilities-content-content-red)" }}>{a.score}%</span>
+              </div>
+              <div className="sa-cell sad-col-148">
+                <span className="sa-cell-text" style={{ color: a.trendUp ? "var(--utilities-content-content-green)" : "var(--utilities-content-content-red)" }}>{a.trend}%</span>
+                <img src={`/icons/12px/${a.trendUp ? "ArrowTop" : "ArrowBottom"}.svg`} width={12} height={12} alt="" style={{ filter: a.trendUp ? "brightness(0) saturate(100%) invert(52%) sepia(74%) saturate(422%) hue-rotate(92deg) brightness(96%) contrast(92%)" : "brightness(0) saturate(100%) invert(38%) sepia(60%) saturate(850%) hue-rotate(327deg) brightness(92%) contrast(90%)" }} />
+              </div>
+              <div className="sa-cell sad-col-140">
+                <span className="sa-cell-text">{a.evaluations}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Agent Detail Modal - reuses sad-modal pattern without chat panel */}
+      {selectedAgent && (
+        <div className="sad-modal-overlay" onClick={() => setSelectedAgent(null)}>
+          <div className="sad-modal-stroke">
+            <div className="sad-modal" onClick={(ev) => ev.stopPropagation()}>
+              <div className="sad-modal-left" style={{ borderRight: "none" }}>
+                <div className="sad-modal-topbar">
+                  <div className="sad-modal-topbar-left">
+                    <img src={selectedAgent.avatar} width={16} height={16} alt="" style={{ borderRadius: 999, border: "1px solid var(--stroke-primary)" }} className="sad-modal-topbar-avatar" />
+                    <span className="sad-modal-topbar-name">{selectedAgent.name}</span>
+                    <Tag color="grey" label={selectedAgent.channel} size="sm" />
+                  </div>
+                  <div className="sad-modal-topbar-actions">
+                    <button className="btn btn-ghost btn-sm btn-icon" onClick={() => setSelectedAgent(null)}>
+                      <img src="/icons/16px/Cross.svg" width={16} height={16} alt="" style={iconFilter} />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="sad-modal-left-scroll">
+                  {/* Top cards row */}
+                  <div className="sad-modal-details-wrap" style={{ display: "flex", gap: 12 }}>
+                    {/* Left: last evaluation details */}
+                    <div className="sad-modal-details" style={{ flex: 1 }}>
+                      <div className="sad-modal-details-header">
+                        <div className="sad-modal-details-meta">
+                          <div className="sad-modal-details-label">
+                            <img src="/icons/16px/Calendar.svg" width={16} height={16} alt="" style={iconFilter} />
+                            <span className="sad-modal-details-label-text">12/03/2026</span>
+                          </div>
+                          <div className="sad-modal-details-label">
+                            <img src="/icons/16px/Clock.svg" width={16} height={16} alt="" style={iconFilter} />
+                            <span className="sad-modal-details-label-text">16:30</span>
+                          </div>
+                        </div>
+                        <span className="sad-modal-details-id">conv-c9b103e2-9a70-4037-9ac0-ffcf63bc73a7-1</span>
+                      </div>
+                      <div className="sad-modal-details-body">
+                        <div className="sad-modal-details-card">
+                          <div className={`sad-modal-score-avatar ${selectedAgent.score >= 80 ? "sad-modal-score-green" : selectedAgent.score >= 60 ? "sad-modal-score-orange" : "sad-modal-score-red"}`}>
+                            {selectedAgent.score}
+                          </div>
+                          <div className="sad-modal-details-card-text">
+                            <p className="sad-modal-details-title">Account Access & Verification Issue</p>
+                            <p className="sad-modal-details-desc">Customer contacted support regarding a account inquiry. They were transferred to Nadia El-Amin who handled the interaction via chat. The conversation included 5 evaluated criteria points.</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right: overall stats */}
+                    <div className="sad-modal-details" style={{ minWidth: 220, maxWidth: 280 }}>
+                      <div className="sad-modal-details-header">
+                        <div className="sad-modal-details-meta">
+                          <div className="sad-modal-details-label">
+                            <img src="/icons/16px/ChartBars.svg" width={16} height={16} alt="" style={iconFilter} />
+                            <span className="sad-modal-details-label-text">{selectedAgent.evaluations} Conversations Evaluated</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="sad-modal-details-body">
+                        <div className="sad-modal-details-card" style={{ gap: 8 }}>
+                          <span style={{ fontSize: 24, fontWeight: 600, letterSpacing: "-0.48px", color: selectedAgent.score >= 80 ? "var(--utilities-content-content-green)" : selectedAgent.score >= 60 ? "var(--utilities-content-content-orange)" : "var(--utilities-content-content-red)" }}>{selectedAgent.score}%</span>
+                          <span style={{ fontSize: 12, color: selectedAgent.trendUp ? "var(--utilities-content-content-green)" : "var(--utilities-content-content-red)" }}>+{selectedAgent.trend}%</span>
+                          <img src={`/icons/12px/${selectedAgent.trendUp ? "ArrowTop" : "ArrowBottom"}.svg`} width={12} height={12} alt="" style={{ filter: selectedAgent.trendUp ? "brightness(0) saturate(100%) invert(52%) sepia(74%) saturate(422%) hue-rotate(92deg) brightness(96%) contrast(92%)" : "brightness(0) saturate(100%) invert(38%) sepia(60%) saturate(850%) hue-rotate(327deg) brightness(92%) contrast(90%)" }} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Charts - reuses sad-charts / sad-chart-card */}
+                  <div className="sad-charts">
+                    {/* Performance vs Team Average */}
+                    <div className="sad-chart-card">
+                      <div className="sad-chart-header">
+                        <div className="sad-chart-title"><span>Performance vs Team Average</span></div>
+                        <div className="sad-chart-subtitle" style={{ display: "flex", gap: 12 }}>
+                          <span style={{ display: "flex", alignItems: "center", gap: 4 }}><span style={{ width: 6, height: 6, borderRadius: 99, background: "var(--stroke-accent)", display: "inline-block" }} />{selectedAgent.name}</span>
+                          <span style={{ display: "flex", alignItems: "center", gap: 4 }}><span style={{ width: 6, height: 6, borderRadius: 99, background: "var(--stroke-secondarystrong)", display: "inline-block" }} />Team average</span>
+                        </div>
+                      </div>
+                      <div className="sad-chart-content-wrap">
+                        <div className="sad-chart-container" style={{ position: "relative" }}>
+                          {/* Vertical dashed grid lines */}
+                          <div style={{ position: "absolute", top: 0, bottom: 34, left: 130, right: 0, pointerEvents: "none" }}>
+                            {Array.from({ length: 11 }).map((_, i) => (
+                              <div key={i} style={{ position: "absolute", top: 0, bottom: 0, left: `${i * 10}%`, borderLeft: i === 0 || i === 10 ? "1px solid var(--stroke-dashed)" : "1px dashed var(--stroke-dashed)" }} />
+                            ))}
+                          </div>
+                          {[
+                            { label: "Follow-up action", agent: 90, team: 78 },
+                            { label: "Knowledge accuracy", agent: 82, team: 75 },
+                            { label: "Escalation handling", agent: 68, team: 82 },
+                            { label: "Closing protocol", agent: 95, team: 65 },
+                            { label: "Empathy display", agent: 55, team: 72 },
+                            { label: "Issue resolution", agent: 72, team: 85 },
+                          ].map((c) => (
+                            <div key={c.label} style={{ display: "flex", alignItems: "center" }}>
+                              <div style={{ width: 130, flexShrink: 0, padding: "8px 0 8px 14px", fontSize: 12, color: "var(--content-tertiary)" }}>{c.label}</div>
+                              <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 4, padding: "8px 0" }}>
+                                <div style={{ height: 6, borderRadius: 99, width: `${c.agent}%`, background: "var(--stroke-accent)", position: "relative", zIndex: 1 }} />
+                                <div style={{ height: 6, borderRadius: 99, width: `${c.team}%`, background: "#e2e3e6", position: "relative", zIndex: 1 }} />
+                              </div>
+                            </div>
+                          ))}
+                          <div style={{ position: "relative", height: 24, marginLeft: 130, marginRight: 0, marginBottom: 8 }}>
+                            {Array.from({ length: 11 }).map((_, i) => (
+                              <span key={i} style={{ position: "absolute", left: `${i * 10}%`, transform: "translateX(-50%)", fontSize: 12, color: "var(--content-tertiary)", whiteSpace: "nowrap" }}>{i * 10}%</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Score timeline */}
+                    <div className="sad-chart-card">
+                      <div className="sad-chart-header">
+                        <div className="sad-chart-title"><span>Score timeline</span></div>
+                        <div className="sad-chart-subtitle" style={{ display: "flex", gap: 12 }}>
+                          <span style={{ display: "flex", alignItems: "center", gap: 4 }}><span style={{ width: 6, height: 6, borderRadius: 99, background: "var(--stroke-accent)", display: "inline-block" }} />{selectedAgent.name}</span>
+                        </div>
+                      </div>
+                      <div className="sad-chart-content-wrap" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+                        <div className="sad-chart-container" style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+                          {/* Chart row: Y labels + chart area */}
+                          <div style={{ display: "flex", flex: 1, minHeight: 160 }}>
+                            {/* Y axis labels - offset by half line-height to center on grid lines */}
+                            <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "0 0 0 14px", margin: "12px 0 4px", fontSize: 12, lineHeight: "16px", color: "var(--content-tertiary)", textAlign: "right", width: 36, flexShrink: 0 }}>
+                              {[100, 90, 80, 70, 60].map((v) => <span key={v}>{v}</span>)}
+                            </div>
+                            {/* Chart area */}
+                            <div style={{ position: "relative", padding: "0 16px 0 10px", flex: 1, margin: "20px 0 12px" }}>
+                              {/* Grid lines - 5 lines evenly distributed */}
+                              {[0, 1, 2, 3, 4].map((i) => (
+                                <div key={i} style={{ position: "absolute", left: 14, right: 22, top: `${i * 25}%`, borderTop: "1px dashed var(--stroke-dashed)" }} />
+                              ))}
+                              {/* Curve area */}
+                              <div style={{ position: "absolute", top: 0, left: 14, right: 22, bottom: 0 }}>
+                                {(() => {
+                                  const scores = [78, 84, 75, 97, 78, 66];
+                                  const n = scores.length;
+                                  const pts = scores.map((s, i) => ({
+                                    px: i / (n - 1),
+                                    py: (100 - s) / 40,
+                                  }));
+                                  const scale = (p) => ({ x: p.px * 1000, y: p.py * 1000 });
+                                  const sp = pts.map(scale);
+                                  let linePath = `M${sp[0].x},${sp[0].y}`;
+                                  for (let i = 0; i < sp.length - 1; i++) {
+                                    const p0 = sp[Math.max(i - 1, 0)];
+                                    const p1 = sp[i];
+                                    const p2 = sp[i + 1];
+                                    const p3 = sp[Math.min(i + 2, sp.length - 1)];
+                                    linePath += ` C${p1.x + (p2.x - p0.x) / 6},${p1.y + (p2.y - p0.y) / 6} ${p2.x - (p3.x - p1.x) / 6},${p2.y - (p3.y - p1.y) / 6} ${p2.x},${p2.y}`;
+                                  }
+                                  const fillPath = linePath + ` L1000,1000 L0,1000 Z`;
+                                  return (
+                                    <svg viewBox="0 0 1000 1000" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }}>
+                                      <defs>
+                                        <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                                          <stop offset="0%" stopColor="var(--stroke-accent)" stopOpacity="0.1" />
+                                          <stop offset="100%" stopColor="var(--stroke-accent)" stopOpacity="0" />
+                                        </linearGradient>
+                                      </defs>
+                                      <path d={fillPath} style={{ fill: "url(#areaGrad)" }} />
+                                      <path d={linePath} stroke="var(--stroke-accent)" strokeWidth="1.5" vectorEffect="non-scaling-stroke" style={{ fill: "none" }} />
+                                    </svg>
+                                  );
+                                })()}
+                                {/* Dots */}
+                                {[78, 84, 75, 97, 78, 66].map((s, i) => (
+                                  <div key={i} style={{
+                                    position: "absolute",
+                                    left: `${(i / 5) * 100}%`,
+                                    top: `${((100 - s) / 40) * 100}%`,
+                                    width: 8, height: 8, borderRadius: "50%",
+                                    background: "var(--stroke-accent)",
+                                    boxShadow: "0 0 0 1px var(--surface-primary)",
+                                    transform: "translate(-50%, -50%)",
+                                  }} />
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                          {/* X axis labels */}
+                          <div style={{ display: "flex", justifyContent: "space-between", padding: "4px 22px 12px 50px", fontSize: 12, color: "var(--content-tertiary)", textAlign: "center" }}>
+                            {["Jan", "Feb", "Mar", "Apr", "Jun", "Jul"].map((m) => <span key={m}>{m}</span>)}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Criterion Pass Rates - reuses sad-chart-card / sad-bar-item */}
+                  <div style={{ padding: "0 20px 20px" }}>
+                    <div className="sad-chart-card" style={{ flex: "none" }}>
+                      <div className="sad-chart-header">
+                        <div className="sad-chart-title"><span>Criterion Pass Rates</span></div>
+                        <span className="sad-chart-subtitle">Met / Total</span>
+                      </div>
+                      <div className="sad-chart-content-wrap">
+                        <div className="sad-chart-container">
+                          {[
+                            { label: "Follow-up action", ratio: "9/10", pct: 90, color: "var(--utilities-content-content-green)" },
+                            { label: "Knowledge accuracy", ratio: "9/11", pct: 82, color: "var(--utilities-content-content-green)" },
+                            { label: "Escalation handling", ratio: "9/11", pct: 82, color: "var(--utilities-content-content-green)" },
+                            { label: "Closing protocol", ratio: "6/10", pct: 60, color: "var(--utilities-content-content-orange)" },
+                          ].map((c) => (
+                            <div className="sad-bar-item" key={c.label}>
+                              <div className="sad-bar-label-row">
+                                <span className="sad-bar-label">{c.label}</span>
+                                <span className="sad-bar-ratio">{c.ratio}</span>
+                                <span className="sad-bar-pct" style={{ color: c.color }}>{c.pct}%</span>
+                              </div>
+                              <div className="sad-bar-track">
+                                <div className="sad-bar-fill" style={{ width: `${c.pct}%`, background: c.color }} />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Evaluation Detail Modal */}
       {selectedEval && (
