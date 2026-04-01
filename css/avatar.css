@@ -30,3 +30,12 @@
   height: 28px;
   font-size: 10px;
 }
+
+.avatar-lg {
+  width: 56px;
+  height: 56px;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--content-tertiary);
+  background: var(--surface-tint);
+}

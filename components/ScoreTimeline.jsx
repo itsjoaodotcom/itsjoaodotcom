@@ -1,3 +1,7 @@
+"use client";
+
+import { useState, useRef } from "react";
+
 const defaultScores = [
   { month: "Jan", score: 78 },
   { month: "Feb", score: 84 },
@@ -31,8 +35,21 @@ function buildCurvePath(scores) {
 }
 
 export default function ScoreTimeline({ userName = "Priya Sharma", data = defaultScores }) {
+  const [hovered, setHovered] = useState(null);
+  const wrapRef = useRef(null);
   const linePath = buildCurvePath(data);
   const fillPath = linePath + " L1000,1000 L0,1000 Z";
+
+  function handleDotHover(e, d, i) {
+    const rect = wrapRef.current.getBoundingClientRect();
+    setHovered({
+      index: i,
+      month: d.month,
+      score: d.score,
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  }
 
   return (
     <div className="score-timeline">
@@ -47,12 +64,10 @@ export default function ScoreTimeline({ userName = "Priya Sharma", data = defaul
       </div>
 
       <div className="score-timeline-content">
-        <div className="score-timeline-inner">
+        <div className="score-timeline-inner" ref={wrapRef} onMouseLeave={() => setHovered(null)}>
           {/* Y-axis */}
           <div className="score-timeline-yaxis">
-            {yLabels.map((v) => (
-              <span key={v}>{v}</span>
-            ))}
+            {yLabels.map((v) => <span key={v}>{v}</span>)}
           </div>
 
           {/* Chart body */}
@@ -60,9 +75,7 @@ export default function ScoreTimeline({ userName = "Priya Sharma", data = defaul
             <div className="score-timeline-chart-area">
               {/* Grid lines */}
               <div className="score-timeline-grid">
-                {yLabels.map((v) => (
-                  <div key={v} className="score-timeline-gridline" />
-                ))}
+                {yLabels.map((v) => <div key={v} className="score-timeline-gridline" />)}
               </div>
 
               {/* SVG curve + fill */}
@@ -82,11 +95,25 @@ export default function ScoreTimeline({ userName = "Priya Sharma", data = defaul
                 {data.map((d, i) => (
                   <div
                     key={i}
-                    className="score-timeline-dot"
+                    className={`score-timeline-dot${hovered && hovered.index === i ? " score-timeline-dot--active" : ""}`}
                     style={{
                       left: `${(i / (data.length - 1)) * 100}%`,
                       top: `${((yMax - d.score) / yRange) * 100}%`,
                     }}
+                    onMouseEnter={(e) => handleDotHover(e, d, i)}
+                  />
+                ))}
+
+                {/* Hover hit areas (larger invisible zones) */}
+                {data.map((d, i) => (
+                  <div
+                    key={`hit-${i}`}
+                    className="score-timeline-hit"
+                    style={{
+                      left: `${(i / (data.length - 1)) * 100}%`,
+                      top: `${((yMax - d.score) / yRange) * 100}%`,
+                    }}
+                    onMouseEnter={(e) => handleDotHover(e, d, i)}
                   />
                 ))}
               </div>
@@ -94,11 +121,21 @@ export default function ScoreTimeline({ userName = "Priya Sharma", data = defaul
 
             {/* X-axis */}
             <div className="score-timeline-xaxis">
-              {data.map((d) => (
-                <span key={d.month}>{d.month}</span>
-              ))}
+              {data.map((d) => <span key={d.month}>{d.month}</span>)}
             </div>
           </div>
+
+          {/* Tooltip */}
+          {hovered && (
+            <div className="score-timeline-tooltip" style={{ left: hovered.x, top: hovered.y }}>
+              <div className="score-timeline-tooltip-title">{hovered.month}</div>
+              <div className="score-timeline-tooltip-row">
+                <span className="score-timeline-tooltip-dot" />
+                <span className="score-timeline-tooltip-name">{userName}</span>
+                <span className="score-timeline-tooltip-value">{hovered.score}</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -445,6 +445,9 @@
 
 .sad-chart-content-wrap {
   padding: 0 2px 2px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .sad-chart-container {
@@ -452,6 +455,7 @@
   border: 1px solid var(--stroke-primary);
   border-radius: 6px;
   overflow: hidden;
+  flex: 1;
 }
 
 .sad-chart-content {
@@ -884,6 +888,11 @@
 
 .sad-col-140 {
   width: 140px;
+  flex-shrink: 0;
+}
+
+.sad-col-200 {
+  width: 200px;
   flex-shrink: 0;
 }
 
@@ -1579,55 +1588,93 @@
   padding: 4px 10px 8px;
 }
 
-/* ── Evaluations table (Agent Detail Modal) ── */
+/* ── Agent Hero Card (Agent Detail Modal) ── */
 
-.sad-eval-table {
-  width: 100%;
-  border-collapse: collapse;
+.sad-agent-hero {
+  display: flex;
+  align-items: end;
+  gap: 6px;
+  padding: 32px;
+}
+
+.sad-agent-hero-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+
+.sad-agent-hero-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.sad-agent-hero-name {
   font-family: var(--font-family);
-}
-
-.sad-eval-table thead th {
-  text-align: left;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 16px;
-  color: var(--content-tertiary);
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--stroke-primary);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: -0.4px;
+  color: var(--content-secondary);
   white-space: nowrap;
-  font-feature-settings: 'lnum' 1, 'pnum' 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.sad-eval-table tbody td {
-  padding: 14px;
-  border-bottom: 1px solid var(--stroke-primary);
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 20px;
-  letter-spacing: -0.28px;
-  color: var(--content-primary);
-  vertical-align: middle;
-  white-space: nowrap;
-  font-feature-settings: 'lnum' 1, 'pnum' 1;
-}
-
-.sad-eval-table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-.sad-eval-col-id { width: 80px; }
-.sad-eval-col-flex { /* auto */ }
-.sad-eval-col-fixed { width: 148px; }
-.sad-eval-col-date { width: 140px; }
-
-.sad-eval-muted {
-  color: var(--content-tertiary);
-}
-
-.sad-eval-violation {
+.sad-agent-hero-meta {
   display: flex;
   align-items: center;
   gap: 6px;
-  color: var(--utilities-content-content-red);
+  flex-wrap: wrap;
 }
+
+.sad-agent-hero-dot {
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--content-tertiary);
+}
+
+.sad-agent-hero-evals {
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--content-tertiary);
+  letter-spacing: -0.28px;
+  white-space: nowrap;
+}
+
+.sad-agent-hero-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.sad-agent-hero-score {
+  font-family: var(--font-family);
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 36px;
+  letter-spacing: -0.64px;
+  font-feature-settings: 'lnum' 1, 'pnum' 1;
+}
+
+.sad-agent-hero-trend {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  justify-content: flex-end;
+  font-family: var(--font-family);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+}
+

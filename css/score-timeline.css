@@ -78,6 +78,7 @@
   flex: 1;
   display: flex;
   min-height: 0;
+  position: relative;
 }
 
 /* ── Y-axis labels ── */
@@ -151,8 +152,26 @@
   height: 8px;
   border-radius: 50%;
   background: var(--charts-positive);
-  box-shadow: 0 0 0 1px var(--surface-primary);
+  box-shadow: 0 0 0 1.5px var(--surface-primary);
   transform: translate(-50%, -50%);
+  transition: width 0.15s, height 0.15s, box-shadow 0.15s;
+  z-index: 2;
+}
+
+.score-timeline-dot--active {
+  width: 10px;
+  height: 10px;
+  box-shadow: 0 0 0 2px var(--surface-primary), 0 0 0 4px var(--charts-positivesubtle);
+}
+
+/* Invisible hit area for easier hover */
+.score-timeline-hit {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 3;
 }
 
 /* ── X-axis labels ── */
@@ -170,9 +189,53 @@
   font-feature-settings: 'lnum' 1, 'pnum' 1;
 }
 
-/* ── Responsive: only simplify x-axis labels & dots ── */
+/* ── Tooltip ── */
+.score-timeline-tooltip {
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+  background: var(--surface-tooltip, #010103);
+  color: var(--content-ontooltip, #fafafc);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-family: var(--font-family);
+  font-size: 12px;
+  line-height: 16px;
+  white-space: nowrap;
+  transform: translate(-50%, -100%);
+  margin-top: -12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
 
-/* < 400px — hide alternate x-axis labels & dots */
+.score-timeline-tooltip-title {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.score-timeline-tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.score-timeline-tooltip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--charts-positive);
+  flex-shrink: 0;
+}
+
+.score-timeline-tooltip-name {
+  color: var(--content-ontooltipsecondary, rgba(250,250,252,0.5));
+}
+
+.score-timeline-tooltip-value {
+  font-weight: 500;
+}
+
+/* ── Responsive (container queries) ── */
+
 @container timeline (max-width: 400px) {
   .score-timeline-xaxis span:nth-child(2),
   .score-timeline-xaxis span:nth-child(4),
@@ -187,23 +250,12 @@
   }
 }
 
-/* < 300px — show only first and last x-axis labels & dots */
 @container timeline (max-width: 300px) {
-  .score-timeline-xaxis span {
-    visibility: hidden;
-  }
-
+  .score-timeline-xaxis span { visibility: hidden; }
   .score-timeline-xaxis span:first-child,
-  .score-timeline-xaxis span:last-child {
-    visibility: visible;
-  }
+  .score-timeline-xaxis span:last-child { visibility: visible; }
 
-  .score-timeline-dot {
-    visibility: hidden;
-  }
-
+  .score-timeline-dot { visibility: hidden; }
   .score-timeline-dot:first-child,
-  .score-timeline-dot:last-child {
-    visibility: visible;
-  }
+  .score-timeline-dot:last-child { visibility: visible; }
 }

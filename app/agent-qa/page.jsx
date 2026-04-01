@@ -1,3 +1,4 @@
+import Link from "next/link";
 import DashboardShell from "../../components/DashboardShell";
 
 export const metadata = { title: "Clarity – Scoring Agents" };
@@ -111,9 +112,9 @@ export default function AgentQAPage() {
                 </td>
                 <td>
                   <div className="qa-actions-cell">
-                    <button className="btn btn-ghost btn-icon btn-sm">
+                    <Link href="/scoring-agents/new" className="btn btn-ghost btn-icon btn-sm">
                       <img src="/icons/16px/Edit.svg" width={16} height={16} alt="Edit" style={iconFilter} />
-                    </button>
+                    </Link>
                     <button className="btn btn-ghost btn-icon btn-sm">
                       <img src="/icons/16px/Trash.svg" width={16} height={16} alt="Delete" style={iconFilter} />
                     </button>

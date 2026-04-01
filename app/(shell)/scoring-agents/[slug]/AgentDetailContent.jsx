@@ -9,6 +9,8 @@ import DateRangeButton from "../../../../components/DateRangeButton";
 import { FiltersButton, FiltersPopover } from "../../../../components/FiltersPopover";
 import PerformanceComparison from "../../../../components/PerformanceComparison";
 import ScoreTimeline from "../../../../components/ScoreTimeline";
+import WeeklyPerformance from "../../../../components/WeeklyPerformance";
+import DonutChart from "../../../../components/DonutChart";
 
 const iconFilter = { filter: "brightness(0) invert(0.53)" };
 
@@ -118,7 +120,7 @@ const evaluations = [
   },
   {
     id: "05", name: "Marcus Webb", avatar: "/avatars/Avatar 5.png", team: "Chat", channel: "Chat", channelIcon: "LiveChat", score: 74, violations: null, date: "10/01/2026", time: "10:21:59",
-    contactName: "Sarah Chen", contactAvatar: "/avatars/Avatar 12.png", title: "Subscription Upgrade Inquiry", channelTag: "call",
+    contactName: "Sarah Chen", contactAvatar: "/avatars/Avatar 13.png", title: "Subscription Upgrade Inquiry", channelTag: "call",
     description: "Customer called to inquire about upgrading their subscription plan. The agent provided clear information about the available options and pricing.",
     criteria: [
       { criterion: "Response Time", category: "Communication", result: "Pass", score: 78, reasoning: "Answered on second ring." },
@@ -130,7 +132,7 @@ const evaluations = [
   },
   {
     id: "06", name: "Nina Petrov", avatar: "/avatars/Avatar 6.png", team: "Chat", channel: "Chat", channelIcon: "LiveChat", score: 88, violations: null, date: "20/12/2025", time: "08:44:17",
-    contactName: "David Park", contactAvatar: "/avatars/Avatar 13.png", title: "Password Reset Assistance", channelTag: "chat",
+    contactName: "David Park", contactAvatar: "/avatars/Avatar 3.png", title: "Password Reset Assistance", channelTag: "chat",
     description: "Customer needed help resetting their account password. The agent walked the customer through the reset process and verified the account was accessible.",
     criteria: [
       { criterion: "Response Time", category: "Communication", result: "Pass", score: 94, reasoning: "Responded within 20 seconds." },
@@ -163,16 +165,16 @@ const criteriaDefinitions = [
 ];
 
 const agentsReportData = [
-  { name: "Sarah Al-Rashid", avatar: "/avatars/Avatar 01.png", channel: "Chat Support", channelIcon: "LiveChat", score: 96, trend: 4.2, trendUp: true, evaluations: 142 },
-  { name: "Fatima Noor", avatar: "/avatars/Avatar 2.png", channel: "Social media", channelIcon: "Globe", score: 94, trend: 2.8, trendUp: true, evaluations: 128 },
-  { name: "Layla Hassan", avatar: "/avatars/Avatar 3.png", channel: "Social media", channelIcon: "Globe", score: 91, trend: 1.5, trendUp: false, evaluations: 98 },
-  { name: "Emma Rodriguez", avatar: "/avatars/Avatar 4.png", channel: "Email", channelIcon: "Email", score: 89, trend: 3.1, trendUp: true, evaluations: 86 },
-  { name: "Priya Sharma", avatar: "/avatars/Avatar 5.png", channel: "Call center", channelIcon: "AnswerCall", score: 88, trend: 0.8, trendUp: true, evaluations: 74 },
-  { name: "James Mitchell", avatar: "/avatars/Avatar 6.png", channel: "Email", channelIcon: "Email", score: 85, trend: 1.2, trendUp: false, evaluations: 112 },
+  { name: "Sarah Al-Rashid", avatar: "/avatars/Avatar 2.png", channel: "Chat Support", channelIcon: "LiveChat", score: 96, trend: 4.2, trendUp: true, evaluations: 142 },
+  { name: "Fatima Noor", avatar: "/avatars/Avatar 4.png", channel: "Social media", channelIcon: "Globe", score: 94, trend: 2.8, trendUp: true, evaluations: 128 },
+  { name: "Layla Hassan", avatar: "/avatars/Avatar 6.png", channel: "Social media", channelIcon: "Globe", score: 91, trend: 1.5, trendUp: false, evaluations: 98 },
+  { name: "Emma Rodriguez", avatar: "/avatars/Avatar 8.png", channel: "Email", channelIcon: "Email", score: 89, trend: 3.1, trendUp: true, evaluations: 86 },
+  { name: "Priya Sharma", avatar: "/avatars/Avatar 10.png", channel: "Call center", channelIcon: "AnswerCall", score: 88, trend: 0.8, trendUp: true, evaluations: 74 },
+  { name: "James Mitchell", avatar: "/avatars/Avatar 01.png", channel: "Email", channelIcon: "Email", score: 85, trend: 1.2, trendUp: false, evaluations: 112 },
   { name: "David Chen", avatar: "/avatars/Avatar 7.png", channel: "Chat Support", channelIcon: "LiveChat", score: 82, trend: 2, trendUp: true, evaluations: 95 },
 ];
 
-const tabs = ["Evaluations", "Agents Report", "Teams Report", "History"];
+const tabs = ["Evaluations", "Agents Report", "Teams Report", "Alerts"];
 const tabIcons = { "Evaluations": "Reports", "Agents Report": "Users", "Teams Report": "Reports" };
 
 export default function AgentDetailContent({ slug }) {
@@ -186,7 +188,11 @@ export default function AgentDetailContent({ slug }) {
   const [scoreInfoOpen, setScoreInfoOpen] = useState(false);
   const [criterionExpanded, setCriterionExpanded] = useState(false);
   const [evalsExpanded, setEvalsExpanded] = useState(false);
+  const [topAgentsExpanded, setTopAgentsExpanded] = useState(false);
+  const [modalCriterionExpanded, setModalCriterionExpanded] = useState(false);
+  const [modalEvalsExpanded, setModalEvalsExpanded] = useState(false);
   const [selectedAgent, setSelectedAgent] = useState(null);
+  const [returnToAgent, setReturnToAgent] = useState(null);
   const scoreInfoRef = useRef(null);
   const [scoreEditMode, setScoreEditMode] = useState(false);
   const scoreDefaults = { critical: 75, belowStandard: 85, onTrack: 92, highPerforming: 97, bestInClass: 97 };
@@ -462,7 +468,7 @@ export default function AgentDetailContent({ slug }) {
           </div>
 
           {/* Score Distribution */}
-          <div className="sad-chart-card">
+          <div className="sad-chart-card sad-chart-card-viewmore">
             <div className="sad-chart-header">
               <div className="sad-chart-title">
                 <span>Score Distribution</span>
@@ -717,7 +723,7 @@ export default function AgentDetailContent({ slug }) {
         </div>
 
         {/* Agents table - reuses same table pattern as Evaluations */}
-        <div style={{ padding: "0 20px 20px" }}>
+        <div style={{ padding: "0 0 20px" }}>
           <div className="sa-table-header">
             <div className="sa-th sad-col-flex"><span className="sa-th-label">Name</span> <img src="/icons/12px/ArrowBottom.svg" width={12} height={12} alt="" style={iconFilter} /></div>
             <div className="sa-th sad-col-flex"><span className="sa-th-label">Channel</span></div>
@@ -755,6 +761,287 @@ export default function AgentDetailContent({ slug }) {
         </div>
       </div>
 
+      {/* Teams Report tab */}
+      <div className="sad-scroll" style={{ display: activeTab === "Teams Report" ? "" : "none" }}>
+        {/* Top metric cards — Team avg score & Compliance rate */}
+        <div className="sa-metrics">
+          <div className="sa-metric-card" style={{ flex: "1 1 0", minWidth: 240 }}>
+            <div className="sa-metric-header">
+              <span className="sa-metric-label">Team avg score</span>
+            </div>
+            <div className="sa-metric-value-row" style={{ justifyContent: "space-between" }}>
+              <div style={{ display: "flex", alignItems: "end", gap: 6 }}>
+                <span style={{ fontSize: 32, fontWeight: 600, letterSpacing: "-0.64px", lineHeight: "36px", color: "var(--utilities-content-content-green)" }}>85%</span>
+                <div style={{ display: "flex", alignItems: "center", gap: 2, paddingBottom: 4 }}>
+                  <span style={{ fontSize: 14, color: "var(--utilities-content-content-green)" }}>5%</span>
+                  <img src="/icons/16px/ArrowTopRight.svg" width={16} height={16} alt="" style={{ filter: "brightness(0) saturate(100%) invert(52%) sepia(74%) saturate(422%) hue-rotate(92deg) brightness(96%) contrast(92%)" }} />
+                </div>
+              </div>
+              <span style={{ fontSize: 14, color: "var(--content-tertiary)" }}>weighted average</span>
+            </div>
+          </div>
+          <div className="sa-metric-card" style={{ flex: "1 1 0", minWidth: 240 }}>
+            <div className="sa-metric-header">
+              <span className="sa-metric-label">Compliance rate</span>
+            </div>
+            <div className="sa-metric-value-row" style={{ justifyContent: "space-between" }}>
+              <div style={{ display: "flex", alignItems: "end", gap: 6 }}>
+                <span style={{ fontSize: 32, fontWeight: 600, letterSpacing: "-0.64px", lineHeight: "36px", color: "var(--utilities-content-content-orange)" }}>80%</span>
+                <div style={{ display: "flex", alignItems: "center", gap: 2, paddingBottom: 4 }}>
+                  <span style={{ fontSize: 14, color: "var(--utilities-content-content-red)" }}>5%</span>
+                  <img src="/icons/16px/ArrowBottomRight.svg" width={16} height={16} alt="" style={{ filter: "brightness(0) saturate(100%) invert(38%) sepia(60%) saturate(850%) hue-rotate(327deg) brightness(92%) contrast(90%)" }} />
+                </div>
+              </div>
+              <span style={{ fontSize: 14, color: "var(--content-tertiary)" }}>weighted average</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Small metric cards row */}
+        <div className="sa-metrics" style={{ paddingTop: 0 }}>
+          {[
+            { icon: "Reports", label: "Evaluations", value: "424", trend: "5%", trendUp: true, sub: "vs previous week" },
+            { icon: "Users", label: "Agents", value: "4", trend: null, trendUp: null, sub: "active this week" },
+            { icon: "Clock", label: "Avg response time", value: "424", trend: "18%", trendUp: false, sub: "vs previous week" },
+            { icon: "Clock", label: "CSAT", value: "4.8/5", trend: "0.1", trendUp: true, sub: "vs previous week" },
+          ].map((m) => (
+            <div className="sa-metric-card" key={m.label}>
+              <div className="sa-metric-header">
+                <img src={`/icons/16px/${m.icon}.svg`} width={16} height={16} alt="" style={iconFilter} />
+                <span className="sa-metric-label">{m.label}</span>
+              </div>
+              <div className="sa-metric-value-row" style={{ justifyContent: "space-between" }}>
+                <div style={{ display: "flex", alignItems: "end", gap: 6 }}>
+                  <span className="sa-metric-value">{m.value}</span>
+                  {m.trend && (
+                    <div style={{ display: "flex", alignItems: "center", gap: 2, paddingBottom: 1 }}>
+                      <span style={{ fontSize: 12, color: m.trendUp ? "var(--utilities-content-content-green)" : "var(--utilities-content-content-red)" }}>{m.trend}</span>
+                      <img src={`/icons/16px/${m.trendUp ? "ArrowTopRight" : "ArrowBottomRight"}.svg`} width={16} height={16} alt="" style={{ filter: m.trendUp ? "brightness(0) saturate(100%) invert(52%) sepia(74%) saturate(422%) hue-rotate(92deg) brightness(96%) contrast(92%)" : "brightness(0) saturate(100%) invert(38%) sepia(60%) saturate(850%) hue-rotate(327deg) brightness(92%) contrast(90%)" }} />
+                    </div>
+                  )}
+                </div>
+                <span style={{ fontSize: 12, color: "var(--content-tertiary)" }}>{m.sub}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Weekly performance chart */}
+        <div className="sad-charts">
+          <WeeklyPerformance />
+        </div>
+
+        {/* Teams table */}
+        <div style={{ padding: "0 0 20px" }}>
+          <div className="sa-table-header">
+            <div className="sa-th sad-col-flex"><span className="sa-th-label">Team</span> <img src="/icons/12px/ArrowBottom.svg" width={12} height={12} alt="" style={iconFilter} /></div>
+            <div className="sa-th sad-col-200"><span className="sa-th-label">Agents</span></div>
+            <div className="sa-th sad-col-200"><span className="sa-th-label">Avg Score</span> <img src="/icons/12px/ArrowBottom.svg" width={12} height={12} alt="" style={iconFilter} /></div>
+            <div className="sa-th sad-col-200"><span className="sa-th-label">Evaluations</span></div>
+            <div className="sa-th sad-col-200"><span className="sa-th-label">Violations</span> <img src="/icons/12px/ArrowBottom.svg" width={12} height={12} alt="" style={iconFilter} /></div>
+          </div>
+
+          {[
+            { icon: "LiveChat", team: "Chat Support", agents: 4, score: 79, evaluations: 10, violations: 2 },
+            { icon: "Globe", team: "Social media", agents: 2, score: 76, evaluations: 3, violations: 0 },
+            { icon: "Email", team: "Email", agents: 2, score: 62, evaluations: 5, violations: 0 },
+            { icon: "AnswerCall", team: "Call center", agents: 2, score: 67, evaluations: 4, violations: 0 },
+          ].map((t) => (
+            <div className="sa-row sad-row-clickable" key={t.team}>
+              <div className="sa-cell sad-col-flex">
+                <div className="sa-channel">
+                  <img src={`/icons/16px/${t.icon}.svg`} width={16} height={16} alt="" style={iconFilter} />
+                  <span className="sa-cell-text">{t.team}</span>
+                </div>
+              </div>
+              <div className="sa-cell sad-col-200">
+                <span className="sa-cell-text">{t.agents}</span>
+              </div>
+              <div className="sa-cell sad-col-200">
+                <span className="sa-cell-text" style={{ color: t.score >= 80 ? "var(--utilities-content-content-green)" : t.score >= 60 ? "var(--utilities-content-content-orange)" : "var(--utilities-content-content-red)" }}>{t.score}%</span>
+              </div>
+              <div className="sa-cell sad-col-200">
+                <span className="sa-cell-text">{t.evaluations}</span>
+              </div>
+              <div className="sa-cell sad-col-200">
+                {t.violations ? (
+                  <div className="sa-channel">
+                    <img src="/icons/16px/Critical.svg" width={16} height={16} alt="" />
+                    <span className="sa-cell-text" style={{ color: "var(--utilities-content-content-red)" }}>{t.violations}</span>
+                  </div>
+                ) : (
+                  <span className="sa-cell-text">0</span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Alerts tab */}
+      <div className="sad-scroll" style={{ display: activeTab === "Alerts" ? "" : "none" }}>
+        {/* Metric cards */}
+        <div className="sa-metrics">
+          {[
+            { label: "Total violations", value: "20", valueColor: "var(--utilities-content-content-red)" },
+            { label: "Acknowledged", value: "5", valueColor: "var(--content-accent)" },
+            { label: "Investigating", value: "3" },
+            { label: "Resolved", value: "12" },
+          ].map((m) => (
+            <div className="sa-metric-card" key={m.label}>
+              <div className="sa-metric-header">
+                <span className="sa-metric-label">{m.label}</span>
+              </div>
+              <div className="sa-metric-value-row">
+                <span className="sa-metric-value" style={m.valueColor ? { color: m.valueColor } : undefined}>{m.value}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Charts row — Violations by team + Violations by type */}
+        <div className="sad-charts">
+          <PerformanceComparison
+            title="Violations by team"
+            singleBar={{ color: "var(--utilities-content-content-red)", max: 10, step: 1, tooltipLabel: "Violations" }}
+            data={[
+              { label: "Chat support", value: 9 },
+              { label: "Call center", value: 8 },
+              { label: "Email", value: 5 },
+              { label: "Social media", value: 7 },
+            ]}
+          />
+          <DonutChart
+            title="Violations by type"
+            data={[
+              { label: "Unauthorized Action", color: "var(--utilities-content-content-red)", value: 8 },
+              { label: "Compliance Gap", color: "var(--content-accent)", value: 4 },
+              { label: "Policy Breach", color: "var(--utilities-content-content-orange)", value: 1 },
+            ]}
+          />
+        </div>
+
+        {/* Charts row — Violations by channel + Top agents with violations */}
+        <div className="sad-charts">
+          {/* Violations by channel — vertical bar chart */}
+          <WeeklyPerformance
+            title="Violations by channel"
+            subtitle={null}
+            data={[
+              { week: "Chat Support", pct: 50, color: "var(--utilities-content-content-red)" },
+              { week: "Social media", pct: 70, color: "var(--utilities-content-content-red)" },
+              { week: "Email", pct: 40, color: "var(--utilities-content-content-red)" },
+              { week: "Call center", pct: 50, color: "var(--utilities-content-content-red)" },
+            ]}
+          />
+
+          {/* Top agents with violations */}
+          {(() => {
+            const topAgentsData = [
+              { name: "Sarah Al-Rashid", avatar: "/avatars/Avatar 2.png", count: 6 },
+              { name: "Fatima Noor", avatar: "/avatars/Avatar 4.png", count: 4 },
+              { name: "Layla Hassan", avatar: "/avatars/Avatar 6.png", count: 3 },
+              { name: "Emma Rodriguez", avatar: "/avatars/Avatar 8.png", count: 2 },
+              { name: "Priya Sharma", avatar: "/avatars/Avatar 10.png", count: 1 },
+              { name: "James Mitchell", avatar: "/avatars/Avatar 01.png", count: 1 },
+            ];
+            const maxViolations = topAgentsData[0]?.count || 1;
+            const visibleAgents = topAgentsExpanded ? topAgentsData : topAgentsData.slice(0, 4);
+            return (
+              <div className="sad-chart-card sad-chart-card-viewmore">
+                <div className="sad-chart-header">
+                  <div className="sad-chart-title"><span>Top agents with violations</span></div>
+                  <span className="sad-chart-subtitle">Met / Total</span>
+                </div>
+                <div className="sad-chart-content-wrap">
+                  <div className="sad-chart-container">
+                    {visibleAgents.map((a) => (
+                      <div className="sad-bar-item" key={a.name}>
+                        <div className="sad-bar-label-row">
+                          <div className="sa-channel">
+                            <img src={a.avatar} width={16} height={16} alt="" style={{ borderRadius: 999, border: "1px solid var(--stroke-primary)" }} />
+                            <span className="sad-bar-label">{a.name}</span>
+                          </div>
+                          <span className="sad-bar-pct" style={{ color: "var(--content-primary)", fontWeight: 500 }}>{a.count}</span>
+                        </div>
+                        <div className="sad-bar-track">
+                          <div className="sad-bar-fill" style={{ width: `${(a.count / maxViolations) * 100}%`, background: "var(--utilities-content-content-red)" }} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {topAgentsData.length > 4 && (
+                  <div className="sad-viewmore-wrap" style={{ opacity: topAgentsExpanded ? 0 : undefined }}>
+                    <button className="btn btn-secondary btn-sm" onClick={() => setTopAgentsExpanded((v) => !v)}>
+                      <span className="btn-label">{topAgentsExpanded ? "View less" : "View more"}</span>
+                      <img src={`/icons/16px/${topAgentsExpanded ? "ArrowTop" : "ArrowBottom"}.svg`} width={16} height={16} alt="" style={iconFilter} />
+                    </button>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
+        </div>
+
+        {/* Violations table */}
+        <div style={{ padding: "0 0 20px" }}>
+          <div className="sa-table-header">
+            <div className="sa-th sad-col-148"><span className="sa-th-label">Criticality</span> <img src="/icons/12px/ArrowBottom.svg" width={12} height={12} alt="" style={iconFilter} /></div>
+            <div className="sa-th sad-col-flex"><span className="sa-th-label">Agent</span></div>
+            <div className="sa-th sad-col-flex"><span className="sa-th-label">Violation type</span></div>
+            <div className="sa-th sad-col-148"><span className="sa-th-label">Date</span></div>
+            <div className="sa-th sad-col-148"><span className="sa-th-label">Assign to</span></div>
+            <div className="sa-th sad-col-140"><span className="sa-th-label">Status</span></div>
+          </div>
+          {[
+            { criticality: "Critical", agent: "Sarah Al-Rashid", avatar: "/avatars/Avatar 2.png", type: "Compliance Gap", date: "20/03/2026", assignee: null, status: "Open" },
+            { criticality: "Critical", agent: "Fatima Noor", avatar: "/avatars/Avatar 4.png", type: "Unauthorized Action", date: "28/03/2026", assignee: { name: "João Pedro", avatar: "/avatars/Avatar 01.png" }, status: "Open" },
+            { criticality: "Major", agent: "Layla Hassan", avatar: "/avatars/Avatar 6.png", type: "Policy Breach", date: "29/03/2026", assignee: null, status: "Open" },
+            { criticality: "Major", agent: "Emma Rodriguez", avatar: "/avatars/Avatar 8.png", type: "Compliance Gap", date: "15/03/2026", assignee: null, status: "Resolved" },
+            { criticality: "Normal", agent: "Priya Sharma", avatar: "/avatars/Avatar 10.png", type: "Unauthorized Action", date: "18/03/2026", assignee: null, status: "Open" },
+            { criticality: "Critical", agent: "James Mitchell", avatar: "/avatars/Avatar 01.png", type: "Policy Breach", date: "04/03/2026", assignee: null, status: "Resolved" },
+            { criticality: "Minor", agent: "David Chen", avatar: "/avatars/Avatar 7.png", type: "Compliance Gap", date: "12/03/2026", assignee: null, status: "Resolved" },
+          ].map((v, i) => (
+            <div className="sa-row" key={i}>
+              <div className="sa-cell sad-col-148">
+                <div className="sa-channel">
+                  <img src={`/icons/16px/${v.criticality === "Critical" ? "Critical" : "ChartBars"}.svg`} width={16} height={16} alt="" style={v.criticality === "Critical" ? undefined : iconFilter} />
+                  <span className="sa-cell-text">{v.criticality}</span>
+                </div>
+              </div>
+              <div className="sa-cell sad-col-flex">
+                <div className="sa-channel">
+                  <img src={v.avatar} width={20} height={20} alt="" style={{ borderRadius: 999, border: "1px solid var(--stroke-primary)" }} />
+                  <span className="sa-cell-text">{v.agent}</span>
+                </div>
+              </div>
+              <div className="sa-cell sad-col-flex">
+                <span className="sa-cell-text">{v.type}</span>
+              </div>
+              <div className="sa-cell sad-col-148">
+                <span className="sa-cell-text" style={{ color: "var(--content-tertiary)" }}>{v.date}</span>
+              </div>
+              <div className="sa-cell sad-col-148">
+                {v.assignee ? (
+                  <div className="sa-channel">
+                    <img src={v.assignee.avatar} width={20} height={20} alt="" style={{ borderRadius: 999, border: "1px solid var(--stroke-primary)" }} />
+                    <span className="sa-cell-text">{v.assignee.name}</span>
+                  </div>
+                ) : (
+                  <div className="sa-channel" style={{ color: "var(--content-tertiary)" }}>
+                    <span style={{ fontSize: 14 }}>+ Assign</span>
+                  </div>
+                )}
+              </div>
+              <div className="sa-cell sad-col-140">
+                <Tag color={v.status === "Open" ? "red" : "green"} label={v.status} style="filled" size="sm" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Agent Detail Modal - reuses sad-modal pattern without chat panel */}
       {selectedAgent && (
         <div className="sad-modal-overlay" onClick={() => setSelectedAgent(null)}>
@@ -763,9 +1050,7 @@ export default function AgentDetailContent({ slug }) {
               <div className="sad-modal-left" style={{ borderRight: "none" }}>
                 <div className="sad-modal-topbar">
                   <div className="sad-modal-topbar-left">
-                    <img src={selectedAgent.avatar} width={16} height={16} alt="" style={{ borderRadius: 999, border: "1px solid var(--stroke-primary)" }} className="sad-modal-topbar-avatar" />
-                    <span className="sad-modal-topbar-name">{selectedAgent.name}</span>
-                    <Tag color="grey" label={selectedAgent.channel} size="sm" />
+                    <span className="sad-modal-topbar-name">Agent insights</span>
                   </div>
                   <div className="sad-modal-topbar-actions">
                     <button className="btn btn-ghost btn-sm btn-icon" onClick={() => setSelectedAgent(null)}>
@@ -775,52 +1060,30 @@ export default function AgentDetailContent({ slug }) {
                 </div>
 
                 <div className="sad-modal-left-scroll">
-                  {/* Top cards row */}
-                  <div className="sad-modal-details-wrap" style={{ display: "flex", gap: 12 }}>
-                    {/* Left: last evaluation details */}
-                    <div className="sad-modal-details" style={{ flex: 1 }}>
-                      <div className="sad-modal-details-header">
-                        <div className="sad-modal-details-meta">
-                          <div className="sad-modal-details-label">
-                            <img src="/icons/16px/Calendar.svg" width={16} height={16} alt="" style={iconFilter} />
-                            <span className="sad-modal-details-label-text">12/03/2026</span>
-                          </div>
-                          <div className="sad-modal-details-label">
-                            <img src="/icons/16px/Clock.svg" width={16} height={16} alt="" style={iconFilter} />
-                            <span className="sad-modal-details-label-text">16:30</span>
-                          </div>
-                        </div>
-                        <span className="sad-modal-details-id">conv-c9b103e2-9a70-4037-9ac0-ffcf63bc73a7-1</span>
+                  {/* Agent hero card */}
+                  <div className="sad-agent-hero">
+                    <div className="sad-agent-hero-left">
+                      <div className="avatar avatar-lg">
+                        {selectedAgent.avatar
+                          ? <img src={selectedAgent.avatar} width={56} height={56} alt="" style={{ borderRadius: 999 }} />
+                          : selectedAgent.name.split(" ").map(n => n[0]).join("")
+                        }
                       </div>
-                      <div className="sad-modal-details-body">
-                        <div className="sad-modal-details-card">
-                          <div className={`sad-modal-score-avatar ${selectedAgent.score >= 80 ? "sad-modal-score-green" : selectedAgent.score >= 60 ? "sad-modal-score-orange" : "sad-modal-score-red"}`}>
-                            {selectedAgent.score}
-                          </div>
-                          <div className="sad-modal-details-card-text">
-                            <p className="sad-modal-details-title">Account Access & Verification Issue</p>
-                            <p className="sad-modal-details-desc">Customer contacted support regarding a account inquiry. They were transferred to Nadia El-Amin who handled the interaction via chat. The conversation included 5 evaluated criteria points.</p>
-                          </div>
+                      <div className="sad-agent-hero-info">
+                        <span className="sad-agent-hero-name">{selectedAgent.name}</span>
+                        <div className="sad-agent-hero-meta">
+                          <Tag color="grey" label={selectedAgent.teams?.[0] || "Chat Support"} icon12Left={<img src={`/icons/12px/${selectedAgent.channelIcon || "LiveChat"}.svg`} width={12} height={12} alt="" style={iconFilter} />} />
+                          <Tag color="grey" label={selectedAgent.channel} iconLeft={false} />
+                          <span className="sad-agent-hero-dot">·</span>
+                          <span className="sad-agent-hero-evals">{selectedAgent.evaluations} conversations evaluated</span>
                         </div>
                       </div>
                     </div>
-
-                    {/* Right: overall stats */}
-                    <div className="sad-modal-details" style={{ minWidth: 220, maxWidth: 280 }}>
-                      <div className="sad-modal-details-header">
-                        <div className="sad-modal-details-meta">
-                          <div className="sad-modal-details-label">
-                            <img src="/icons/16px/ChartBars.svg" width={16} height={16} alt="" style={iconFilter} />
-                            <span className="sad-modal-details-label-text">{selectedAgent.evaluations} Conversations Evaluated</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="sad-modal-details-body">
-                        <div className="sad-modal-details-card" style={{ gap: 8 }}>
-                          <span style={{ fontSize: 24, fontWeight: 600, letterSpacing: "-0.48px", color: selectedAgent.score >= 80 ? "var(--utilities-content-content-green)" : selectedAgent.score >= 60 ? "var(--utilities-content-content-orange)" : "var(--utilities-content-content-red)" }}>{selectedAgent.score}%</span>
-                          <span style={{ fontSize: 12, color: selectedAgent.trendUp ? "var(--utilities-content-content-green)" : "var(--utilities-content-content-red)" }}>+{selectedAgent.trend}%</span>
-                          <img src={`/icons/12px/${selectedAgent.trendUp ? "ArrowTop" : "ArrowBottom"}.svg`} width={12} height={12} alt="" style={{ filter: selectedAgent.trendUp ? "brightness(0) saturate(100%) invert(52%) sepia(74%) saturate(422%) hue-rotate(92deg) brightness(96%) contrast(92%)" : "brightness(0) saturate(100%) invert(38%) sepia(60%) saturate(850%) hue-rotate(327deg) brightness(92%) contrast(90%)" }} />
-                        </div>
+                    <div className="sad-agent-hero-right">
+                      <span className="sad-agent-hero-score" style={{ color: selectedAgent.score >= 80 ? "var(--utilities-content-content-green)" : selectedAgent.score >= 60 ? "var(--utilities-content-content-orange)" : "var(--utilities-content-content-red)" }}>{selectedAgent.score}%</span>
+                      <div className="sad-agent-hero-trend" style={{ color: selectedAgent.trendUp ? "var(--utilities-content-content-green)" : "var(--utilities-content-content-red)" }}>
+                        <span>{selectedAgent.trend}%</span>
+                        <img src={`/icons/16px/${selectedAgent.trendUp ? "ArrowTopRight" : "ArrowBottomRight"}.svg`} width={16} height={16} alt="" style={{ filter: selectedAgent.trendUp ? "brightness(0) saturate(100%) invert(52%) sepia(74%) saturate(422%) hue-rotate(92deg) brightness(96%) contrast(92%)" : "brightness(0) saturate(100%) invert(38%) sepia(60%) saturate(850%) hue-rotate(327deg) brightness(92%) contrast(90%)" }} />
                       </div>
                     </div>
                   </div>
@@ -856,7 +1119,7 @@ export default function AgentDetailContent({ slug }) {
 
                   {/* Criterion Pass Rates - reuses sad-chart-card / sad-bar-item */}
                   <div style={{ padding: "0 16px 16px" }}>
-                    <div className="sad-chart-card" style={{ flex: "none" }}>
+                    <div className={`sad-chart-card sad-chart-card-viewmore${modalCriterionExpanded ? " sad-chart-expanded" : ""}`} style={{ flex: "none" }}>
                       <div className="sad-chart-header">
                         <div className="sad-chart-title"><span>Criterion Pass Rates</span></div>
                         <span className="sad-chart-subtitle">Met / Total</span>
@@ -884,14 +1147,20 @@ export default function AgentDetailContent({ slug }) {
                           ))}
                         </div>
                       </div>
+                      <div className="sad-viewmore-wrap">
+                        <button className="btn btn-secondary btn-sm" onClick={() => setModalCriterionExpanded(true)}>
+                          <span className="btn-label">View more</span>
+                          <img src="/icons/16px/ArrowBottom.svg" width={16} height={16} alt="" style={iconFilter} />
+                        </button>
+                      </div>
                     </div>
                   </div>
 
-                  {/* Evaluations table */}
+                  {/* Recent Evaluations table */}
                   <div style={{ padding: "0 16px 16px" }}>
-                    <div className="sad-chart-card" style={{ flex: "none" }}>
+                    <div className={`sad-chart-card sad-chart-card-viewmore${modalEvalsExpanded ? " sad-chart-expanded" : ""}`} style={{ flex: "none" }}>
                       <div className="sad-chart-header">
-                        <div className="sad-chart-title"><span>Evaluations</span></div>
+                        <div className="sad-chart-title"><span>Recent Evaluations</span></div>
                         <button className="btn btn-ghost btn-icon">
                           <img src="/icons/16px/ChevronTop.svg" width={16} height={16} alt="" style={iconFilter} />
                         </button>
@@ -899,43 +1168,32 @@ export default function AgentDetailContent({ slug }) {
                       <div className="sad-chart-content-wrap">
                         <div className="sad-chart-container">
                           <div className="sa-table-header">
-                            <div className="sa-th sad-col-id"><span className="sa-th-label">ID</span></div>
-                            <div className="sa-th sad-col-flex"><span className="sa-th-label">Agent Name</span></div>
-                            <div className="sa-th sad-col-flex"><span className="sa-th-label">Channel</span></div>
-                            <div className="sa-th sad-col-flex"><span className="sa-th-label">Team</span></div>
+                            <div className="sa-th sad-col-flex"><span className="sa-th-label">ID</span></div>
                             <div className="sa-th sad-col-148"><span className="sa-th-label">Score</span></div>
-                            <div className="sa-th sad-col-148"><span className="sa-th-label">Violations</span></div>
+                            <div className="sa-th sad-col-flex"><span className="sa-th-label">Channel</span></div>
+                            <div className="sa-th sad-col-flex"><span className="sa-th-label">Violations</span></div>
                             <div className="sa-th sad-col-140"><span className="sa-th-label">Date</span></div>
                           </div>
                           {[
-                            { id: "01", name: "Oliver Smith", channelIcon: "LiveChat", channel: "Chat", team: "Chat", score: 98, violations: null, date: "14/03/2026" },
-                            { id: "02", name: "Penelope Cruz", channelIcon: "AnswerCall", channel: "Call center", team: "Call center", score: 59, violations: null, date: "14/03/2026" },
-                            { id: "03", name: "Social media", channelIcon: "Globe", channel: "Advanced support", team: "Advanced support", score: 98, violations: null, date: "14/03/2026" },
-                            { id: "04", name: "Email", channelIcon: "Globe", channel: "Social media", team: "Social media", score: 86, violations: 1, date: "14/03/2026" },
-                            { id: "05", name: "Call center", channelIcon: "LiveChat", channel: "Chat", team: "Chat", score: 74, violations: null, date: "14/03/2026" },
-                            { id: "06", name: "Call center", channelIcon: "AnswerCall", channel: "Call center", team: "Chat", score: 74, violations: null, date: "14/03/2026" },
-                            { id: "07", name: "Call center", channelIcon: "Globe", channel: "Advanced support", team: "Chat", score: 74, violations: null, date: "14/03/2026" },
+                            { id: "01", score: 98, channel: "Chat", violations: null, date: "14/03/2026" },
+                            { id: "02", score: 59, channel: "Call center", violations: null, date: "14/03/2026" },
+                            { id: "03", score: 98, channel: "Advanced support", violations: null, date: "14/03/2026" },
+                            { id: "04", score: 86, channel: "Social media", violations: 1, date: "14/03/2026" },
+                            { id: "05", score: 74, channel: "Chat", violations: null, date: "14/03/2026" },
+                            { id: "06", score: 74, channel: "Call center", violations: null, date: "14/03/2026" },
+                            { id: "07", score: 74, channel: "Advanced support", violations: null, date: "14/03/2026" },
                           ].map((e) => (
-                            <div className="sa-row sad-row-clickable" key={e.id}>
-                              <div className="sa-cell sad-col-id">
+                            <div className="sa-row sad-row-clickable" key={e.id} onClick={() => { const ev = evaluations.find(v => v.id === e.id); if (ev) { setReturnToAgent(selectedAgent); setSelectedAgent(null); setSelectedEval(ev); setSelectedCriterion(0); setResultFilter(null); } }}>
+                              <div className="sa-cell sad-col-flex">
                                 <span className="sa-cell-text" style={{ color: "var(--content-tertiary)" }}>{e.id}</span>
-                              </div>
-                              <div className="sa-cell sad-col-flex">
-                                <span className="sa-cell-text">{e.name}</span>
-                              </div>
-                              <div className="sa-cell sad-col-flex">
-                                <div className="sa-channel">
-                                  <img src={`/icons/16px/${e.channelIcon}.svg`} width={16} height={16} alt="" style={iconFilter} />
-                                  <span className="sa-cell-text">{e.channel}</span>
-                                </div>
-                              </div>
-                              <div className="sa-cell sad-col-flex">
-                                <span className="sa-cell-text">{e.team}</span>
                               </div>
                               <div className="sa-cell sad-col-148">
                                 <span className="sa-cell-text" style={{ color: e.score >= 80 ? "var(--utilities-content-content-green)" : e.score >= 60 ? "var(--utilities-content-content-orange)" : "var(--utilities-content-content-red)" }}>{e.score}</span>
                               </div>
-                              <div className="sa-cell sad-col-148">
+                              <div className="sa-cell sad-col-flex">
+                                <span className="sa-cell-text">{e.channel}</span>
+                              </div>
+                              <div className="sa-cell sad-col-flex">
                                 {e.violations ? (
                                   <div className="sa-channel">
                                     <img src="/icons/16px/Critical.svg" width={16} height={16} alt="" />
@@ -952,6 +1210,12 @@ export default function AgentDetailContent({ slug }) {
                           ))}
                         </div>
                       </div>
+                      <div className="sad-viewmore-wrap">
+                        <button className="btn btn-secondary btn-sm" onClick={() => setModalEvalsExpanded(true)}>
+                          <span className="btn-label">View more</span>
+                          <img src="/icons/16px/ArrowBottom.svg" width={16} height={16} alt="" style={iconFilter} />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -963,14 +1227,19 @@ export default function AgentDetailContent({ slug }) {
 
       {/* Evaluation Detail Modal */}
       {selectedEval && (
-        <div className="sad-modal-overlay" onClick={() => { setSelectedEval(null); setSelectedCriterion(0); setResultFilter(null); }}>
+        <div className="sad-modal-overlay" onClick={() => { setSelectedEval(null); setSelectedCriterion(0); setResultFilter(null); setReturnToAgent(null); }}>
           <div className={`sad-modal-stroke${!chatOpen ? " sad-modal-collapsed" : ""}`}>
           <div className="sad-modal" onClick={(ev) => ev.stopPropagation()}>
             {/* ── Left Panel ── */}
             <div className="sad-modal-left">
               {/* Top bar */}
               <div className="sad-modal-topbar">
-                <div className="sad-modal-topbar-left">
+                <div className="sad-modal-topbar-left" style={returnToAgent ? { paddingLeft: 10 } : undefined}>
+                  {returnToAgent && (
+                    <button className="btn btn-ghost btn-icon btn-sm" onClick={(e) => { e.stopPropagation(); setSelectedEval(null); setSelectedAgent(returnToAgent); setReturnToAgent(null); }}>
+                      <img src="/icons/16px/ArrowLeft.svg" width={16} height={16} alt="" style={iconFilter} />
+                    </button>
+                  )}
                   <img src={selectedEval.contactAvatar || selectedEval.avatar} className="sad-modal-topbar-avatar" width={16} height={16} alt="" />
                   <span className="sad-modal-topbar-name">{selectedEval.contactName}</span>
                   <Tag color="grey" label={selectedEval.channelTag} size="sm" iconLeft={false} />

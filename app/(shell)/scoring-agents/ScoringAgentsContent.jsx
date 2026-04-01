@@ -304,7 +304,7 @@ export default function ScoringAgentsContent() {
 
             {/* Actions */}
             <div className="sa-cell sa-col-fixed-100 sa-cell-actions">
-              <button className="btn btn-ghost btn-icon" onClick={(e) => e.stopPropagation()}>
+              <button className="btn btn-ghost btn-icon" onClick={(e) => { e.stopPropagation(); router.push(`/scoring-agents/${a.name.toLowerCase().replace(/\s+/g, "-")}/edit`); }}>
                 <img src="/icons/16px/Edit.svg" width={16} height={16} alt="Edit" style={iconFilter} />
               </button>
               <button className="btn btn-ghost-destructive btn-icon" onClick={(e) => e.stopPropagation()}>
