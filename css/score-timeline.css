@@ -1,0 +1,209 @@
+/* score-timeline.css — Score Timeline chart */
+
+.score-timeline {
+  background: var(--surface-secondary);
+  border: 1px solid var(--stroke-primary);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-width: 280px;
+  container-type: inline-size;
+  container-name: timeline;
+}
+
+/* ── Header ── */
+.score-timeline-header {
+  display: flex;
+  align-items: center;
+}
+
+.score-timeline-title {
+  flex: 1;
+  padding: 10px 16px;
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-feature-settings: 'lnum' 1, 'pnum' 1;
+}
+
+.score-timeline-legend {
+  display: flex;
+  padding: 12px;
+}
+
+.score-timeline-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.score-timeline-legend-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  margin: 2.5px;
+  background: var(--charts-positive);
+}
+
+.score-timeline-legend-label {
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--content-tertiary);
+  white-space: nowrap;
+  font-feature-settings: 'lnum' 1, 'pnum' 1;
+}
+
+/* ── Content area ── */
+.score-timeline-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 2px 2px;
+  min-height: 0;
+}
+
+.score-timeline-inner {
+  background: var(--surface-primary);
+  border: 1px solid var(--stroke-primary);
+  border-radius: 6px;
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+/* ── Y-axis labels ── */
+.score-timeline-yaxis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px 0 36px 14px;
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--content-tertiary);
+  text-align: right;
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-feature-settings: 'lnum' 1, 'pnum' 1;
+}
+
+/* ── Chart body ── */
+.score-timeline-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.score-timeline-chart-area {
+  flex: 1;
+  position: relative;
+  padding: 20px 22px 12px 14px;
+  min-height: 160px;
+}
+
+/* Grid lines */
+.score-timeline-grid {
+  position: absolute;
+  inset: 20px 22px 12px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.score-timeline-gridline {
+  width: 100%;
+  height: 1px;
+  background: var(--stroke-primary);
+}
+
+.score-timeline-gridline:first-child {
+  background: var(--stroke-secondarystrong);
+}
+
+/* SVG curve container */
+.score-timeline-svg-wrap {
+  position: absolute;
+  inset: 20px 22px 12px 14px;
+}
+
+.score-timeline-svg-wrap svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Data dots */
+.score-timeline-dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--charts-positive);
+  box-shadow: 0 0 0 1px var(--surface-primary);
+  transform: translate(-50%, -50%);
+}
+
+/* ── X-axis labels ── */
+.score-timeline-xaxis {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 14px 12px 2px;
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--content-tertiary);
+  text-align: center;
+  white-space: nowrap;
+  font-feature-settings: 'lnum' 1, 'pnum' 1;
+}
+
+/* ── Responsive: only simplify x-axis labels & dots ── */
+
+/* < 400px — hide alternate x-axis labels & dots */
+@container timeline (max-width: 400px) {
+  .score-timeline-xaxis span:nth-child(2),
+  .score-timeline-xaxis span:nth-child(4),
+  .score-timeline-xaxis span:nth-child(6) {
+    visibility: hidden;
+  }
+
+  .score-timeline-dot:nth-child(2),
+  .score-timeline-dot:nth-child(4),
+  .score-timeline-dot:nth-child(6) {
+    visibility: hidden;
+  }
+}
+
+/* < 300px — show only first and last x-axis labels & dots */
+@container timeline (max-width: 300px) {
+  .score-timeline-xaxis span {
+    visibility: hidden;
+  }
+
+  .score-timeline-xaxis span:first-child,
+  .score-timeline-xaxis span:last-child {
+    visibility: visible;
+  }
+
+  .score-timeline-dot {
+    visibility: hidden;
+  }
+
+  .score-timeline-dot:first-child,
+  .score-timeline-dot:last-child {
+    visibility: visible;
+  }
+}

@@ -1,0 +1,218 @@
+/* performance-comparison.css — Performance vs Team Average chart */
+
+.perf-compare {
+  background: var(--surface-secondary);
+  border: 1px solid var(--stroke-primary);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-width: 280px;
+  container-type: inline-size;
+  container-name: perf;
+}
+
+/* ── Header ── */
+.perf-compare-header {
+  display: flex;
+  align-items: center;
+}
+
+.perf-compare-title {
+  flex: 1;
+  padding: 10px 16px;
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  color: var(--content-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-feature-settings: 'lnum' 1, 'pnum' 1;
+}
+
+.perf-compare-legend {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+}
+
+.perf-compare-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.perf-compare-legend-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  margin: 2.5px;
+}
+
+.perf-compare-legend-dot--user {
+  background: var(--charts-positive);
+}
+
+.perf-compare-legend-dot--team {
+  background: var(--charts-neutralsubtle);
+}
+
+.perf-compare-legend-label {
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--content-tertiary);
+  white-space: nowrap;
+  font-feature-settings: 'lnum' 1, 'pnum' 1;
+}
+
+/* ── Content area ── */
+.perf-compare-content {
+  padding: 0 2px 2px;
+}
+
+.perf-compare-inner {
+  background: var(--surface-primary);
+  border: 1px solid var(--stroke-primary);
+  border-radius: 6px;
+  position: relative;
+}
+
+/* ── Grid lines (absolute behind bars) ── */
+.perf-compare-grid {
+  position: absolute;
+  inset: -1px -1px 27px 159px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 28px 4px 12px;
+  pointer-events: none;
+}
+
+.perf-compare-gridline {
+  width: 1px;
+  height: 100%;
+  background: var(--stroke-primary);
+}
+
+.perf-compare-gridline:first-child,
+.perf-compare-gridline:last-child {
+  background: var(--stroke-secondarystrong);
+}
+
+/* ── Bar rows ── */
+.perf-compare-row {
+  display: flex;
+  align-items: center;
+}
+
+.perf-compare-row-label {
+  flex-shrink: 0;
+  width: 160px;
+  padding: 12px 14px;
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--content-tertiary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-feature-settings: 'lnum' 1, 'pnum' 1;
+}
+
+.perf-compare-bars {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+}
+
+.perf-compare-bar-track {
+  width: 100%;
+  height: 6px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.perf-compare-bar-fill {
+  height: 6px;
+  border-radius: 99px;
+}
+
+.perf-compare-bar-fill--user {
+  background: var(--charts-positive);
+}
+
+.perf-compare-bar-fill--team {
+  background: var(--charts-neutralsubtle);
+}
+
+/* ── X-axis labels ── */
+.perf-compare-axis {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px 12px;
+  padding-left: 156px;
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--content-tertiary);
+  text-align: center;
+  white-space: nowrap;
+  font-feature-settings: 'lnum' 1, 'pnum' 1;
+}
+
+/* Show full by default, hide medium & small */
+.perf-compare-axis--medium,
+.perf-compare-axis--small {
+  display: none;
+}
+
+/* ── Responsive: swap axis variants & hide gridlines ── */
+
+/* < 700px — switch to 6-label axis (0%, 20%, …, 100%) */
+@container perf (max-width: 700px) {
+  .perf-compare-axis--full {
+    display: none;
+  }
+
+  .perf-compare-axis--medium {
+    display: flex;
+  }
+
+  .perf-compare-gridline:nth-child(2),
+  .perf-compare-gridline:nth-child(4),
+  .perf-compare-gridline:nth-child(6),
+  .perf-compare-gridline:nth-child(8),
+  .perf-compare-gridline:nth-child(10) {
+    visibility: hidden;
+  }
+}
+
+/* < 500px — switch to 3-label axis (0%, 50%, 100%) */
+@container perf (max-width: 500px) {
+  .perf-compare-axis--medium {
+    display: none;
+  }
+
+  .perf-compare-axis--small {
+    display: flex;
+  }
+
+  .perf-compare-gridline {
+    visibility: hidden;
+  }
+
+  .perf-compare-gridline:first-child,
+  .perf-compare-gridline:nth-child(6),
+  .perf-compare-gridline:last-child {
+    visibility: visible;
+  }
+}

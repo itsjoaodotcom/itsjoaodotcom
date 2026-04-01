@@ -7,6 +7,8 @@ import Tag from "../../../../components/Tag";
 import FilterChip from "../../../../components/FilterChip";
 import DateRangeButton from "../../../../components/DateRangeButton";
 import { FiltersButton, FiltersPopover } from "../../../../components/FiltersPopover";
+import PerformanceComparison from "../../../../components/PerformanceComparison";
+import ScoreTimeline from "../../../../components/ScoreTimeline";
 
 const iconFilter = { filter: "brightness(0) invert(0.53)" };
 
@@ -826,128 +828,34 @@ export default function AgentDetailContent({ slug }) {
                   {/* Charts - reuses sad-charts / sad-chart-card */}
                   <div className="sad-charts">
                     {/* Performance vs Team Average */}
-                    <div className="sad-chart-card">
-                      <div className="sad-chart-header">
-                        <div className="sad-chart-title"><span>Performance vs Team Average</span></div>
-                        <div className="sad-chart-subtitle" style={{ display: "flex", gap: 12 }}>
-                          <span style={{ display: "flex", alignItems: "center", gap: 4 }}><span style={{ width: 6, height: 6, borderRadius: 99, background: "var(--stroke-accent)", display: "inline-block" }} />{selectedAgent.name}</span>
-                          <span style={{ display: "flex", alignItems: "center", gap: 4 }}><span style={{ width: 6, height: 6, borderRadius: 99, background: "var(--stroke-secondarystrong)", display: "inline-block" }} />Team average</span>
-                        </div>
-                      </div>
-                      <div className="sad-chart-content-wrap">
-                        <div className="sad-chart-container" style={{ position: "relative" }}>
-                          {/* Vertical dashed grid lines */}
-                          <div style={{ position: "absolute", top: 0, bottom: 34, left: 130, right: 0, pointerEvents: "none" }}>
-                            {Array.from({ length: 11 }).map((_, i) => (
-                              <div key={i} style={{ position: "absolute", top: 0, bottom: 0, left: `${i * 10}%`, borderLeft: i === 0 || i === 10 ? "1px solid var(--stroke-dashed)" : "1px dashed var(--stroke-dashed)" }} />
-                            ))}
-                          </div>
-                          {[
-                            { label: "Follow-up action", agent: 90, team: 78 },
-                            { label: "Knowledge accuracy", agent: 82, team: 75 },
-                            { label: "Escalation handling", agent: 68, team: 82 },
-                            { label: "Closing protocol", agent: 95, team: 65 },
-                            { label: "Empathy display", agent: 55, team: 72 },
-                            { label: "Issue resolution", agent: 72, team: 85 },
-                          ].map((c) => (
-                            <div key={c.label} style={{ display: "flex", alignItems: "center" }}>
-                              <div style={{ width: 130, flexShrink: 0, padding: "8px 0 8px 14px", fontSize: 12, color: "var(--content-tertiary)" }}>{c.label}</div>
-                              <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 4, padding: "8px 0" }}>
-                                <div style={{ height: 6, borderRadius: 99, width: `${c.agent}%`, background: "var(--stroke-accent)", position: "relative", zIndex: 1 }} />
-                                <div style={{ height: 6, borderRadius: 99, width: `${c.team}%`, background: "#e2e3e6", position: "relative", zIndex: 1 }} />
-                              </div>
-                            </div>
-                          ))}
-                          <div style={{ position: "relative", height: 24, marginLeft: 130, marginRight: 0, marginBottom: 8 }}>
-                            {Array.from({ length: 11 }).map((_, i) => (
-                              <span key={i} style={{ position: "absolute", left: `${i * 10}%`, transform: "translateX(-50%)", fontSize: 12, color: "var(--content-tertiary)", whiteSpace: "nowrap" }}>{i * 10}%</span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <PerformanceComparison
+                      userName={selectedAgent.name}
+                      data={[
+                        { label: "Follow-up action", user: 90, team: 78 },
+                        { label: "Knowledge accuracy", user: 82, team: 75 },
+                        { label: "Escalation handling", user: 68, team: 82 },
+                        { label: "Closing protocol", user: 95, team: 65 },
+                        { label: "Empathy display", user: 55, team: 72 },
+                        { label: "Issue resolution", user: 72, team: 85 },
+                      ]}
+                    />
 
                     {/* Score timeline */}
-                    <div className="sad-chart-card">
-                      <div className="sad-chart-header">
-                        <div className="sad-chart-title"><span>Score timeline</span></div>
-                        <div className="sad-chart-subtitle" style={{ display: "flex", gap: 12 }}>
-                          <span style={{ display: "flex", alignItems: "center", gap: 4 }}><span style={{ width: 6, height: 6, borderRadius: 99, background: "var(--stroke-accent)", display: "inline-block" }} />{selectedAgent.name}</span>
-                        </div>
-                      </div>
-                      <div className="sad-chart-content-wrap" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-                        <div className="sad-chart-container" style={{ display: "flex", flexDirection: "column", flex: 1 }}>
-                          {/* Chart row: Y labels + chart area */}
-                          <div style={{ display: "flex", flex: 1, minHeight: 160 }}>
-                            {/* Y axis labels - offset by half line-height to center on grid lines */}
-                            <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "0 0 0 14px", margin: "12px 0 4px", fontSize: 12, lineHeight: "16px", color: "var(--content-tertiary)", textAlign: "right", width: 36, flexShrink: 0 }}>
-                              {[100, 90, 80, 70, 60].map((v) => <span key={v}>{v}</span>)}
-                            </div>
-                            {/* Chart area */}
-                            <div style={{ position: "relative", padding: "0 16px 0 10px", flex: 1, margin: "20px 0 12px" }}>
-                              {/* Grid lines - 5 lines evenly distributed */}
-                              {[0, 1, 2, 3, 4].map((i) => (
-                                <div key={i} style={{ position: "absolute", left: 14, right: 22, top: `${i * 25}%`, borderTop: "1px dashed var(--stroke-dashed)" }} />
-                              ))}
-                              {/* Curve area */}
-                              <div style={{ position: "absolute", top: 0, left: 14, right: 22, bottom: 0 }}>
-                                {(() => {
-                                  const scores = [78, 84, 75, 97, 78, 66];
-                                  const n = scores.length;
-                                  const pts = scores.map((s, i) => ({
-                                    px: i / (n - 1),
-                                    py: (100 - s) / 40,
-                                  }));
-                                  const scale = (p) => ({ x: p.px * 1000, y: p.py * 1000 });
-                                  const sp = pts.map(scale);
-                                  let linePath = `M${sp[0].x},${sp[0].y}`;
-                                  for (let i = 0; i < sp.length - 1; i++) {
-                                    const p0 = sp[Math.max(i - 1, 0)];
-                                    const p1 = sp[i];
-                                    const p2 = sp[i + 1];
-                                    const p3 = sp[Math.min(i + 2, sp.length - 1)];
-                                    linePath += ` C${p1.x + (p2.x - p0.x) / 6},${p1.y + (p2.y - p0.y) / 6} ${p2.x - (p3.x - p1.x) / 6},${p2.y - (p3.y - p1.y) / 6} ${p2.x},${p2.y}`;
-                                  }
-                                  const fillPath = linePath + ` L1000,1000 L0,1000 Z`;
-                                  return (
-                                    <svg viewBox="0 0 1000 1000" preserveAspectRatio="none" style={{ width: "100%", height: "100%", display: "block" }}>
-                                      <defs>
-                                        <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-                                          <stop offset="0%" stopColor="var(--stroke-accent)" stopOpacity="0.1" />
-                                          <stop offset="100%" stopColor="var(--stroke-accent)" stopOpacity="0" />
-                                        </linearGradient>
-                                      </defs>
-                                      <path d={fillPath} style={{ fill: "url(#areaGrad)" }} />
-                                      <path d={linePath} stroke="var(--stroke-accent)" strokeWidth="1.5" vectorEffect="non-scaling-stroke" style={{ fill: "none" }} />
-                                    </svg>
-                                  );
-                                })()}
-                                {/* Dots */}
-                                {[78, 84, 75, 97, 78, 66].map((s, i) => (
-                                  <div key={i} style={{
-                                    position: "absolute",
-                                    left: `${(i / 5) * 100}%`,
-                                    top: `${((100 - s) / 40) * 100}%`,
-                                    width: 8, height: 8, borderRadius: "50%",
-                                    background: "var(--stroke-accent)",
-                                    boxShadow: "0 0 0 1px var(--surface-primary)",
-                                    transform: "translate(-50%, -50%)",
-                                  }} />
-                                ))}
-                              </div>
-                            </div>
-                          </div>
-                          {/* X axis labels */}
-                          <div style={{ display: "flex", justifyContent: "space-between", padding: "4px 22px 12px 50px", fontSize: 12, color: "var(--content-tertiary)", textAlign: "center" }}>
-                            {["Jan", "Feb", "Mar", "Apr", "Jun", "Jul"].map((m) => <span key={m}>{m}</span>)}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <ScoreTimeline
+                      userName={selectedAgent.name}
+                      data={[
+                        { month: "Jan", score: 78 },
+                        { month: "Feb", score: 84 },
+                        { month: "Mar", score: 75 },
+                        { month: "Apr", score: 97 },
+                        { month: "Jun", score: 78 },
+                        { month: "Jul", score: 66 },
+                      ]}
+                    />
                   </div>
 
                   {/* Criterion Pass Rates - reuses sad-chart-card / sad-bar-item */}
-                  <div style={{ padding: "0 20px 20px" }}>
+                  <div style={{ padding: "0 16px 16px" }}>
                     <div className="sad-chart-card" style={{ flex: "none" }}>
                       <div className="sad-chart-header">
                         <div className="sad-chart-title"><span>Criterion Pass Rates</span></div>
@@ -960,6 +868,8 @@ export default function AgentDetailContent({ slug }) {
                             { label: "Knowledge accuracy", ratio: "9/11", pct: 82, color: "var(--utilities-content-content-green)" },
                             { label: "Escalation handling", ratio: "9/11", pct: 82, color: "var(--utilities-content-content-green)" },
                             { label: "Closing protocol", ratio: "6/10", pct: 60, color: "var(--utilities-content-content-orange)" },
+                            { label: "Empathy display", ratio: "5/7", pct: 71, color: "var(--utilities-content-content-orange)" },
+                            { label: "Issue resolution", ratio: "9/11", pct: 82, color: "var(--utilities-content-content-green)" },
                           ].map((c) => (
                             <div className="sad-bar-item" key={c.label}>
                               <div className="sad-bar-label-row">
@@ -969,6 +879,74 @@ export default function AgentDetailContent({ slug }) {
                               </div>
                               <div className="sad-bar-track">
                                 <div className="sad-bar-fill" style={{ width: `${c.pct}%`, background: c.color }} />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Evaluations table */}
+                  <div style={{ padding: "0 16px 16px" }}>
+                    <div className="sad-chart-card" style={{ flex: "none" }}>
+                      <div className="sad-chart-header">
+                        <div className="sad-chart-title"><span>Evaluations</span></div>
+                        <button className="btn btn-ghost btn-icon">
+                          <img src="/icons/16px/ChevronTop.svg" width={16} height={16} alt="" style={iconFilter} />
+                        </button>
+                      </div>
+                      <div className="sad-chart-content-wrap">
+                        <div className="sad-chart-container">
+                          <div className="sa-table-header">
+                            <div className="sa-th sad-col-id"><span className="sa-th-label">ID</span></div>
+                            <div className="sa-th sad-col-flex"><span className="sa-th-label">Agent Name</span></div>
+                            <div className="sa-th sad-col-flex"><span className="sa-th-label">Channel</span></div>
+                            <div className="sa-th sad-col-flex"><span className="sa-th-label">Team</span></div>
+                            <div className="sa-th sad-col-148"><span className="sa-th-label">Score</span></div>
+                            <div className="sa-th sad-col-148"><span className="sa-th-label">Violations</span></div>
+                            <div className="sa-th sad-col-140"><span className="sa-th-label">Date</span></div>
+                          </div>
+                          {[
+                            { id: "01", name: "Oliver Smith", channelIcon: "LiveChat", channel: "Chat", team: "Chat", score: 98, violations: null, date: "14/03/2026" },
+                            { id: "02", name: "Penelope Cruz", channelIcon: "AnswerCall", channel: "Call center", team: "Call center", score: 59, violations: null, date: "14/03/2026" },
+                            { id: "03", name: "Social media", channelIcon: "Globe", channel: "Advanced support", team: "Advanced support", score: 98, violations: null, date: "14/03/2026" },
+                            { id: "04", name: "Email", channelIcon: "Globe", channel: "Social media", team: "Social media", score: 86, violations: 1, date: "14/03/2026" },
+                            { id: "05", name: "Call center", channelIcon: "LiveChat", channel: "Chat", team: "Chat", score: 74, violations: null, date: "14/03/2026" },
+                            { id: "06", name: "Call center", channelIcon: "AnswerCall", channel: "Call center", team: "Chat", score: 74, violations: null, date: "14/03/2026" },
+                            { id: "07", name: "Call center", channelIcon: "Globe", channel: "Advanced support", team: "Chat", score: 74, violations: null, date: "14/03/2026" },
+                          ].map((e) => (
+                            <div className="sa-row sad-row-clickable" key={e.id}>
+                              <div className="sa-cell sad-col-id">
+                                <span className="sa-cell-text" style={{ color: "var(--content-tertiary)" }}>{e.id}</span>
+                              </div>
+                              <div className="sa-cell sad-col-flex">
+                                <span className="sa-cell-text">{e.name}</span>
+                              </div>
+                              <div className="sa-cell sad-col-flex">
+                                <div className="sa-channel">
+                                  <img src={`/icons/16px/${e.channelIcon}.svg`} width={16} height={16} alt="" style={iconFilter} />
+                                  <span className="sa-cell-text">{e.channel}</span>
+                                </div>
+                              </div>
+                              <div className="sa-cell sad-col-flex">
+                                <span className="sa-cell-text">{e.team}</span>
+                              </div>
+                              <div className="sa-cell sad-col-148">
+                                <span className="sa-cell-text" style={{ color: e.score >= 80 ? "var(--utilities-content-content-green)" : e.score >= 60 ? "var(--utilities-content-content-orange)" : "var(--utilities-content-content-red)" }}>{e.score}</span>
+                              </div>
+                              <div className="sa-cell sad-col-148">
+                                {e.violations ? (
+                                  <div className="sa-channel">
+                                    <img src="/icons/16px/Critical.svg" width={16} height={16} alt="" />
+                                    <span className="sa-cell-text" style={{ color: "var(--utilities-content-content-red)" }}>{e.violations}</span>
+                                  </div>
+                                ) : (
+                                  <span className="sa-cell-text" style={{ color: "var(--content-tertiary)" }}>—</span>
+                                )}
+                              </div>
+                              <div className="sa-cell sad-col-140">
+                                <span className="sa-cell-text" style={{ color: "var(--content-tertiary)" }}>{e.date}</span>
                               </div>
                             </div>
                           ))}
