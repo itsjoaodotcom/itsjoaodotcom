@@ -97,6 +97,19 @@ export default function NewAgentContent({ editId } = {}) {
   const [scorecardName, setScorecardName] = useState("");
   const [outputLang, setOutputLang] = useState("English");
 
+  // Validation: details tab filled
+  const detailsFilled = agentName.trim().length > 0 && description.trim().length > 0;
+  // Validation: knowledge tab filled (at least one toggle on)
+  const knowledgeFilled = Object.values(kbToggles).some(Boolean);
+  // Can advance past first two tabs
+  const canUnlockAdvanced = detailsFilled && knowledgeFilled;
+  // Current tab index
+  const currentTabIndex = tabs.findIndex((t) => t.key === activeTab);
+  // Is this an early tab (shows Next) or late tab (shows Save)
+  const showNext = currentTabIndex < 2;
+  // Can click Next
+  const canNext = (currentTabIndex === 0 && detailsFilled) || (currentTabIndex === 1 && knowledgeFilled);
+
   /* Load form data when editing an existing agent */
   useEffect(() => {
     if (!editId) return;
@@ -181,12 +194,15 @@ export default function NewAgentContent({ editId } = {}) {
 
         {/* Tabs */}
         <div className="na-tabs">
-          {tabs.map((t) => (
-            <button key={t.key} className={`na-tab${activeTab === t.key ? " active" : ""}`} onClick={() => setActiveTab(t.key)}>
-              <img src={t.icon} alt="" style={activeTab === t.key ? iconTabActive : iconTab} className="na-tab-icon" />
-              {t.label}
-            </button>
-          ))}
+          {tabs.map((t, i) => {
+            const disabled = !editId && i >= 2 && !canUnlockAdvanced;
+            return (
+              <button key={t.key} className={`na-tab${activeTab === t.key ? " active" : ""}${disabled ? " na-tab-disabled" : ""}`} onClick={() => !disabled && setActiveTab(t.key)} disabled={disabled}>
+                <img src={t.icon} alt="" style={activeTab === t.key ? iconTabActive : iconTab} className="na-tab-icon" />
+                {t.label}
+              </button>
+            );
+          })}
         </div>
 
         {/* Agent Details tab */}
@@ -659,22 +675,33 @@ export default function NewAgentContent({ editId } = {}) {
       {/* Actions bar */}
       <div className="na-actions">
         <div className="na-actions-group">
-          <div className="na-actions-toggle">
-            <Toggle on={isActive} onChange={setIsActive} />
-            <span className="na-actions-toggle-label">Active</span>
-          </div>
-          <div className="na-actions-divider" />
+          {(editId || canUnlockAdvanced) && (
+            <>
+              <div className="na-actions-toggle">
+                <Toggle on={isActive} onChange={setIsActive} />
+                <span className="na-actions-toggle-label">Active</span>
+              </div>
+              <div className="na-actions-divider" />
+            </>
+          )}
           <div className="na-actions-right">
             <button className="btn btn-secondary" onClick={() => router.push("/scoring-agents")}>
               <span className="btn-label">Cancel</span>
             </button>
-            <button className="btn btn-accent" onClick={() => {
-            const formData = { agentName, channel, frequency, description, autoEval, kbToggles, categories, scorecardName, scoringModel, outputLang, isDraft: !isActive };
-            if (editId) { updateAgent(editId, formData); } else { addAgent(formData); }
-            router.push("/scoring-agents");
-          }}>
-            <span className="btn-label">Save</span>
-          </button>
+            {!editId && currentTabIndex < tabs.length - 1 && (
+              <button className="btn btn-secondary" disabled={!canNext} onClick={() => { if (canNext) setActiveTab(tabs[currentTabIndex + 1].key); }}>
+                <span className="btn-label">Next</span>
+              </button>
+            )}
+            {(!editId && canUnlockAdvanced) || editId ? (
+              <button className="btn btn-accent" onClick={() => {
+                const formData = { agentName, channel, frequency, description, autoEval, kbToggles, categories, scorecardName, scoringModel, outputLang, isDraft: !isActive };
+                if (editId) { updateAgent(editId, formData); } else { addAgent(formData); }
+                router.push("/scoring-agents");
+              }}>
+                <span className="btn-label">Save</span>
+              </button>
+            ) : null}
           </div>
         </div>
       </div>

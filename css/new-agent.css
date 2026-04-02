@@ -96,6 +96,15 @@
   color: var(--content-primary);
 }
 
+.na-tab.na-tab-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.na-tab.na-tab-disabled:hover {
+  background: transparent;
+}
+
 .na-tab-icon {
   width: 16px;
   height: 16px;
