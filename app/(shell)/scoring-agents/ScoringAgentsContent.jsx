@@ -6,6 +6,7 @@ import Tag from "../../../components/Tag";
 import FilterChip from "../../../components/FilterChip";
 import DateRangeButton from "../../../components/DateRangeButton";
 import { FiltersButton, FiltersPopover } from "../../../components/FiltersPopover";
+import Toggle from "../../../components/Toggle";
 import { useShell } from "../../../components/ShellContext";
 
 const iconFilter = { filter: "brightness(0) invert(0.53)" };
@@ -32,9 +33,10 @@ function scoreColor(score) {
 
 export default function ScoringAgentsContent() {
   const router = useRouter();
-  const { agents, deleteAgent } = useShell();
+  const { agents, deleteAgent, updateAgent } = useShell();
   const [search, setSearch] = useState("");
-  const [deleteConfirm, setDeleteConfirm] = useState(null); // agent to delete
+  const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [toast, setToast] = useState(null);
   const [sortField, setSortField] = useState(null);
   const [sortDir, setSortDir] = useState("asc");
   const [filterSelections, setFilterSelections] = useState({});
@@ -299,8 +301,8 @@ export default function ScoringAgentsContent() {
             </div>
 
             {/* Status */}
-            <div className="sa-cell sa-col-fixed-120">
-              <Tag color={a.status === "Active" ? "green" : "grey"} label={a.status} />
+            <div className="sa-cell sa-col-fixed-120" onClick={(e) => e.stopPropagation()}>
+              <Toggle on={a.status === "Active"} onChange={(val) => { updateAgent(a.id, { ...a._form, isDraft: !val }); }} />
             </div>
 
             {/* Actions */}
@@ -330,12 +332,23 @@ export default function ScoringAgentsContent() {
                 <button className="btn btn-secondary btn-sm" onClick={() => setDeleteConfirm(null)}>
                   <span className="btn-label">Cancel</span>
                 </button>
-                <button className="btn btn-destructive btn-sm" onClick={() => { deleteAgent(deleteConfirm.id); setDeleteConfirm(null); }}>
+                <button className="btn btn-destructive btn-sm" onClick={() => { const name = deleteConfirm.name; deleteAgent(deleteConfirm.id); setDeleteConfirm(null); setToast(`${name} has been successfully deleted.`); setTimeout(() => setToast(null), 4000); }}>
                   <span className="btn-label">Delete</span>
                 </button>
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Toast notification */}
+      {toast && (
+        <div className="sa-toast">
+          <img src="/icons/16px/CheckCircle.svg" width={16} height={16} alt="" style={{ filter: "brightness(0) saturate(100%) invert(52%) sepia(74%) saturate(422%) hue-rotate(92deg) brightness(96%) contrast(92%)", flexShrink: 0, marginTop: 2 }} />
+          <span className="sa-toast-text">{toast}</span>
+          <button className="btn btn-ghost btn-icon btn-sm" onClick={() => setToast(null)} style={{ flexShrink: 0 }}>
+            <img src="/icons/16px/Cross.svg" width={16} height={16} alt="" style={iconFilter} />
+          </button>
         </div>
       )}
     </div>
