@@ -675,25 +675,22 @@ export default function NewAgentContent({ editId } = {}) {
       {/* Actions bar */}
       <div className="na-actions">
         <div className="na-actions-group">
-          {(editId || canUnlockAdvanced) && (
-            <>
-              <div className="na-actions-toggle">
-                <Toggle on={isActive} onChange={setIsActive} />
-                <span className="na-actions-toggle-label">Active</span>
-              </div>
-              <div className="na-actions-divider" />
-            </>
-          )}
+          {(editId || currentTabIndex >= 2) ? (
+            <div className="na-actions-toggle">
+              <Toggle on={isActive} onChange={setIsActive} />
+              <span className="na-actions-toggle-label">Active</span>
+            </div>
+          ) : <div />}
           <div className="na-actions-right">
-            <button className="btn btn-secondary" onClick={() => router.push("/scoring-agents")}>
+            <button className="btn btn-ghost" onClick={() => router.push("/scoring-agents")}>
               <span className="btn-label">Cancel</span>
             </button>
-            {!editId && currentTabIndex < tabs.length - 1 && (
+            {!editId && currentTabIndex < 2 && (
               <button className="btn btn-secondary" disabled={!canNext} onClick={() => { if (canNext) setActiveTab(tabs[currentTabIndex + 1].key); }}>
                 <span className="btn-label">Next</span>
               </button>
             )}
-            {(!editId && canUnlockAdvanced) || editId ? (
+            {(editId || currentTabIndex >= 2) ? (
               <button className="btn btn-accent" onClick={() => {
                 const formData = { agentName, channel, frequency, description, autoEval, kbToggles, categories, scorecardName, scoringModel, outputLang, isDraft: !isActive };
                 if (editId) { updateAgent(editId, formData); } else { addAgent(formData); }

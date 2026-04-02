@@ -1089,7 +1089,6 @@
 .na-actions {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   padding: 12px;
   border-top: 1px solid var(--stroke-primary);
   flex-shrink: 0;
@@ -1098,6 +1097,8 @@
 .na-actions-group {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .na-actions-toggle {
@@ -1136,5 +1137,5 @@
 .na-actions-right {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
 }

@@ -32,7 +32,7 @@ function scoreColor(score) {
 
 export default function ScoringAgentsContent() {
   const router = useRouter();
-  const { agents } = useShell();
+  const { agents, deleteAgent } = useShell();
   const [search, setSearch] = useState("");
   const [sortField, setSortField] = useState(null);
   const [sortDir, setSortDir] = useState("asc");
@@ -84,7 +84,7 @@ export default function ScoringAgentsContent() {
       { key: "agents",   label: "Agents",   icon: "/icons/16px/User.svg",    items: uniqueAgents },
       { key: "status",   label: "Status",   icon: "/icons/16px/CheckCircle.svg", items: uniqueStatuses },
     ];
-  }, []);
+  }, [agents]);
 
   const filtered = useMemo(() => {
     let list = [...agents];
@@ -142,7 +142,7 @@ export default function ScoringAgentsContent() {
     }
 
     return list;
-  }, [search, sortField, sortDir, filterSelections, dateFilter]);
+  }, [agents, search, sortField, sortDir, filterSelections, dateFilter]);
 
   return (
     <div className="sa-content">
@@ -307,7 +307,7 @@ export default function ScoringAgentsContent() {
               <button className="btn btn-ghost btn-icon" onClick={(e) => { e.stopPropagation(); router.push(`/scoring-agents/${a.name.toLowerCase().replace(/\s+/g, "-")}/edit`); }}>
                 <img src="/icons/16px/Edit.svg" width={16} height={16} alt="Edit" style={iconFilter} />
               </button>
-              <button className="btn btn-ghost-destructive btn-icon" onClick={(e) => e.stopPropagation()}>
+              <button className="btn btn-ghost-destructive btn-icon" onClick={(e) => { e.stopPropagation(); deleteAgent(a.id); }}>
                 <img src="/icons/16px/Trash.svg" width={16} height={16} alt="Delete" style={{ filter: "brightness(0) saturate(100%) invert(40%) sepia(78%) saturate(1640%) hue-rotate(335deg) brightness(95%) contrast(97%)" }} />
               </button>
             </div>
