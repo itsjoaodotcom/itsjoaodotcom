@@ -34,6 +34,7 @@ export default function ScoringAgentsContent() {
   const router = useRouter();
   const { agents, deleteAgent } = useShell();
   const [search, setSearch] = useState("");
+  const [deleteConfirm, setDeleteConfirm] = useState(null); // agent to delete
   const [sortField, setSortField] = useState(null);
   const [sortDir, setSortDir] = useState("asc");
   const [filterSelections, setFilterSelections] = useState({});
@@ -307,13 +308,36 @@ export default function ScoringAgentsContent() {
               <button className="btn btn-ghost btn-icon" onClick={(e) => { e.stopPropagation(); router.push(`/scoring-agents/${a.name.toLowerCase().replace(/\s+/g, "-")}/edit`); }}>
                 <img src="/icons/16px/Edit.svg" width={16} height={16} alt="Edit" style={iconFilter} />
               </button>
-              <button className="btn btn-ghost-destructive btn-icon" onClick={(e) => { e.stopPropagation(); deleteAgent(a.id); }}>
+              <button className="btn btn-ghost-destructive btn-icon" onClick={(e) => { e.stopPropagation(); setDeleteConfirm(a); }}>
                 <img src="/icons/16px/Trash.svg" width={16} height={16} alt="Delete" style={{ filter: "brightness(0) saturate(100%) invert(40%) sepia(78%) saturate(1640%) hue-rotate(335deg) brightness(95%) contrast(97%)" }} />
               </button>
             </div>
           </div>
         ))}
       </div>
+
+      {/* Delete confirmation modal */}
+      {deleteConfirm && (
+        <div className="sa-delete-overlay" onClick={() => setDeleteConfirm(null)}>
+          <div className="sa-delete-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="sa-delete-modal-inner">
+              <div className="sa-delete-content">
+                <p className="sa-delete-title">Delete &quot;{deleteConfirm.name}&quot;</p>
+                <p className="sa-delete-desc">This action cannot be undone. All configurations, scoring metrics, and associated data will be permanently deleted.</p>
+              </div>
+              <div className="sa-delete-divider" />
+              <div className="sa-delete-actions">
+                <button className="btn btn-secondary btn-sm" onClick={() => setDeleteConfirm(null)}>
+                  <span className="btn-label">Cancel</span>
+                </button>
+                <button className="btn btn-destructive btn-sm" onClick={() => { deleteAgent(deleteConfirm.id); setDeleteConfirm(null); }}>
+                  <span className="btn-label">Delete</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
