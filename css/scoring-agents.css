@@ -905,7 +905,7 @@
 
 .sa-delete-modal {
   position: relative;
-  width: 320px;
+  width: 340px;
   max-width: calc(100vw - 40px);
   border-radius: 10px;
   background: var(--surface-secondary);
@@ -973,7 +973,6 @@
   z-index: 300;
   display: flex;
   align-items: flex-start;
-  gap: 0;
   background: var(--surface-popover, white);
   border: 1px solid var(--stroke-primary);
   border-radius: 8px;
@@ -983,8 +982,10 @@
   animation: sa-toast-in 0.2s ease-out;
 }
 
-.sa-toast > img:first-child {
+.sa-toast-icon {
+  flex-shrink: 0;
   padding: 12px 0 10px 12px;
+  display: flex;
 }
 
 .sa-toast-text {
@@ -998,8 +999,9 @@
   padding: 10px 8px;
 }
 
-.sa-toast > button:last-child {
-  padding: 8px;
+.sa-toast-close {
+  flex-shrink: 0;
+  padding: 8px 8px 0 0;
 }
 
 @keyframes sa-toast-in {

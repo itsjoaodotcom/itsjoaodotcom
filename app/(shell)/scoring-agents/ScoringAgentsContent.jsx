@@ -329,10 +329,10 @@ export default function ScoringAgentsContent() {
               </div>
               <div className="sa-delete-divider" />
               <div className="sa-delete-actions">
-                <button className="btn btn-secondary btn-sm" onClick={() => setDeleteConfirm(null)}>
+                <button className="btn btn-secondary" onClick={() => setDeleteConfirm(null)}>
                   <span className="btn-label">Cancel</span>
                 </button>
-                <button className="btn btn-destructive btn-sm" onClick={() => { const name = deleteConfirm.name; deleteAgent(deleteConfirm.id); setDeleteConfirm(null); setToast(`${name} has been successfully deleted.`); setTimeout(() => setToast(null), 4000); }}>
+                <button className="btn btn-destructive" onClick={() => { const name = deleteConfirm.name; deleteAgent(deleteConfirm.id); setDeleteConfirm(null); setToast(`${name} has been successfully deleted.`); setTimeout(() => setToast(null), 4000); }}>
                   <span className="btn-label">Delete</span>
                 </button>
               </div>
@@ -344,11 +344,17 @@ export default function ScoringAgentsContent() {
       {/* Toast notification */}
       {toast && (
         <div className="sa-toast">
-          <img src="/icons/16px/CheckCircle.svg" width={16} height={16} alt="" style={{ filter: "brightness(0) saturate(100%) invert(52%) sepia(74%) saturate(422%) hue-rotate(92deg) brightness(96%) contrast(92%)", flexShrink: 0, marginTop: 2 }} />
+          <div className="sa-toast-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M8 1.5C11.5899 1.5 14.5 4.41015 14.5 8C14.5 11.5899 11.5899 14.5 8 14.5C4.41015 14.5 1.5 11.5899 1.5 8C1.5 4.41015 4.41015 1.5 8 1.5ZM8 2.5C4.96243 2.5 2.5 4.96243 2.5 8C2.5 11.0376 4.96243 13.5 8 13.5C11.0376 13.5 13.5 11.0376 13.5 8C13.5 4.96243 11.0376 2.5 8 2.5ZM9.64648 6.64648C9.84175 6.45122 10.1583 6.45122 10.3535 6.64648C10.5488 6.84175 10.5488 7.15825 10.3535 7.35352L7.85352 9.85352C7.65825 10.0488 7.34175 10.0488 7.14648 9.85352L5.64648 8.35352C5.45122 8.15825 5.45122 7.84175 5.64648 7.64648C5.84175 7.45122 6.15825 7.45122 6.35352 7.64648L7.5 8.79297L9.64648 6.64648Z" fill="var(--utilities-content-content-green, #47ad7a)"/>
+            </svg>
+          </div>
           <span className="sa-toast-text">{toast}</span>
-          <button className="btn btn-ghost btn-icon btn-sm" onClick={() => setToast(null)} style={{ flexShrink: 0 }}>
-            <img src="/icons/16px/Cross.svg" width={16} height={16} alt="" style={iconFilter} />
-          </button>
+          <div className="sa-toast-close">
+            <button className="btn btn-ghost btn-icon btn-sm" onClick={() => setToast(null)}>
+              <img src="/icons/16px/Cross.svg" width={16} height={16} alt="" style={iconFilter} />
+            </button>
+          </div>
         </div>
       )}
     </div>
