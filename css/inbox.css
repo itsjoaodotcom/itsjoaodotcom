@@ -148,6 +148,7 @@ body {
 }
 
 .snav-item:hover .snav-link { background: var(--surface-tint); }
+.snav-item.active .snav-link { background: var(--surface-tint); }
 
 .snav-icon {
   width: 20px;
