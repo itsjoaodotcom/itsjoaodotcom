@@ -154,8 +154,8 @@ function AgentsQaSubitems() {
 
   return (
     <>
-      <SnavSubitem icon="Star" label="Scoring Agents" badge={6} href="/scoring-agents" active={pathname.startsWith("/scoring-agents") && !pathname.startsWith("/scoring-agents/dashboard")} />
-      <SnavSubitem icon="ChartBars" label="Analytics" />
+      <SnavSubitem icon="Star" label="Scoring Agents" badge={6} href="/scoring-agents" active={pathname.startsWith("/scoring-agents") && !pathname.startsWith("/scoring-agents/dashboard") && !pathname.startsWith("/scoring-agents/analytics")} />
+      <SnavSubitem icon="ChartBars" label="Analytics" href="/scoring-agents/analytics" active={pathname.startsWith("/scoring-agents/analytics")} />
     </>
   );
 }
